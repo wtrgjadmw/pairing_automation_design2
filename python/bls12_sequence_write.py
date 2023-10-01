@@ -311,6 +311,7 @@ if __name__ == "__main__":
     args = sys.argv
     output_directory = args[1]
 
+    #TODO: スケジューリング毎回実行するように修正
     directory = "/home/mfukuda/optimal-ate-pairing/scheduling/new_split_sche/inRAM/bls12-381/result/"
     for root, dirs, files in os.walk(directory):
         for file in files:

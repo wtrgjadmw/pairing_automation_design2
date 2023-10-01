@@ -13,7 +13,7 @@ def write_parameter_vh(f_param):
     p_str = str(hex(p))[2:]
     p_len_str = str(p_len)
     p3 = p * 3
-    with open("/home/mfukuda/optimal-ate-pairing/template/lib/bls12/ram_addr.v", "r") as file:
+    with open("./lib/bls12/ram_addr.v", "r") as file:
         content = file.read()
     
     f = open(f_param, 'a')
@@ -219,12 +219,12 @@ def make_FE_commands(f_FE_commands):
     return cnt+6
 
 def testbench_copy(output_directory):
-    shutil.copy("/home/mfukuda/optimal-ate-pairing/template/lib/bls12/input_values.v", output_directory+"/testbench/include/")
-    shutil.copy("/home/mfukuda/optimal-ate-pairing/template/lib/bls12/SQR_test.v", output_directory+"/testbench/include/")
-    shutil.copy("/home/mfukuda/optimal-ate-pairing/template/lib/bls12/sim_new_arch.v", output_directory+"/testbench/")
-    shutil.copy("/home/mfukuda/optimal-ate-pairing/template/lib/bls12/simML.v", output_directory+"/testbench/")
-    shutil.copy("/home/mfukuda/optimal-ate-pairing/template/lib/bls12/simPairing.v", output_directory+"/testbench/")
-    shutil.copy("/home/mfukuda/optimal-ate-pairing/template/lib/bls12/simRAM_wr.v", output_directory+"/testbench/")
+    shutil.copy("./lib/bls12/input_values.v", output_directory+"/testbench/include/")
+    shutil.copy("./lib/bls12/SQR_test.v", output_directory+"/testbench/include/")
+    shutil.copy("./lib/bls12/sim_new_arch.v", output_directory+"/testbench/")
+    shutil.copy("./lib/bls12/simML.v", output_directory+"/testbench/")
+    shutil.copy("./lib/bls12/simPairing.v", output_directory+"/testbench/")
+    shutil.copy("./lib/bls12/simRAM_wr.v", output_directory+"/testbench/")
 
 
 def make_RTL(output_directory):
