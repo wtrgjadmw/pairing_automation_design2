@@ -1,4 +1,4 @@
-DIRNAME=
+DIRNAME=.
 P_BIT=
 
 bls12_debug:
