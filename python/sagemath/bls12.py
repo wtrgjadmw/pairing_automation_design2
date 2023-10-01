@@ -13,6 +13,65 @@ from sage.structure.proof.all import arithmetic
 from parameter import find_curve_parameter_b, find_twist_curve_parameter_xi_ab
 from test_pairing import test_order, test_ate_pairing_bls12_aklgl
 
+def get_parameters(u0):
+    QQx = QQ["x"]
+    (x,) = QQx._first_ngens(1)
+    # BLS12 polynomials
+    px = (x - 1) ** 2 * (x**4 - x**2 + 1) / 3 + x
+    rx = x**4 - x**2 + 1
+    tx = x + 1
+    cx = (x - 1) ** 2 / 3
+    yx = (x - 1) * (2 * x**2 - 1) / 3
+    c2x = (x**8 - 4 * x**7 + 5 * x**6 - 4 * x**4 + 6 * x**3 - 4 * x**2 - 4 * x + 13) / 9  # cofactor for G2
+    p = ZZ(px(u0))
+    r = ZZ(rx(u0))
+    c = ZZ(cx(u0))
+    c2 = ZZ(c2x(u0))
+    t = ZZ(tx(u0))
+    y = ZZ(yx(u0))
+    Fp = GF(p, proof=False)
+    k = 12
+    b, E = find_curve_parameter_b(Fp, r, c)
+    print("u = {:#x}".format(u0))
+    print("p = {:#x}, {} mod 4 # {} bits".format(p, p % 4, p.nbits()))
+    print("r = {:#x} # {} bits".format(r, r.nbits()))
+    print("c = {:#x} # {} bits".format(c, c.nbits()))
+    print("y = {:#x}".format(y))
+    print("t = {:#x}".format(t))
+    print("BLS{}-{} E: y^2 = x^3 {:+d}".format(k, p.nbits(), b))
+    
+    # define Fp2
+    Fpz = Fp["z"]
+    (z,) = Fpz._first_ngens(1)
+    if (p % 4) == 3:
+        Fp2 = Fp.extension(z**2 + 1, names=("i",))
+        (i,) = Fp2._first_ngens(1)
+        a = -1
+        print("Fp2 = Fp[x]/(x^2 + 1)")
+    else:
+        a = 2
+        while not (z**2 - a).is_irreducible():
+            a = a + 1
+        print("Fp2 = Fp[x]/(x^2 - {})".format(a))
+        Fp2 = Fp.extension(z**2 - a, names=("i",))
+        (i,) = Fp2._first_ngens(1)
+
+    # Fq = Fp2
+    Fp2s = Fp2["s"]
+    (s,) = Fp2s._first_ngens(1)
+    E2, xi, btw, D_twist = find_twist_curve_parameter_xi_ab(b, Fp2, r, d=6)
+    if D_twist:
+        print(
+            "BLS{}-{} E'(Fp4): y^2 = x^3 {:+d}/({}): D-twist".format(
+                k, p.nbits(), b, xi
+            )
+        )
+    else:
+        print(
+            "BLS{}-{} E'(Fp4): y^2 = x^3 {:+d}*({}): M-twist".format(
+                k, p.nbits(), b, xi
+            )
+        )
 
 def test_curve(u0):
     # preparse("QQx.<x> = QQ[]")
@@ -24,16 +83,7 @@ def test_curve(u0):
     tx = x + 1
     cx = (x - 1) ** 2 / 3
     yx = (x - 1) * (2 * x**2 - 1) / 3
-    c2x = (
-        x**8
-        - 4 * x**7
-        + 5 * x**6
-        - 4 * x**4
-        + 6 * x**3
-        - 4 * x**2
-        - 4 * x
-        + 13
-    ) / 9  # cofactor for G2
+    c2x = (x**8 - 4 * x**7 + 5 * x**6 - 4 * x**4 + 6 * x**3 - 4 * x**2 - 4 * x + 13) / 9  # cofactor for G2
     p = ZZ(px(u0))
     r = ZZ(rx(u0))
     c = ZZ(cx(u0))
@@ -127,7 +177,8 @@ def test_curve(u0):
 
 # bls12-381
 u0 = ZZ(-(2**63 + 2**62 + 2**60 + 2**57 + 2**48 + 2**16))
-test_curve(u0)
+# test_curve(u0)
+get_parameters(u0)
 
 # # bls12-446
 # u0 = ZZ(-(2**75 - 2**73 + 2**63 + 2**57 + 2**50 + 2**17 + 1))
