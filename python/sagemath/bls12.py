@@ -12,6 +12,7 @@ from sage.structure.proof.all import arithmetic
 
 from parameter import find_curve_parameter_b, find_twist_curve_parameter_xi_ab
 from test_pairing import test_order, test_ate_pairing_bls12_aklgl
+import json
 
 def get_parameters(u0):
     QQx = QQ["x"]
@@ -61,17 +62,31 @@ def get_parameters(u0):
     (s,) = Fp2s._first_ngens(1)
     E2, xi, btw, D_twist = find_twist_curve_parameter_xi_ab(b, Fp2, r, d=6)
     if D_twist:
-        print(
-            "BLS{}-{} E'(Fp4): y^2 = x^3 {:+d}/({}): D-twist".format(
-                k, p.nbits(), b, xi
-            )
-        )
+        print("BLS{}-{} E'(Fp4): y^2 = x^3 {:+d}/({}): D-twist".format(k, p.nbits(), b, xi))
     else:
-        print(
-            "BLS{}-{} E'(Fp4): y^2 = x^3 {:+d}*({}): M-twist".format(
-                k, p.nbits(), b, xi
-            )
-        )
+        print("BLS{}-{} E'(Fp4): y^2 = x^3 {:+d}*({}): M-twist".format(k, p.nbits(), b, xi))
+    
+    P = c * E.random_element()
+    while P == E(0) or r * P != E(0):
+        P = c * E.random_element()
+    Q = c2 * E2.random_element()
+    while Q == E2(0) or r * Q != E2(0):
+        Q = c2 * E2.random_element()
+
+
+    params = {
+        "p": int(p), 
+        "r": int(r), 
+        "b": int(b), 
+        "btw": [int(x) for x in btw.list()], 
+        "D_twist": D_twist, 
+        "P": [int(P[0]), int(P[1])], 
+        "Q": [[int(x) for x in Q[0].list()], [int(x) for x in Q[1].list()]]
+    }
+    with open("./param.json", "w") as f:
+        json.dump(params, f, indent=4)
+
+    return params 
 
 def test_curve(u0):
     # preparse("QQx.<x> = QQ[]")
