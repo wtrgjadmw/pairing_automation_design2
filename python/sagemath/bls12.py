@@ -14,7 +14,7 @@ from parameter import find_curve_parameter_b, find_twist_curve_parameter_xi_ab
 from test_pairing import test_order, test_ate_pairing_bls12_aklgl
 import json
 
-def get_parameters(u0):
+def get_parameters(u0, curve_name):
     QQx = QQ["x"]
     (x,) = QQx._first_ngens(1)
     # BLS12 polynomials
@@ -83,7 +83,8 @@ def get_parameters(u0):
         "P": [int(P[0]), int(P[1])], 
         "Q": [[int(x) for x in Q[0].list()], [int(x) for x in Q[1].list()]]
     }
-    with open("./param.json", "w") as f:
+
+    with open("./{}.json".format(curve_name), "w") as f:
         json.dump(params, f, indent=4)
 
     return params 
@@ -193,8 +194,9 @@ def test_curve(u0):
 # bls12-381
 u0 = ZZ(-(2**63 + 2**62 + 2**60 + 2**57 + 2**48 + 2**16))
 # test_curve(u0)
-get_parameters(u0)
+get_parameters(u0, curve_name="P381")
 
 # # bls12-446
-# u0 = ZZ(-(2**75 - 2**73 + 2**63 + 2**57 + 2**50 + 2**17 + 1))
+u0 = ZZ(-(2**75 - 2**73 + 2**63 + 2**57 + 2**50 + 2**17 + 1))
+get_parameters(u0, curve_name="P446")
 # test_curve(u0)
