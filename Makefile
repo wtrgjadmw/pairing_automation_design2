@@ -1,3 +1,4 @@
+SAGE_PATH=/Applications/SageMath-10-0.app/Contents/Frameworks/Sage.framework/Versions/10.0/local/var/lib/sage/venv-python3.11.1/bin/
 DIRNAME=.
 P_BIT=
 
