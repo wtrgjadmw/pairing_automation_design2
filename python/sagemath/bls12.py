@@ -75,6 +75,7 @@ def get_parameters(u0, curve_name):
 
 
     params = {
+        "u": int(u0),
         "p": int(p), 
         "r": int(r), 
         "b": int(b), 
