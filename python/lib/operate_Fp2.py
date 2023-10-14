@@ -1,6 +1,19 @@
-from parameters import *
-from operate_Fp import mul, add, sub, invFp, reduction, addDP, subDP, constMul, constMulDP, qnr1, srtFp, negFp
-from util import printFp
+from lib.parameters import *
+from lib.operate_Fp import (
+    mul,
+    add,
+    sub,
+    invFp,
+    reduction,
+    addDP,
+    subDP,
+    constMul,
+    constMulDP,
+    qnr1,
+    srtFp,
+    negFp,
+)
+from lib.util import printFp
 
 # モンゴメリ変換されたデータを扱う
 # Fp2: [a0, a1] -> a0 + a1u (u^2 = -1)
@@ -51,6 +64,7 @@ def mulFp2(a, b):
     c1 = sub(t4, t6)
     return [c0, c1]
 
+
 # reduction 無し, 大文字は倍精度
 def mulFp2_unr(a, b):
     T0 = a[0] * b[0]
@@ -69,11 +83,11 @@ def mulFp2_unr(a, b):
 
 
 def squareFp2(a):
-    t0 = (a[0] + (qnr1*a[1])%p) % p
+    t0 = (a[0] + (qnr1 * a[1]) % p) % p
     t1 = add(a[0], a[1])
     t2 = mul(t0, t1)
     t3 = mul(a[0], a[1])
-    t4 = (qnr1*t3) % p
+    t4 = (qnr1 * t3) % p
     t5 = add(t3, t4)
     c0 = sub(t2, t5)
     c1 = add(t3, t3)
@@ -86,15 +100,16 @@ def constMulFp2(a, k):
     new_i = mul(a[1], k)
     return [new_r, new_i]
 
+
 # https://github.com/relic-toolkit/relic/blob/83de89f714202f9b227a2138e4fe784ee6e202f5/src/fpx/relic_fp2_mul.c
-def guzaiFp2(a): # u^2 = guzai
-    if p_mod8 == 3: # guzai = i+1
+def guzaiFp2(a):  # u^2 = guzai
+    if p_mod8 == 3:  # guzai = i+1
         new_r = sub(a[0], a[1])
         new_i = add(a[0], a[1])
-    elif p_mod8 == 1 or p_mod8 == 5: # guzai = i
+    elif p_mod8 == 1 or p_mod8 == 5:  # guzai = i
         new_r = (qnr1 * a[1]) % p
         new_i = a[0]
-    elif p_mod8 == 7: # guzai = 2^k + i
+    elif p_mod8 == 7:  # guzai = 2^k + i
         b = a
         b[0] = (qnr1 * a[1]) % p
         b[1] = a[0]
@@ -106,11 +121,11 @@ def guzaiFp2(a): # u^2 = guzai
         return addFp2(b, c)
     else:
         raise Exception("characteristic number p is not prime")
-    
+
     return [new_r, new_i]
 
 
-def conjFp2(a): 
+def conjFp2(a):
     new_r = a[0]
     new_i = p - a[1]
     return [new_r, new_i]
@@ -127,7 +142,7 @@ def expFp2(f, u):
     return r
 
 
-def invFp2(a): # Itoh-Tsujii Inversion
+def invFp2(a):  # Itoh-Tsujii Inversion
     a_ = conjFp2(a)
     t = mulFp2(a, a_)
     s = invFp(t[0])
@@ -173,6 +188,7 @@ def srtFp2(a):
         return [c0, c1], True
     return [0, 0], False
 
+
 def get_qnr2():
     if p_mod8 == 1 or p_mod8 == 3 or p_mod8 == 5:
         return 0
@@ -192,17 +208,20 @@ def get_qnr2():
     else:
         Exception("characteristic number p is not prime")
 
+
 qnr2 = get_qnr2()
 
+
 def get_v2():
-    if p_mod8 == 3: # guzai = i+1
+    if p_mod8 == 3:  # guzai = i+1
         v2 = [MontConv(1), MontConv(1)]
-    elif p_mod8 == 1 or p_mod8 == 5: # guzai = i
+    elif p_mod8 == 1 or p_mod8 == 5:  # guzai = i
         v2 = [0, MontConv(1)]
     elif p_mod8 == 7:
         v2 = [MontConv(qnr2), MontConv(1)]
     else:
         raise Exception("characteristic number p is not prime")
     return v2
+
 
 v2 = get_v2()

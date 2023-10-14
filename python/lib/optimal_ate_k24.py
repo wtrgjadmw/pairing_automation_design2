@@ -1,19 +1,31 @@
-from ep4_operation import ep4_add_relic, ep4_dbl_relic
+from lib.ep4_operation import ep4_add_relic, ep4_dbl_relic
 
-from parameters import MontConv
-from parameters import bits_list
-from parameters import p, r, u, U
+from lib.parameters import MontConv
+from lib.parameters import bits_list
+from lib.parameters import p, r, u, U
 
-from operate_Fp4 import negFp4, constMulFp4
-from operate_Fp12 import conjFp12
-from operate_Fp24 import mulFp24, conjFp24, FrobFp24, invFp24, expFp24, sparseFp24, squareFp24, sparseFp24, mulFp24_conj_forRTL, squareFp24_forRTL
+from lib.operate_Fp4 import negFp4, constMulFp4
+from lib.operate_Fp12 import conjFp12
+from lib.operate_Fp24 import (
+    mulFp24,
+    conjFp24,
+    FrobFp24,
+    invFp24,
+    expFp24,
+    sparseFp24,
+    squareFp24,
+    sparseFp24,
+    mulFp24_conj_forRTL,
+    squareFp24_forRTL,
+)
 
-from util import *
+from lib.util import *
 
 
 def pp_dbl_first_k24(T, P):
     T, e = ep4_dbl_relic(T, P)
     return T, e
+
 
 def pp_dbl_k24(T, f, P):
     T, e = ep4_dbl_relic(T, P)
@@ -30,13 +42,19 @@ def pp_add_k24(T, f, P, Q):
 
 def pp_ml_k24(P, Q, T):
     m = U[::-1]
-    f = [[[[MontConv(1), 0], [0, 0]], [[0, 0], [0, 0]], [[0, 0], [0, 0]]], [[[0, 0], [0, 0]], [[0, 0], [0, 0]], [[0, 0], [0, 0]]]]
+    f = [
+        [[[MontConv(1), 0], [0, 0]], [[0, 0], [0, 0]], [[0, 0], [0, 0]]],
+        [[[0, 0], [0, 0]], [[0, 0], [0, 0]], [[0, 0], [0, 0]]],
+    ]
     negQ = [Q[0], negFp4(Q[1])]
-    PforDBL = [[[[0, 0], [0, 0]], [[0, 0], [0, 0]]], [[[0, 0], [0, 0]], [[0, 0], [0, 0]]]]
+    PforDBL = [
+        [[[0, 0], [0, 0]], [[0, 0], [0, 0]]],
+        [[[0, 0], [0, 0]], [[0, 0], [0, 0]]],
+    ]
     PforDBL[0] = constMulFp4(P[0], MontConv(3))
     PforDBL[1] = negFp4(P[1])
 
-    if (m[0] < 0):
+    if m[0] < 0:
         T = [Q[0], negFp4(Q[1]), [[MontConv(1), 0], [0, 0]]]
 
     for l in m[1:]:
@@ -63,7 +81,7 @@ def pp_fe_k24(f):
     t0 = mulFp24(f_, f_inv)
     t1 = FrobFp24(FrobFp24(FrobFp24(FrobFp24(t0))))
     fdash = mulFp24(t1, t0)
-    
+
     # Hard Part
     t0 = expFp24(fdash)
     t1 = expFp24(t0)
@@ -103,13 +121,13 @@ def pp_fe_k24(f):
 def final_exponentiation_forRTL(f):
     # ans = pp_fe_k24(f)
     # f の (p**24-1)*3//r乗を求める
-    
+
     # Easy Part
     e = invFp24(f)
     f = mulFp24_conj_forRTL(e, f)
     e = FrobFp24(FrobFp24(FrobFp24(FrobFp24(f))))
     f = mulFp24(e, f)
-    
+
     # Hard Part
     a = expFp24(f)
     b = expFp24(a)

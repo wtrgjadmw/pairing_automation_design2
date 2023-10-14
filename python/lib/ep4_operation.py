@@ -1,7 +1,8 @@
-from operate_Fp import mul
-from operate_Fp4 import mulFp4, subFp4, addFp4, constMulFp4, squareFp4, guzaiFp4
-from parameters import MontConv, B4, p, bits_of, twist_type
-from util import printFp4, printFp
+from lib.operate_Fp import mul
+from lib.operate_Fp4 import mulFp4, subFp4, addFp4, constMulFp4, squareFp4, guzaiFp4
+from lib.parameters import MontConv, B4, p, bits_of, twist_type
+from lib.util import printFp4, printFp
+
 
 # The Realm of the Pairing p15 参照
 # T, Q: 射影座標変換済み
@@ -64,9 +65,10 @@ def ep4_mul(n, T_):
     res = T_
     for nb in bits_of(n)[1:]:
         res = ep4_dbl(res)
-        if(nb == 1):
+        if nb == 1:
             res = ep4_add(res, T_)
     return res
+
 
 # TODO: アルゴリズム確認
 def ep4_add_relic(T, P, Q):
@@ -81,9 +83,12 @@ def ep4_add_relic(T, P, Q):
     t0 = subFp4(xt, t0)
     t1 = mulFp4(zt, yq)
     t1 = subFp4(yt, t1)
-    xp00_ = (-xp[0][0])%p
-    
-    l10 = [[mul(t1[0][0], xp00_), mul(t1[0][1], xp00_)], [mul(t1[1][0], xp00_), mul(t1[1][1], xp00_)]]
+    xp00_ = (-xp[0][0]) % p
+
+    l10 = [
+        [mul(t1[0][0], xp00_), mul(t1[0][1], xp00_)],
+        [mul(t1[1][0], xp00_), mul(t1[1][1], xp00_)],
+    ]
     t2 = squareFp4(t0)
     new_xt = mulFp4(xt, t2)
     t2 = mulFp4(t2, t0)
@@ -101,10 +106,13 @@ def ep4_add_relic(T, P, Q):
     new_zt = mulFp4(zt, t2)
     t2 = mulFp4(yq, t0)
     l11 = subFp4(t4, t2)
-    
-    l00 = [[mul(t0[0][0], yp[0][0]), mul(t0[0][1], yp[0][0])], [mul(t0[1][0], yp[0][0]), mul(t0[1][1], yp[0][0])]]
+
+    l00 = [
+        [mul(t0[0][0], yp[0][0]), mul(t0[0][1], yp[0][0])],
+        [mul(t0[1][0], yp[0][0]), mul(t0[1][1], yp[0][0])],
+    ]
     zero = [[0, 0], [0, 0]]
-    if twist_type == "D":
+    if D_twist:
         l11 = guzaiFp4(l11)
         e = [[l11, zero, l10], [zero, l00, zero]]
     else:
@@ -148,10 +156,16 @@ def ep4_dbl_relic(T, P):
     new_zt = addFp4(new_zt, new_zt)
     new_zt = mulFp4(new_zt, t5)
     l11 = subFp4(t3, t1)
-    l10 = [[mul(t0[0][0], xp[0][0]), mul(t0[0][1], xp[0][0])], [mul(t0[1][0], xp[0][0]), mul(t0[1][1], xp[0][0])]]
-    l00 = [[mul(t5[0][0], yp[0][0]), mul(t5[0][1], yp[0][0])], [mul(t5[1][0], yp[0][0]), mul(t5[1][1], yp[0][0])]]
+    l10 = [
+        [mul(t0[0][0], xp[0][0]), mul(t0[0][1], xp[0][0])],
+        [mul(t0[1][0], xp[0][0]), mul(t0[1][1], xp[0][0])],
+    ]
+    l00 = [
+        [mul(t5[0][0], yp[0][0]), mul(t5[0][1], yp[0][0])],
+        [mul(t5[1][0], yp[0][0]), mul(t5[1][1], yp[0][0])],
+    ]
     zero = [[0, 0], [0, 0]]
-    if twist_type == "D":
+    if D_twist:
         l11 = guzaiFp4(l11)
         e = [[l11, zero, l10], [zero, l00, zero]]
     else:

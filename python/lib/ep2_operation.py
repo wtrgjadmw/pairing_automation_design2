@@ -1,7 +1,15 @@
-from operate_Fp import mul, negFp
-from operate_Fp2 import mulFp2, subFp2, addFp2, constMulFp2, squareFp2, guzaiFp2, negFp2
-from parameters import *
-from util import printFp2, printFp
+from lib.operate_Fp import mul, negFp
+from lib.operate_Fp2 import (
+    mulFp2,
+    subFp2,
+    addFp2,
+    constMulFp2,
+    squareFp2,
+    guzaiFp2,
+    negFp2,
+)
+from lib.parameters import *
+from lib.util import printFp2, printFp
 
 
 # TODO: アルゴリズム確認
@@ -38,8 +46,8 @@ def ep2_add(T, P, Q):
     a = mulFp2(xq, a)
     l01 = subFp2(l01, a)
     zero = [0, 0]
-    if twist_type == "D":
-        l = [[l00, l01], [l10, zero], [zero, zero]] 
+    if D_twist:
+        l = [[l00, l01], [l10, zero], [zero, zero]]
     else:
         l = [[l01, l00], [zero, zero], [l10, zero]]
     return [new_xt, new_yt, new_zt], l
@@ -78,16 +86,17 @@ def ep2_dbl(T, P):
     l00 = [mul(e[0], yp[0]), mul(e[1], yp[0])]
     l10 = [mul(d[0], negFp(xp[0])), mul(d[1], negFp(xp[0]))]
     zero = [0, 0]
-    if twist_type == "D":
-        l = [[l00, l01], [l10, zero], [zero, zero]] 
+    if D_twist:
+        l = [[l00, l01], [l10, zero], [zero, zero]]
     else:
         l = [[l01, l00], [zero, zero], [l10, zero]]
     return [new_xt, new_yt, new_zt], l
+
 
 def ep2_mul(n, T_):
     res = T_
     for nb in bits_of(n)[1:]:
         res, e = ep2_dbl(res, P)
-        if(nb == 1):
+        if nb == 1:
             res, e = ep2_add(res, P, T_)
     return res

@@ -271,23 +271,23 @@ def test_curve(u0):
 
     test_ate_pairing_bls24_aklgl(E, E2, r, c, c2, u0, Fq6, map_Fq6_Fp24, D_twist)
 
+if __name__ == "__main__":
+    # # BLS24-315
+    u0 = ZZ(-(2**32) + 2**30 + 2**21 + 2**20 + 1)
+    get_parameters(u0, curve_name="P315")
+    # test_curve(u0)
 
-# # BLS24-315
-u0 = ZZ(-(2**32) + 2**30 + 2**21 + 2**20 + 1)
-get_parameters(u0, curve_name="P315")
-# test_curve(u0)
+    # BLS24-317
+    u0 = ZZ(2**31 + 2**30 + 2**28 + 2**27 + 2**24 + 2**16 + 2**15)
+    get_parameters(u0, curve_name="P317")
+    # test_curve(u0)
 
-# BLS24-317
-u0 = ZZ(2**31 + 2**30 + 2**28 + 2**27 + 2**24 + 2**16 + 2**15)
-get_parameters(u0, curve_name="P317")
-# test_curve(u0)
+    # # BLS24-318
+    u0 = ZZ(-(2**32) + 2**28 + 2**12)
+    get_parameters(u0, curve_name="P318")
+    # test_curve(u0)
 
-# # BLS24-318
-u0 = ZZ(-(2**32) + 2**28 + 2**12)
-get_parameters(u0, curve_name="P318")
-# test_curve(u0)
-
-# # BLS24-509
-u0 = ZZ(-(2**51) - 2**28 + 2**11 - 1)
-get_parameters(u0, curve_name="P509")
-# test_curve(u0)
+    # # BLS24-509
+    u0 = ZZ(-(2**51) - 2**28 + 2**11 - 1)
+    get_parameters(u0, curve_name="P509")
+    # test_curve(u0)

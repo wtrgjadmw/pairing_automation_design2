@@ -1,7 +1,31 @@
-from operate_Fp12 import Fp12SparseMul_forRTL, addFp12, subFp12, mulFp12, guzaiFp12, negFp12, invFp12, constMulFp12, squareFp12, Fp12SparseMul
-from operate_Fp4 import addFp4, invFp4_forRTL, mulFp4, subFp4, expFp4, conjFp4, guzaiFp4, squareFp4, negFp4, FrobFp4, mulFp4, invFp4
-from parameters import p, MontConv, bits_of, U
-from util import *
+from lib.operate_Fp12 import (
+    Fp12SparseMul_forRTL,
+    addFp12,
+    subFp12,
+    mulFp12,
+    guzaiFp12,
+    negFp12,
+    invFp12,
+    constMulFp12,
+    squareFp12,
+    Fp12SparseMul,
+)
+from lib.operate_Fp4 import (
+    addFp4,
+    invFp4_forRTL,
+    mulFp4,
+    subFp4,
+    expFp4,
+    conjFp4,
+    guzaiFp4,
+    squareFp4,
+    negFp4,
+    FrobFp4,
+    mulFp4,
+    invFp4,
+)
+from lib.parameters import p, MontConv, bits_of, U
+from lib.util import *
 
 # Fp24: [a0, a1] -> a0 + a1z (Fp12: a0 = [a00, a01, a02] -> a00 + a01w + a02w^2)
 
@@ -15,55 +39,56 @@ def mulFp24(a, b):
     c0 = addFp12(t0, t1)
     return [c0, c1]
 
+
 def mulFp24_forRTL(a, b):
     # t0 = mulFp12(a[0], b[0])
-    T0 = mulFp4(a[0][0], b[0][0]) 
-    T1 = mulFp4(a[0][1], b[0][1]) 
-    T2 = mulFp4(a[0][2], b[0][2]) 
-    T3 = addFp4(a[0][0], a[0][1]) 
-    T4 = addFp4(b[0][0], b[0][1]) 
-    T3 = mulFp4(T3, T4) 
-    T4 = addFp4(a[0][1], a[0][2]) 
-    T5 = addFp4(b[0][1], b[0][2]) 
-    T4 = mulFp4(T4, T5) 
-    T5 = addFp4(a[0][0], a[0][2]) 
-    T6 = addFp4(b[0][0], b[0][2]) 
-    T5 = mulFp4(T5, T6) 
+    T0 = mulFp4(a[0][0], b[0][0])
+    T1 = mulFp4(a[0][1], b[0][1])
+    T2 = mulFp4(a[0][2], b[0][2])
+    T3 = addFp4(a[0][0], a[0][1])
+    T4 = addFp4(b[0][0], b[0][1])
+    T3 = mulFp4(T3, T4)
+    T4 = addFp4(a[0][1], a[0][2])
+    T5 = addFp4(b[0][1], b[0][2])
+    T4 = mulFp4(T4, T5)
+    T5 = addFp4(a[0][0], a[0][2])
+    T6 = addFp4(b[0][0], b[0][2])
+    T5 = mulFp4(T5, T6)
     T3 = subFp4(T3, T0)
     T3 = subFp4(T3, T1)
     T4 = subFp4(T4, T1)
     T4 = subFp4(T4, T2)
     T4 = guzaiFp4(T4)
-    T7 = addFp4(T0, T4) # c0
+    T7 = addFp4(T0, T4)  # c0
     T5 = subFp4(T5, T2)
     T5 = subFp4(T5, T0)
     T2 = guzaiFp4(T2)
-    T8 = addFp4(T3, T2) # c1
-    T9 = addFp4(T1, T5) # c2
+    T8 = addFp4(T3, T2)  # c1
+    T9 = addFp4(T1, T5)  # c2
     # t1 = mulFp12(a[1], b[1])
-    T0 = mulFp4(a[1][0], b[1][0]) 
-    T1 = mulFp4(a[1][1], b[1][1]) 
-    T2 = mulFp4(a[1][2], b[1][2]) 
-    T3 = addFp4(a[1][0], a[1][1]) 
-    T4 = addFp4(b[1][0], b[1][1]) 
-    T3 = mulFp4(T3, T4) 
-    T4 = addFp4(a[1][1], a[1][2]) 
-    T5 = addFp4(b[1][1], b[1][2]) 
-    T4 = mulFp4(T4, T5) 
-    T5 = addFp4(a[1][0], a[1][2]) 
-    T6 = addFp4(b[1][0], b[1][2]) 
-    T5 = mulFp4(T5, T6) 
+    T0 = mulFp4(a[1][0], b[1][0])
+    T1 = mulFp4(a[1][1], b[1][1])
+    T2 = mulFp4(a[1][2], b[1][2])
+    T3 = addFp4(a[1][0], a[1][1])
+    T4 = addFp4(b[1][0], b[1][1])
+    T3 = mulFp4(T3, T4)
+    T4 = addFp4(a[1][1], a[1][2])
+    T5 = addFp4(b[1][1], b[1][2])
+    T4 = mulFp4(T4, T5)
+    T5 = addFp4(a[1][0], a[1][2])
+    T6 = addFp4(b[1][0], b[1][2])
+    T5 = mulFp4(T5, T6)
     T3 = subFp4(T3, T0)
     T3 = subFp4(T3, T1)
     T4 = subFp4(T4, T1)
     T4 = subFp4(T4, T2)
     T4 = guzaiFp4(T4)
-    T10 = addFp4(T0, T4) # c0
+    T10 = addFp4(T0, T4)  # c0
     T5 = subFp4(T5, T2)
     T5 = subFp4(T5, T0)
     T2 = guzaiFp4(T2)
-    T11 = addFp4(T3, T2) # c1
-    T12 = addFp4(T1, T5) # c2
+    T11 = addFp4(T3, T2)  # c1
+    T12 = addFp4(T1, T5)  # c2
     # t2 = mulFp12(addFp12(a[0], a[1]), addFp12(b[0], b[1]))
     T13 = addFp4(a[0][0], a[1][0])
     T14 = addFp4(a[0][1], a[1][1])
@@ -71,29 +96,29 @@ def mulFp24_forRTL(a, b):
     T16 = addFp4(b[0][0], b[1][0])
     T17 = addFp4(b[0][1], b[1][1])
     T18 = addFp4(b[0][2], b[1][2])
-    T0 = mulFp4(T13, T16) 
-    T1 = mulFp4(T14, T17) 
-    T2 = mulFp4(T15, T18) 
-    T3 = addFp4(T13, T14) 
-    T4 = addFp4(T16, T17) 
-    T3 = mulFp4(T3, T4) 
-    T4 = addFp4(T14, T15) 
-    T5 = addFp4(T17, T18) 
-    T4 = mulFp4(T4, T5) 
-    T5 = addFp4(T13, T15) 
-    T6 = addFp4(T16, T18) 
-    T5 = mulFp4(T5, T6) 
+    T0 = mulFp4(T13, T16)
+    T1 = mulFp4(T14, T17)
+    T2 = mulFp4(T15, T18)
+    T3 = addFp4(T13, T14)
+    T4 = addFp4(T16, T17)
+    T3 = mulFp4(T3, T4)
+    T4 = addFp4(T14, T15)
+    T5 = addFp4(T17, T18)
+    T4 = mulFp4(T4, T5)
+    T5 = addFp4(T13, T15)
+    T6 = addFp4(T16, T18)
+    T5 = mulFp4(T5, T6)
     T3 = subFp4(T3, T0)
     T3 = subFp4(T3, T1)
     T4 = subFp4(T4, T1)
     T4 = subFp4(T4, T2)
     T4 = guzaiFp4(T4)
-    T4 = addFp4(T0, T4) # c0
+    T4 = addFp4(T0, T4)  # c0
     T5 = subFp4(T5, T2)
     T5 = subFp4(T5, T0)
     T2 = guzaiFp4(T2)
-    T3 = addFp4(T3, T2) # c1
-    T5 = addFp4(T1, T5) # c2
+    T3 = addFp4(T3, T2)  # c1
+    T5 = addFp4(T1, T5)  # c2
     # c1 = subFp12(t2, addFp12(t0, t1))
     C10 = subFp4(T4, T7)
     C10 = subFp4(C10, T10)
@@ -109,55 +134,56 @@ def mulFp24_forRTL(a, b):
     C02 = addFp4(T9, T11)
     return [[C00, C01, C02], [C10, C11, C12]]
 
+
 def mulFp24_conj_forRTL(a, b):
     # t0 = mulFp12(a[0], b[0])
-    T0 = mulFp4(a[0][0], b[0][0]) 
-    T1 = mulFp4(a[0][1], b[0][1]) 
-    T2 = mulFp4(a[0][2], b[0][2]) 
-    T3 = addFp4(a[0][0], a[0][1]) 
-    T4 = addFp4(b[0][0], b[0][1]) 
-    T3 = mulFp4(T3, T4) 
-    T4 = addFp4(a[0][1], a[0][2]) 
-    T5 = addFp4(b[0][1], b[0][2]) 
-    T4 = mulFp4(T4, T5) 
-    T5 = addFp4(a[0][0], a[0][2]) 
-    T6 = addFp4(b[0][0], b[0][2]) 
-    T5 = mulFp4(T5, T6) 
+    T0 = mulFp4(a[0][0], b[0][0])
+    T1 = mulFp4(a[0][1], b[0][1])
+    T2 = mulFp4(a[0][2], b[0][2])
+    T3 = addFp4(a[0][0], a[0][1])
+    T4 = addFp4(b[0][0], b[0][1])
+    T3 = mulFp4(T3, T4)
+    T4 = addFp4(a[0][1], a[0][2])
+    T5 = addFp4(b[0][1], b[0][2])
+    T4 = mulFp4(T4, T5)
+    T5 = addFp4(a[0][0], a[0][2])
+    T6 = addFp4(b[0][0], b[0][2])
+    T5 = mulFp4(T5, T6)
     T3 = subFp4(T3, T0)
     T3 = subFp4(T3, T1)
     T4 = subFp4(T4, T1)
     T4 = subFp4(T4, T2)
     T4 = guzaiFp4(T4)
-    T7 = addFp4(T0, T4) # c0
+    T7 = addFp4(T0, T4)  # c0
     T5 = subFp4(T5, T2)
     T5 = subFp4(T5, T0)
     T2 = guzaiFp4(T2)
-    T8 = addFp4(T3, T2) # c1
-    T9 = addFp4(T1, T5) # c2
+    T8 = addFp4(T3, T2)  # c1
+    T9 = addFp4(T1, T5)  # c2
     # t1 = mulFp12(a[1], negFp12(b[1]))
-    T0 = mulFp4(a[1][0], b[1][0]) 
-    T1 = mulFp4(a[1][1], b[1][1]) 
-    T2 = mulFp4(a[1][2], b[1][2]) 
-    T3 = addFp4(a[1][0], a[1][1]) 
-    T4 = addFp4(b[1][0], b[1][1]) 
-    T3 = mulFp4(T3, T4) 
-    T4 = addFp4(a[1][1], a[1][2]) 
-    T5 = addFp4(b[1][1], b[1][2]) 
-    T4 = mulFp4(T4, T5) 
-    T5 = addFp4(a[1][0], a[1][2]) 
-    T6 = addFp4(b[1][0], b[1][2]) 
-    T5 = mulFp4(T5, T6) 
+    T0 = mulFp4(a[1][0], b[1][0])
+    T1 = mulFp4(a[1][1], b[1][1])
+    T2 = mulFp4(a[1][2], b[1][2])
+    T3 = addFp4(a[1][0], a[1][1])
+    T4 = addFp4(b[1][0], b[1][1])
+    T3 = mulFp4(T3, T4)
+    T4 = addFp4(a[1][1], a[1][2])
+    T5 = addFp4(b[1][1], b[1][2])
+    T4 = mulFp4(T4, T5)
+    T5 = addFp4(a[1][0], a[1][2])
+    T6 = addFp4(b[1][0], b[1][2])
+    T5 = mulFp4(T5, T6)
     T3 = subFp4(T0, T3)
     T3 = addFp4(T3, T1)
     T4 = subFp4(T1, T4)
     T4 = addFp4(T4, T2)
     T4 = guzaiFp4(T4)
-    T10 = subFp4(T4, T0) # c0
+    T10 = subFp4(T4, T0)  # c0
     T5 = subFp4(T2, T5)
     T5 = addFp4(T5, T0)
     T2 = guzaiFp4(T2)
-    T11 = subFp4(T3, T2) # c1
-    T12 = subFp4(T5, T1) # c2
+    T11 = subFp4(T3, T2)  # c1
+    T12 = subFp4(T5, T1)  # c2
     # t2 = mulFp12(addFp12(a[0], a[1]), subFp12(b[0], b[1]))
     a[0][0] = addFp4(a[0][0], a[1][0])
     a[0][1] = addFp4(a[0][1], a[1][1])
@@ -165,29 +191,29 @@ def mulFp24_conj_forRTL(a, b):
     b[0][0] = subFp4(b[0][0], b[1][0])
     b[0][1] = subFp4(b[0][1], b[1][1])
     b[0][2] = subFp4(b[0][2], b[1][2])
-    T0 = mulFp4(a[0][0], b[0][0]) 
-    T1 = mulFp4(a[0][1], b[0][1]) 
-    T2 = mulFp4(a[0][2], b[0][2]) 
-    T3 = addFp4(a[0][0], a[0][1]) 
-    T4 = addFp4(b[0][0], b[0][1]) 
-    T3 = mulFp4(T3, T4) 
-    T4 = addFp4(a[0][1], a[0][2]) 
-    T5 = addFp4(b[0][1], b[0][2]) 
-    T4 = mulFp4(T4, T5) 
-    T5 = addFp4(a[0][0], a[0][2]) 
-    T6 = addFp4(b[0][0], b[0][2]) 
-    T5 = mulFp4(T5, T6) 
+    T0 = mulFp4(a[0][0], b[0][0])
+    T1 = mulFp4(a[0][1], b[0][1])
+    T2 = mulFp4(a[0][2], b[0][2])
+    T3 = addFp4(a[0][0], a[0][1])
+    T4 = addFp4(b[0][0], b[0][1])
+    T3 = mulFp4(T3, T4)
+    T4 = addFp4(a[0][1], a[0][2])
+    T5 = addFp4(b[0][1], b[0][2])
+    T4 = mulFp4(T4, T5)
+    T5 = addFp4(a[0][0], a[0][2])
+    T6 = addFp4(b[0][0], b[0][2])
+    T5 = mulFp4(T5, T6)
     T3 = subFp4(T3, T0)
     T3 = subFp4(T3, T1)
     T4 = subFp4(T4, T1)
     T4 = subFp4(T4, T2)
     T4 = guzaiFp4(T4)
-    T4 = addFp4(T0, T4) # c0
+    T4 = addFp4(T0, T4)  # c0
     T5 = subFp4(T5, T2)
     T5 = subFp4(T5, T0)
     T2 = guzaiFp4(T2)
-    T3 = addFp4(T3, T2) # c1
-    T5 = addFp4(T1, T5) # c2
+    T3 = addFp4(T3, T2)  # c1
+    T5 = addFp4(T1, T5)  # c2
     # c1 = subFp12(t2, addFp12(t0, t1))
     C10 = subFp4(T4, T7)
     C10 = subFp4(C10, T10)
@@ -215,6 +241,7 @@ def squareFp24(a):
     c1 = addFp12(t3, t3)
     return [c0, c1]
 
+
 def squareFp24_forRTL(a):
     # t0 = addFp12(a[0], guzaiFp12(a[1]))
     T0 = guzaiFp4(a[1][2])
@@ -226,14 +253,14 @@ def squareFp24_forRTL(a):
     T4 = addFp4(a[0][1], a[1][1])
     T5 = addFp4(a[0][2], a[1][2])
     # t2 = mulFp12(t0, t1)
-    T6 = mulFp4(T0, T3) 
-    T7 = mulFp4(T1, T4) 
-    T8 = mulFp4(T2, T5) 
-    T9 = addFp4(T0, T1) 
-    T10 = addFp4(T3, T4) 
-    T9 = mulFp4(T9, T10) 
-    T1 = addFp4(T1, T2) 
-    T4 = addFp4(T4, T5) 
+    T6 = mulFp4(T0, T3)
+    T7 = mulFp4(T1, T4)
+    T8 = mulFp4(T2, T5)
+    T9 = addFp4(T0, T1)
+    T10 = addFp4(T3, T4)
+    T9 = mulFp4(T9, T10)
+    T1 = addFp4(T1, T2)
+    T4 = addFp4(T4, T5)
     T1 = mulFp4(T1, T4)
     T2 = addFp4(T0, T2)
     T5 = addFp4(T3, T5)
@@ -243,21 +270,21 @@ def squareFp24_forRTL(a):
     T1 = subFp4(T1, T7)
     T1 = subFp4(T1, T8)
     T1 = guzaiFp4(T1)
-    T0 = addFp4(T6, T1) # c0
+    T0 = addFp4(T6, T1)  # c0
     T2 = subFp4(T2, T8)
     T2 = subFp4(T2, T6)
     T8 = guzaiFp4(T8)
-    T1 = addFp4(T9, T8) # c1
-    T2 = addFp4(T7, T2) # c2
+    T1 = addFp4(T9, T8)  # c1
+    T2 = addFp4(T7, T2)  # c2
     # t3 = mulFp12(a[0], a[1])
-    T6 = mulFp4(a[0][0], a[1][0]) 
-    T7 = mulFp4(a[0][1], a[1][1]) 
-    T8 = mulFp4(a[0][2], a[1][2]) 
-    T9 = addFp4(a[0][0], a[0][1]) 
-    T10 = addFp4(a[1][0], a[1][1]) 
-    T9 = mulFp4(T9, T10) 
-    T3 = addFp4(a[0][1], a[0][2]) 
-    T4 = addFp4(a[1][1], a[1][2]) 
+    T6 = mulFp4(a[0][0], a[1][0])
+    T7 = mulFp4(a[0][1], a[1][1])
+    T8 = mulFp4(a[0][2], a[1][2])
+    T9 = addFp4(a[0][0], a[0][1])
+    T10 = addFp4(a[1][0], a[1][1])
+    T9 = mulFp4(T9, T10)
+    T3 = addFp4(a[0][1], a[0][2])
+    T4 = addFp4(a[1][1], a[1][2])
     T3 = mulFp4(T3, T4)
     T4 = addFp4(a[0][0], a[0][2])
     T5 = addFp4(a[1][0], a[1][2])
@@ -267,12 +294,12 @@ def squareFp24_forRTL(a):
     T3 = subFp4(T3, T7)
     T3 = subFp4(T3, T8)
     T3 = guzaiFp4(T3)
-    T3 = addFp4(T6, T3) # c0
+    T3 = addFp4(T6, T3)  # c0
     T4 = subFp4(T4, T8)
     T4 = subFp4(T4, T6)
     T8 = guzaiFp4(T8)
-    T5 = addFp4(T7, T4) # c2
-    T4 = addFp4(T9, T8) # c1
+    T5 = addFp4(T7, T4)  # c2
+    T4 = addFp4(T9, T8)  # c1
     # t4 = guzaiFp12(t3)
     # t5 = addFp12(t3, t4)
     T6 = guzaiFp4(T5)
@@ -464,7 +491,7 @@ def conjFp24(a):
 def sparseFp24(a, b):
     # a = Dtype: [[a00, 0, a02], [0, a11, 0]], Mtype:[[a00, a01, 0], [0, a11, 0]]
     # b = [b0, b1] (= [[b00, T5, b02], [b10, b11, b12]])
-    if twist_type == "D":
+    if D_twist:
         T0 = mulFp4(a[1][1], b[0][2])
         T0 = guzaiFp4(T0)
         T1 = mulFp4(a[1][1], b[0][0])
@@ -475,29 +502,29 @@ def sparseFp24(a, b):
         T1 = mulFp4(a[1][1], b[1][0])
         T2 = mulFp4(a[1][1], b[1][1])
     A = [T0, T1, T2]
-    if twist_type == "D":
-        B = Fp12SparseMul_forRTL(a[0], b[1]) # [T4, T6, T7]
+    if D_twist:
+        B = Fp12SparseMul_forRTL(a[0], b[1])  # [T4, T6, T7]
     else:
-        B = Fp12SparseMul(a[0], b[0]) # [T5, T7, T6]
-    if twist_type == "D":
-        a[0][2] = addFp4(a[0][2], a[1][1]) #E02
+        B = Fp12SparseMul(a[0], b[0])  # [T5, T7, T6]
+    if D_twist:
+        a[0][2] = addFp4(a[0][2], a[1][1])  # E02
     else:
-        a[0][1] = addFp4(a[0][1], a[1][1]) #E01
-    b[0] = addFp12(b[0], b[1]) # [F00, F01, F02]
-    if twist_type == "D":
-        H = addFp12(A, B) # [F10, F11, F12]
-        E = Fp12SparseMul_forRTL(a[0], b[0]) # [T8, T9, T10]
+        a[0][1] = addFp4(a[0][1], a[1][1])  # E01
+    b[0] = addFp12(b[0], b[1])  # [F00, F01, F02]
+    if D_twist:
+        H = addFp12(A, B)  # [F10, F11, F12]
+        E = Fp12SparseMul_forRTL(a[0], b[0])  # [T8, T9, T10]
         T2 = guzaiFp4(T2)
         A = [T2, T0, T1]
-        F = subFp12(E, A) # [F00, F01, F02]
+        F = subFp12(E, A)  # [F00, F01, F02]
     else:
-        E = Fp12SparseMul(a[0], b[0]) # [T8, T10, T9]
-        F = subFp12(E, A) # [F00, F01, F02]
+        E = Fp12SparseMul(a[0], b[0])  # [T8, T10, T9]
+        F = subFp12(E, A)  # [F00, F01, F02]
         T2 = guzaiFp4(T2)
         A = [T2, T0, T1]
-        H = addFp12(A, B) # [F10, F11, F12]
-    F = subFp12(F, B) # [F00, F01, F02]
-    return [F, H] if twist_type == "D" else [H, F]
+        H = addFp12(A, B)  # [F10, F11, F12]
+    F = subFp12(F, B)  # [F00, F01, F02]
+    return [F, H] if D_twist else [H, F]
 
 
 def expFp24_for_test(a, u):
@@ -511,28 +538,33 @@ def expFp24_for_test(a, u):
         r = invFp24(r)
     return r
 
+
 # NOTE: Final Exponentiation Hard Partではこっちを使う
 def expFp24(a):
     r = a
-    res = [[[[MontConv(1), 0], [0, 0]], [[0, 0], [0, 0]], [[0, 0], [0, 0]]], [[[0, 0], [0, 0]], [[0, 0], [0, 0]], [[0, 0], [0, 0]]]]
+    res = [
+        [[[MontConv(1), 0], [0, 0]], [[0, 0], [0, 0]], [[0, 0], [0, 0]]],
+        [[[0, 0], [0, 0]], [[0, 0], [0, 0]], [[0, 0], [0, 0]]],
+    ]
     for ui in U:
-        if (ui == 1):
+        if ui == 1:
             res = mulFp24(res, r)
-        if (ui == -1):
+        if ui == -1:
             # NOTE: hard partでは冪乗する数a(=conj(f)/f)がunitaryなのでinv(a)=conj(a)
             res = mulFp24(res, conjFp24(r))
         r = SQR012345Fp24(r)
     return res
 
+
 def FrobFp24(f):
     v = [[0, 0], [MontConv(1), 0]]
     xi1 = [
         [[MontConv(1), 0], [0, 0]],
-        expFp4(v, (p-1)//6),
-        expFp4(v, 2*(p-1)//6),
-        expFp4(v, 3*(p-1)//6),
-        expFp4(v, 4*(p-1)//6),
-        expFp4(v, 5*(p-1)//6)
+        expFp4(v, (p - 1) // 6),
+        expFp4(v, 2 * (p - 1) // 6),
+        expFp4(v, 3 * (p - 1) // 6),
+        expFp4(v, 4 * (p - 1) // 6),
+        expFp4(v, 5 * (p - 1) // 6),
     ]
     f10_c = FrobFp4(f[1][0])
     f01_c = FrobFp4(f[0][1])

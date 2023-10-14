@@ -1,7 +1,23 @@
-from operate_Fp2 import mulFp2, reductionFp2, addFp2, expFp2, subFp2, mulFp2_unr, constMulFp2, guzaiFp2, addDPFp2, subDPFp2, squareFp2, conjFp2, negFp2, invFp2, v2
-from operate_Fp import mul, add, sub, invFp
-from parameters import *
-from util import *
+from lib.operate_Fp2 import (
+    mulFp2,
+    reductionFp2,
+    addFp2,
+    expFp2,
+    subFp2,
+    mulFp2_unr,
+    constMulFp2,
+    guzaiFp2,
+    addDPFp2,
+    subDPFp2,
+    squareFp2,
+    conjFp2,
+    negFp2,
+    invFp2,
+    v2,
+)
+from lib.operate_Fp import mul, add, sub, invFp
+from lib.parameters import *
+from lib.util import *
 
 """
 E/Fp^4: y^2 = x^3 + [[A0, A1], [A2, A3]]x + [[B0, B1], [B2, B3]]
@@ -9,11 +25,14 @@ E/Fp^4: y^2 = x^3 + [[A0, A1], [A2, A3]]x + [[B0, B1], [B2, B3]]
 Fp4: [a0, a1] -> a0 + a1v (Fp2: a0 = [a00, a01] -> a00 + a01u)
 """
 
+
 def get_k():
-    k = expFp2(v2, (p-1)//2)
+    k = expFp2(v2, (p - 1) // 2)
     return k
 
+
 k = get_k()
+
 
 def reductionFp4(x):
     c0 = reductionFp2(x[0])
@@ -106,7 +125,7 @@ def conjFp4(a):
     return [a[0], negFp2(a[1])]
 
 
-def guzaiFp4(a): # v^2 = guzai = u
+def guzaiFp4(a):  # v^2 = guzai = u
     return [guzaiFp2(a[1]), a[0]]
 
 
@@ -120,7 +139,8 @@ def invFp4(a):
     c1 = mulFp2(a[1], denom_inv)
     return [c0, negFp2(c1)]
 
-def invFp4_forRTL(a): # for BLS24-509
+
+def invFp4_forRTL(a):  # for BLS24-509
     # aa = squareFp2(a[0])
     t0 = sub(a[0][0], a[0][1])
     t1_a0 = add(a[0][0], a[0][1])
@@ -181,6 +201,7 @@ def FrobFp4(a):
     c0 = conjFp2(a[0])
     c1 = mulFp2(conjFp2(a[1]), k)
     return [c0, c1]
+
 
 if __name__ == "__main__":
     printFp2(k)

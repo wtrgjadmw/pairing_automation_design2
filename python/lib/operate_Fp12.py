@@ -1,11 +1,31 @@
-from operate_Fp2 import negFp2, addFp2, subFp2, mulFp2, squareFp2, guzaiFp2, expFp2, conjFp2, v2
-from operate_Fp4 import addFp4, subFp4, mulFp4, guzaiFp4, invFp4, negFp4, constMulFp4, squareFp4, mulFp4
-from util import printFp4
-from parameters import MontConv, p, bits_list, bits_of
-from constants import U, twist_type
+from lib.operate_Fp2 import (
+    negFp2,
+    addFp2,
+    subFp2,
+    mulFp2,
+    squareFp2,
+    guzaiFp2,
+    expFp2,
+    conjFp2,
+    v2,
+)
+from lib.operate_Fp4 import (
+    addFp4,
+    subFp4,
+    mulFp4,
+    guzaiFp4,
+    invFp4,
+    negFp4,
+    constMulFp4,
+    squareFp4,
+    mulFp4,
+)
+from lib.util import printFp4
+from lib.parameters import MontConv, p, bits_list, bits_of, U, D_twist
 
 # Fp12: [a0, a1, a2] -> a0 + a1w + a2w^2 (Fp4: a0 = [a00, a01] -> a00 + a01v)
 # w^3 + v = 0, v^2 + u + 1 = 0, u^2 + 1 = 0
+
 
 def addFp12(a, b):
     c0 = addFp4(a[0], b[0])
@@ -61,7 +81,7 @@ def constMulFp12(a, k):
     return [constMulFp4(a[0], k), constMulFp4(a[1], k), constMulFp4(a[2], k)]
 
 
-def guzaiFp12(a): # w^3 = guzai = v
+def guzaiFp12(a):  # w^3 = guzai = v
     return [guzaiFp4(a[2]), a[0], a[1]]
 
 
@@ -100,6 +120,7 @@ def conjFp12(a):
     a21 = negFp2(a[2][1])
     return [[a[0][0], a01], [a10, a[1][1]], [a[2][0], a21]]
 
+
 def SQR012345Fp12(a):
     T0 = squareFp2(a[0][0])
     T1 = addFp2(a[0][0], a[1][1])
@@ -110,9 +131,9 @@ def SQR012345Fp12(a):
     T3 = mulFp2(a[1][1], a[2][0])
     T3 = addFp2(T3, T3)
     T4 = squareFp2(a[1][1])
-    T5 = mulFp2(a[0][0], a[0][1]) #B01
-    T6 = mulFp2(a[2][0], a[2][1]) #B45
-    T7 = mulFp2(a[1][0], a[1][1]) #B23
+    T5 = mulFp2(a[0][0], a[0][1])  # B01
+    T6 = mulFp2(a[2][0], a[2][1])  # B45
+    T7 = mulFp2(a[1][0], a[1][1])  # B23
     c00 = guzaiFp2(T3)
     c00 = addFp2(T0, c00)
     c00 = addFp2(c00, c00)
@@ -146,9 +167,9 @@ def expFp12(a):
     r = a
     res = [[[MontConv(1), 0], [0, 0]], [[0, 0], [0, 0]], [[0, 0], [0, 0]]]
     for ui in U:
-        if (ui == 1):
+        if ui == 1:
             res = mulFp12(res, r)
-        if (ui == -1):
+        if ui == -1:
             # NOTE: hard partでは冪乗する数a(=conj(f)/f)がunitaryなのでinv(a)=conj(a)
             res = mulFp12(res, conjFp12(r))
         r = SQR012345Fp12(r)
@@ -161,22 +182,21 @@ def expFp12_for_test(a, k):
     k_bit_list = bits_of(abs_k)
     for ui in k_bit_list[1:]:
         r = squareFp12(r)
-        if (ui == 1):
+        if ui == 1:
             r = mulFp12(r, a)
     if k < 0:
         r = invFp12(r)
     return r
 
 
-
 def FrobFp12(f):
     xi1 = [
         [MontConv(1), 0],
-        expFp2(v2, (p-1)//6),
-        expFp2(v2, 2*(p-1)//6),
-        expFp2(v2, 3*(p-1)//6),
-        expFp2(v2, 4*(p-1)//6),
-        expFp2(v2, 5*(p-1)//6)
+        expFp2(v2, (p - 1) // 6),
+        expFp2(v2, 2 * (p - 1) // 6),
+        expFp2(v2, 3 * (p - 1) // 6),
+        expFp2(v2, 4 * (p - 1) // 6),
+        expFp2(v2, 5 * (p - 1) // 6),
     ]
     f10_c = conjFp2(f[1][0])
     f20_c = conjFp2(f[2][0])
@@ -194,7 +214,7 @@ def FrobFp12(f):
 
 def sparseFp12(a, b):
     # a = Dtype: [[l00, l01], [l10, zero], [zero, zero]], Mtype:[[l01, l00], [zero, zero], [l10, zero]]
-    if twist_type == "D":
+    if D_twist:
         T0 = mulFp2(a[0][0], b[0][0])
         T1 = mulFp2(a[0][0], b[2][0])
         T2 = mulFp2(a[0][0], b[1][1])  # A = [T0, T1, T2]
@@ -204,13 +224,13 @@ def sparseFp12(a, b):
         T1 = mulFp2(a[0][1], b[1][0])
         T2 = mulFp2(a[0][1], b[0][1])
         T0 = mulFp2(a[0][1], b[2][1])
-        T0 = guzaiFp2(T0)   # A = [T0, T1, T2]
+        T0 = guzaiFp2(T0)  # A = [T0, T1, T2]
         B = Fq6SparseMul(a[0][0], a[2][0], b[0][0], b[2][0], b[1][1])
         T3 = addFp2(a[2][0], a[0][1])
     T4 = addFp2(b[0][0], b[1][0])
     T5 = addFp2(b[2][0], b[0][1])
     T6 = addFp2(b[1][1], b[2][1])
-    if twist_type == "D":
+    if D_twist:
         E = Fq6SparseMul(T3, a[0][1], T4, T5, T6)
     else:
         E = Fq6SparseMul(a[0][0], T3, T4, T5, T6)
@@ -220,7 +240,7 @@ def sparseFp12(a, b):
     T7 = subFp2(E[0], T7)
     T8 = subFp2(E[1], T8)
     T9 = subFp2(E[2], T9)
-    if twist_type == "D":
+    if D_twist:
         B[2] = guzaiFp2(B[2])
         T0 = addFp2(T0, B[2])
         T1 = addFp2(T1, B[0])
@@ -246,10 +266,11 @@ def Fq6SparseMul(a0, a1, b0, b1, b2):
     t7 = addFp2(t0, t1)
     t7 = subFp2(t6, t7)
     t8 = mulFp2(a0, b2)
-    t9 = addFp2(t8, t1)   
+    t9 = addFp2(t8, t1)
     return [t3, t7, t9]
 
-def Fp12SparseMul(a, b): # P317で違う
+
+def Fp12SparseMul(a, b):  # P317で違う
     # a = [a0, a1, 0], b = [b0, b1, b2]
 
     # MEMO: RTLのメモリ割り当て: E = Fp12SparseMul([T3, a[1][1], 0], b[1])の計算内では T3->T3, T4->T4, T5->T8, T6->T9, T7->T10
@@ -265,7 +286,7 @@ def Fp12SparseMul(a, b): # P317で違う
     T7 = subFp4(T7, T4)
     T6 = mulFp4(a[0], b[2])
     T6 = addFp4(T4, T6)
-    return  [T5, T7, T6]
+    return [T5, T7, T6]
 
 
 def Fp12SparseMul_forRTL(a, b):
@@ -285,4 +306,4 @@ def Fp12SparseMul_forRTL(a, b):
     T6 = mulFp4(a[0], b[1])
     T5 = guzaiFp4(T5)
     T6 = addFp4(T5, T6)
-    return  [T4, T6, T7]
+    return [T4, T6, T7]

@@ -1,5 +1,5 @@
 from io import TextIOWrapper
-from parameters import *
+from lib.parameters import *
 
 def printFp(a):
     a_str = str(hex(a))

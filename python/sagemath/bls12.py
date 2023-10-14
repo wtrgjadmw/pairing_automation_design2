@@ -191,13 +191,13 @@ def test_curve(u0):
 
     test_ate_pairing_bls12_aklgl(E, E2, r, c, c2, u0, Fq6, map_Fq6_Fp12, D_twist)
 
+if __name__ == "__main__":
+    # bls12-381
+    u0 = ZZ(-(2**63 + 2**62 + 2**60 + 2**57 + 2**48 + 2**16))
+    # test_curve(u0)
+    get_parameters(u0, curve_name="P381")
 
-# bls12-381
-u0 = ZZ(-(2**63 + 2**62 + 2**60 + 2**57 + 2**48 + 2**16))
-# test_curve(u0)
-get_parameters(u0, curve_name="P381")
-
-# # bls12-446
-u0 = ZZ(-(2**75 - 2**73 + 2**63 + 2**57 + 2**50 + 2**17 + 1))
-get_parameters(u0, curve_name="P446")
-# test_curve(u0)
+    # # bls12-446
+    u0 = ZZ(-(2**75 - 2**73 + 2**63 + 2**57 + 2**50 + 2**17 + 1))
+    get_parameters(u0, curve_name="P446")
+    # test_curve(u0)
