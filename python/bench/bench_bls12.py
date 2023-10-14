@@ -17,13 +17,10 @@ from lib.operate_Fp12 import (
     expFp12,
     expFp12_for_test,
 )
-
 from lib.ep_operation import ep_mul
 from lib.ep2_operation import ep2_add, ep2_dbl, ep2_mul
-
 from lib.optimal_ate_k12 import pp_ml_k12, pp_fe_k12, pp_oatep_k12
-
-from lib.util import printFp12, printFp2, printFp
+from util import printFp12, printFp2, printFp
 
 
 def check_mongomery_inv():

@@ -19,7 +19,7 @@ from lib.operate_Fp24 import (
     squareFp24_forRTL,
 )
 
-from lib.util import *
+from util import *
 
 
 def pp_dbl_first_k24(T, P):

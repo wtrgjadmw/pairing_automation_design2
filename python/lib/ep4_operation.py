@@ -1,7 +1,7 @@
 from lib.operate_Fp import mul
 from lib.operate_Fp4 import mulFp4, subFp4, addFp4, constMulFp4, squareFp4, guzaiFp4
 from lib.parameters import MontConv, B4, p, bits_of, twist_type
-from lib.util import printFp4, printFp
+from util import printFp4, printFp
 
 
 # The Realm of the Pairing p15 参照

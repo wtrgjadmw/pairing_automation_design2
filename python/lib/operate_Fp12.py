@@ -20,7 +20,7 @@ from lib.operate_Fp4 import (
     squareFp4,
     mulFp4,
 )
-from lib.util import printFp4
+from util import printFp4
 from lib.parameters import MontConv, p, bits_list, bits_of, U, D_twist
 
 # Fp12: [a0, a1, a2] -> a0 + a1w + a2w^2 (Fp4: a0 = [a00, a01] -> a00 + a01v)

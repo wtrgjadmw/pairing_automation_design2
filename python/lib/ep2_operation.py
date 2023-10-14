@@ -9,7 +9,7 @@ from lib.operate_Fp2 import (
     negFp2,
 )
 from lib.parameters import *
-from lib.util import printFp2, printFp
+from util import printFp2, printFp
 
 
 # TODO: アルゴリズム確認

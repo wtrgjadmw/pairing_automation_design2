@@ -17,7 +17,7 @@ from lib.operate_Fp2 import (
 )
 from lib.operate_Fp import mul, add, sub, invFp
 from lib.parameters import *
-from lib.util import *
+from util import *
 
 """
 E/Fp^4: y^2 = x^3 + [[A0, A1], [A2, A3]]x + [[B0, B1], [B2, B3]]

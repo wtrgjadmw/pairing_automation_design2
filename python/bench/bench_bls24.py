@@ -1,18 +1,18 @@
 import random, time
 
-from parameters import MontConv, MontConvInv, bits_list
-from parameters import P, Q, T, A4, B4, A, B
-from parameters import p, r, u, U
+from lib.parameters import MontConv, MontConvInv, bits_list
+from lib.parameters import P, Q, T, A4, B4, A, B
+from lib.parameters import p, r, u, U
 
-from operate_Fp import invFp_forRTL, srtFp, expFp, Div2, Div4, add, sub
-from operate_Fp2 import mul, invFp, mulFp2, invFp2, squareFp2, srtFp2
-from operate_Fp4 import mulFp4, invFp4, invFp4_forRTL, squareFp4, addFp4, negFp4, srtFp4
-from operate_Fp12 import mulFp12, invFp12, Fp12SparseMul
-from operate_Fp24 import conjFp24, mulFp24, mulFp24_conj_forRTL, invFp24, invFp24_forRTL, FrobFp24, sparseFp24, expFp24_for_test, squareFp24, SQR012345Fp24, expFp24
+from lib.operate_Fp import invFp_forRTL, srtFp, expFp, Div2, Div4, add, sub
+from lib.operate_Fp2 import mul, invFp, mulFp2, invFp2, squareFp2, srtFp2
+from lib.operate_Fp4 import mulFp4, invFp4, invFp4_forRTL, squareFp4, addFp4, negFp4
+from lib.operate_Fp12 import mulFp12, invFp12, Fp12SparseMul
+from lib.operate_Fp24 import conjFp24, mulFp24, mulFp24_conj_forRTL, invFp24, invFp24_forRTL, FrobFp24, sparseFp24, expFp24_for_test, squareFp24, SQR012345Fp24, expFp24
 
-from ep4_operation import ep4_add, ep4_dbl, ep4_mul
-from ep_operation import ep_mul
-from optimal_ate_k24 import pp_fe_k24, pp_oatep_k24, pp_ml_k24
+from lib.ep4_operation import ep4_add, ep4_dbl, ep4_mul
+from lib.ep_operation import ep_mul
+from lib.optimal_ate_k24 import pp_fe_k24, pp_oatep_k24, pp_ml_k24
 
 from util import *
 
@@ -489,8 +489,8 @@ def time_check():
     print(time_end - time_start)
 
 if __name__ == "__main__":
-    # bilinear_check(r, P, Q, T)
-    check_frob()
+    bilinear_check(r, P, Q, T)
+    # check_frob()
     # check_final_exponentiation()
     # check_inv_mul_Fp_forRTL()
     # check_srt_Fp4()

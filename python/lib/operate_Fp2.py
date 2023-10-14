@@ -13,7 +13,7 @@ from lib.operate_Fp import (
     srtFp,
     negFp,
 )
-from lib.util import printFp
+from util import printFp
 
 # モンゴメリ変換されたデータを扱う
 # Fp2: [a0, a1] -> a0 + a1u (u^2 = -1)

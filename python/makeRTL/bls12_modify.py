@@ -1,9 +1,9 @@
 import shutil
 from io import TextIOWrapper
 
-from parameters import args, u, U, p, p_len, p_inv, inv_init_val, one, P, Q, T, B2
-from operate_Fp import get_qnr1, add, negFp
-from operate_Fp2 import addFp2, expFp2, negFp2, v2
+from lib.parameters import args, u, U, p, p_len, p_inv, inv_init_val, one, P, Q, T, B2
+from lib.operate_Fp import get_qnr1, add, negFp
+from lib.operate_Fp2 import addFp2, expFp2, negFp2, v2
 from util import make_define_Fp2
 
 def int2hexstr(x):

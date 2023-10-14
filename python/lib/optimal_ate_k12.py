@@ -17,7 +17,7 @@ from lib.operate_Fp12 import (
     expFp12_for_test,
 )
 
-from lib.util import *
+from util import *
 
 
 def pp_dbl_first_k12(T, P):
