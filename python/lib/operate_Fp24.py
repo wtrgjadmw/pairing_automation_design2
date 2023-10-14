@@ -24,7 +24,7 @@ from lib.operate_Fp4 import (
     mulFp4,
     invFp4,
 )
-from lib.parameters import p, MontConv, bits_of, U
+from lib.parameters import p, MontConv, bits_of, U, D_twist
 from util import *
 
 # Fp24: [a0, a1] -> a0 + a1z (Fp12: a0 = [a00, a01, a02] -> a00 + a01w + a02w^2)

@@ -82,9 +82,10 @@ if curve_group == "bls12" or curve_group == "bn":
     T = [Q[0], Q[1], [one, 0]]
 elif curve_group == "bls24":
     A4 = [[0, 0], [0, 0]]
-    B4 = [[[MontConv(x[0]), MontConv(x[1])], [MontConv(x[2]), MontConv(x[3])]] for x in dict["btw"]]
-    P = P = [[[MontConv(x), 0], [0, 0]] for x in dict["P"]] # 計算のためFp4の形式
-    Q = [[[[MontConv(x[0]), MontConv(x[1])], [MontConv(x[2]), MontConv(x[3])]] for x in xx] for xx in dict["Q"]]
+    btw = dict["btw"]
+    B4 = [[MontConv(btw[0]), MontConv(btw[1])], [MontConv(btw[2]), MontConv(btw[3])]]
+    P = [[[MontConv(x), 0], [0, 0]] for x in dict["P"]] # 計算のためFp4の形式
+    Q = [[[MontConv(x[0]), MontConv(x[1])], [MontConv(x[2]), MontConv(x[3])]] for x in dict["Q"]]
     T = [Q[0], Q[1], [[one, 0], [0, 0]]]
 
 
