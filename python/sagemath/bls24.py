@@ -13,6 +13,25 @@ from parameter import (
 )
 from test_pairing import test_order, test_ate_pairing_bls24_aklgl
 
+def Fp4ToFp22(a, p, xi):
+    try:
+        coeffs_xi = xi.polynomial().list()
+    except AttributeError as err:
+        coeffs_xi = xi.list()
+    i0 = ZZ(coeffs_xi[0])
+    i1 = ZZ(coeffs_xi[1])
+    if abs(i0 - p) < abs(i0):
+        i0 = i0 - p
+    if abs(i1 - p) < abs(i1):
+        i1 = i1 - p
+    i0 = int(i0)
+    i1 = int(i1)
+    out0 = a[0] + a[2]*i0
+    out1 = a[2]*i1
+    out2 = a[1] + a[3]*i0
+    out3 = a[3]*i1
+    return [[out0, out1], [out2, out3]]
+
 def get_parameters(u0):
     print("u0 = {:#x}".format(u0))
     # preparse("QQx.<x> = QQ[]")
@@ -96,10 +115,6 @@ def get_parameters(u0):
     (s,) = Fp4s._first_ngens(1)
     E2, xi, btw, D_twist = find_twist_curve_parameter_xi_ab(b, Fp4, r, d=6)
     
-    # Fq = Fp4
-    Fp4s = Fp4["s"]
-    (s,) = Fp4s._first_ngens(1)
-    E2, xi, btw, D_twist = find_twist_curve_parameter_xi_ab(b, Fp4, r, d=6)
     print("test E' (G2): ", end="")
     test_order(E2, r * c2)
     if D_twist:
@@ -132,7 +147,9 @@ def get_parameters(u0):
         "beta": int(a), # Fp2[i]/(i^2-beta)
         "beta2": [int(x) for x in a2.polynomial().list()], # Fp4[v]/(v^2-(beta21*i+beta20))
         "xi": [int(x) for x in xi.polynomial().list()], # Fp24[w]/(w^6-(xi1*v+xi0))
-        "D_twist": D_twist
+        "D_twist": D_twist,
+        "P": [int(P[0]), int(P[1])],
+        "Q": [Fp4ToFp22([int(x) for x in Q[0].polynomial().list()], p, a2), Fp4ToFp22([int(x) for x in Q[1].polynomial().list()], p, a2)]
     }
 
     return params 

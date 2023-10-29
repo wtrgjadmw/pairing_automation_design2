@@ -44,13 +44,13 @@ def bits_calc(U):
         res <<= 1
     return u
 
-def read_csv_dict(filename):
+def read_json(filename):
     with open(filename, "r") as f:
         dict = json.load(f)
     return dict
 
 args = sys.argv
-dict = read_csv_dict(args[1])
+dict = read_json(args[1])
 
 curve_group = dict["curve_group"]
 A = 0

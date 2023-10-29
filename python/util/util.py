@@ -58,20 +58,4 @@ def printFp24(a):
     printFp12(a[1])
 
 
-def make_define_Fp2(f: TextIOWrapper, name, a): # name: variable name , a: Fp4 variable
-    f.write("`define " + name + "0 ")
-    file_printFp(f, a[0])
-    f.write("`define " + name + "1 ")
-    file_printFp(f, a[1])
-    f.write("\n")
 
-def make_define_Fp4(f: TextIOWrapper, name, a): # name: variable name , a: Fp4 variable
-    f.write("`define " + name + "00 ")
-    file_printFp(f, a[0][0])
-    f.write("`define " + name + "01 ")
-    file_printFp(f, a[0][1])
-    f.write("`define " + name + "10 ")
-    file_printFp(f, a[1][0])
-    f.write("`define " + name + "11 ")
-    file_printFp(f, a[1][1])
-    f.write("\n")
