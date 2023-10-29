@@ -14,7 +14,7 @@ from parameter import find_curve_parameter_b, find_twist_curve_parameter_xi_ab
 from test_pairing import test_order, test_ate_pairing_bls12_aklgl
 import json
 
-def get_parameters(u0, curve_name):
+def get_parameters(u0):
     QQx = QQ["x"]
     (x,) = QQx._first_ngens(1)
     # BLS12 polynomials
@@ -79,14 +79,10 @@ def get_parameters(u0, curve_name):
         "p": int(p), 
         "r": int(r), 
         "b": int(b), 
-        "btw": [int(x) for x in btw.list()], 
-        "D_twist": D_twist, 
-        "P": [int(P[0]), int(P[1])], 
-        "Q": [[int(x) for x in Q[0].list()], [int(x) for x in Q[1].list()]]
+        "beta": int(a), # Fp2[i]/(i^2-beta)
+        "xi": [int(x) for x in xi.polynomial().list()], # Fp12[w]/(w^6-(xi1*v+xi0))
+        "D_twist": D_twist
     }
-
-    with open("./{}.json".format(curve_name), "w") as f:
-        json.dump(params, f, indent=4)
 
     return params 
 
@@ -192,12 +188,25 @@ def test_curve(u0):
     test_ate_pairing_bls12_aklgl(E, E2, r, c, c2, u0, Fq6, map_Fq6_Fp12, D_twist)
 
 if __name__ == "__main__":
+    args = sys.argv
+    param_file = args[1]
+    size = os.path.getsize(param_file)
+    if size == 0:
+        json_load = dict()
+    else:
+        with open(param_file, "r") as file:
+            json_load = json.load(file)
+
+    json_load["bls12"] = dict()
     # bls12-381
     u0 = ZZ(-(2**63 + 2**62 + 2**60 + 2**57 + 2**48 + 2**16))
+    json_load["bls12"]["P381"] = get_parameters(u0)
     # test_curve(u0)
-    get_parameters(u0, curve_name="P381")
 
     # # bls12-446
     u0 = ZZ(-(2**75 - 2**73 + 2**63 + 2**57 + 2**50 + 2**17 + 1))
-    get_parameters(u0, curve_name="P446")
+    json_load["bls12"]["P446"] = get_parameters(u0)
     # test_curve(u0)
+
+    with open(param_file, "w") as file:
+        json.dump(json_load, file, indent=4)

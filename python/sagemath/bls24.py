@@ -13,7 +13,7 @@ from parameter import (
 )
 from test_pairing import test_order, test_ate_pairing_bls24_aklgl
 
-def get_parameters(u0, curve_name):
+def get_parameters(u0):
     print("u0 = {:#x}".format(u0))
     # preparse("QQx.<x> = QQ[]")
     QQx = QQ["x"]
@@ -115,27 +115,25 @@ def get_parameters(u0, curve_name):
             )
         )
     
+    # (px, py, 1)
     P = c * E.random_element()
     while P == E(0) or r * P != E(0):
         P = c * E.random_element()
+    # (qx3*v^3 + qx2*v^2 + qx1*v + qx0, qy3*v^3 + qy2*v^2 + qy1*v + qy0, 1)
     Q = c2 * E2.random_element()
     while Q == E2(0) or r * Q != E2(0):
         Q = c2 * E2.random_element()
-
 
     params = {
         "u": int(u0),
         "p": int(p), 
         "r": int(r), 
         "b": int(b), 
-        "btw": [int(x) for x in btw.list()], 
-        "D_twist": D_twist, 
-        "P": [int(P[0]), int(P[1])], 
-        "Q": [[int(x) for x in Q[0].list()], [int(x) for x in Q[1].list()]]
+        "beta": int(a), # Fp2[i]/(i^2-beta)
+        "beta2": [int(x) for x in a2.polynomial().list()], # Fp4[v]/(v^2-(beta21*i+beta20))
+        "xi": [int(x) for x in xi.polynomial().list()], # Fp24[w]/(w^6-(xi1*v+xi0))
+        "D_twist": D_twist
     }
-
-    with open("./{}.json".format(curve_name), "w") as f:
-        json.dump(params, f, indent=4)
 
     return params 
 
@@ -272,22 +270,35 @@ def test_curve(u0):
     test_ate_pairing_bls24_aklgl(E, E2, r, c, c2, u0, Fq6, map_Fq6_Fp24, D_twist)
 
 if __name__ == "__main__":
-    # # BLS24-315
+    args = sys.argv
+    param_file = args[1]
+    size = os.path.getsize(param_file)
+    if size == 0:
+        json_load = dict()
+    else:
+        with open(param_file, "r") as file:
+            json_load = json.load(file)
+
+    json_load["bls24"] = dict()
+    # BLS24-315
     u0 = ZZ(-(2**32) + 2**30 + 2**21 + 2**20 + 1)
-    get_parameters(u0, curve_name="P315")
+    json_load["bls24"]["P315"] = get_parameters(u0)
     # test_curve(u0)
 
     # BLS24-317
     u0 = ZZ(2**31 + 2**30 + 2**28 + 2**27 + 2**24 + 2**16 + 2**15)
-    get_parameters(u0, curve_name="P317")
+    json_load["bls24"]["P317"] = get_parameters(u0)
     # test_curve(u0)
 
-    # # BLS24-318
+    # BLS24-318
     u0 = ZZ(-(2**32) + 2**28 + 2**12)
-    get_parameters(u0, curve_name="P318")
+    json_load["bls24"]["P318"] = get_parameters(u0)
     # test_curve(u0)
 
-    # # BLS24-509
+    # BLS24-509
     u0 = ZZ(-(2**51) - 2**28 + 2**11 - 1)
-    get_parameters(u0, curve_name="P509")
+    json_load["bls24"]["P509"] = get_parameters(u0)
     # test_curve(u0)
+    
+    with open(param_file, "w") as file:
+        json.dump(json_load, file, indent=4)
