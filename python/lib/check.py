@@ -1,5 +1,5 @@
-from my_fpx_definition import *
-from my_pairing import (
+from lib.fpx import *
+from lib.pairing import (
     double_line_twist6,
     add_line_twist6,
     sparse_mult_d6_twist,
@@ -9,9 +9,10 @@ from my_pairing import (
     scalar_mul_twist6,
     final_exp_bls24,
 )
-from my_ep_operation import scalar_mul
+from lib.ep import scalar_mul
 import argparse
-from my_util import (read_json, bits_list, bits_of)
+from lib.util import read_json, bits_list, bits_of
+
 
 def change_to_affine(Fq, T):
     # 射影座標(X,Y,Z)のZ座標を1に補正する　X,Y座標を取り出せばそのままアフィン座標
@@ -105,7 +106,6 @@ def check_mul(group):
 
 
 def check_bilinear(curve_group, Fq6, Fq, Fp, P, Q, b_t, xi, D_twist, U):
-
     if curve_group == "bls12":
         f = pairing_bls12(Fq6, Fq, Fp, P, Q, b_t, xi, D_twist, U)
     elif curve_group == "bls24":
@@ -178,8 +178,18 @@ if __name__ == "__main__":
     P = [Fp.MontConv(param["P"][0]), Fp.MontConv(param["P"][1])]
     Q = [Fq.MontConv(param["Q"][0]), Fq.MontConv(param["Q"][1])]
     T = [Fq.MontConv(param["Q"][0]), Fq.MontConv(param["Q"][1]), Fq.one()]
-    
 
     # check_ml(Fq6, Fq, Fp, r, P, Q, b_t, xi, D_twist, miller_param_list=U[::-1])
 
-    check_bilinear(curve_group, Fq6, Fq, Fp, P, Q, b_t, [[param["xi"][0], 0], [param["xi"][1], 0]], D_twist, U)
+    check_bilinear(
+        curve_group,
+        Fq6,
+        Fq,
+        Fp,
+        P,
+        Q,
+        b_t,
+        [[param["xi"][0], 0], [param["xi"][1], 0]],
+        D_twist,
+        U,
+    )

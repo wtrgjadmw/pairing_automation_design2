@@ -1,5 +1,5 @@
-from my_fpx_definition import Fp_t
-from my_util import bits_of
+from lib.fpx import Fp_t
+from lib.util import bits_of
 
 
 def ep_add(Fp: Fp_t, P1, P2):

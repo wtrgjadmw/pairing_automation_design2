@@ -1,4 +1,4 @@
-from my_fpx_definition import *
+from lib.fpx import *
 
 
 def double_line_twist6(Fq, T, P, b_t, xi, D_twist):

@@ -1,4 +1,4 @@
-from my_util import bits_of
+from lib.util import bits_of
 import random
 
 
@@ -19,14 +19,12 @@ def px(u, curve_group):
 
 
 class Fp_t:
-    def __init__(
-        self,
-        p: int,
-    ) -> None:
+    def __init__(self, p: int, formulaMode: bool) -> None:
         self.p = p
         self.p_len = p.bit_length()
         self.L = 2**self.p_len
         self.montgomery_inv = pow(self.L, -1, self.p)
+        self.formulaMode = formulaMode
 
     def MontConvInv(self, a):
         c = (a * self.montgomery_inv) % self.p
@@ -46,6 +44,8 @@ class Fp_t:
         return self.MontConv(1)
 
     def add(self, a, b):
+        if self.formulaMode:
+            print("ADD")
         t0 = a + b
         t1 = a + b - self.p
         if t1 >= 0:
@@ -55,6 +55,8 @@ class Fp_t:
         return out
 
     def sub(self, a, b):
+        if self.formulaMode:
+            print("SUB")
         t0 = a - b
         t1 = a - b + self.p
         if t0 >= 0:
@@ -64,9 +66,7 @@ class Fp_t:
         return out
 
     def neg(self, a):
-        if a == 0:
-            return 0
-        return self.p - a
+        return self.sub(0, a)
 
     def constMul(self, a, k):  # モンゴメリ乗算じゃない
         bits_k = bits_of(abs(k))
@@ -92,9 +92,13 @@ class Fp_t:
         return a_
 
     def mul(self, a, b):
+        if self.formulaMode:
+            print("MUL")
         return (a * b % self.p) * self.montgomery_inv % self.p
 
     def inv(self, a):
+        if self.formulaMode:
+            print("INV")
         b = pow(a, self.p - 2, self.p)
         b = (b * self.L % self.p) * self.L % self.p
         return b
@@ -171,12 +175,12 @@ class Fp2_t:
         return [c0, c1]
 
     def sqr(self, a):
-        a1_ = self.Fp.constMul(a[1], self.qnr)
+        a1_ = self.Fp.guzai(a[1], self.qnr)
         t0 = self.Fp.add(a[0], a1_)
         t1 = self.Fp.add(a[0], a[1])
         t2 = self.Fp.mul(t0, t1)
         t3 = self.Fp.mul(a[0], a[1])
-        t4 = self.Fp.constMul(t3, self.qnr)
+        t4 = self.Fp.guzai(t3, self.qnr)
         t5 = self.Fp.add(t3, t4)
         c0 = self.Fp.sub(t2, t5)
         c1 = self.Fp.add(t3, t3)
@@ -479,7 +483,9 @@ class Fp24_t:
         self.qnr = qnr
         self.k = self.k = [
             Fp12.Fp4.one(),
-            self.Fp12.Fp4.exp(Fp12.Fp4.MontConv(Fp12.cnr), (Fp12.Fp4.Fp2.Fp.p - 1) // 6),
+            self.Fp12.Fp4.exp(
+                Fp12.Fp4.MontConv(Fp12.cnr), (Fp12.Fp4.Fp2.Fp.p - 1) // 6
+            ),
             self.Fp12.Fp4.exp(
                 Fp12.Fp4.MontConv(Fp12.cnr), 2 * (Fp12.Fp4.Fp2.Fp.p - 1) // 6
             ),
