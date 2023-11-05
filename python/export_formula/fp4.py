@@ -1,4 +1,4 @@
-from export_formula.fp2 import fp2_add, fp2_sub, fp2_neg, fp2_mul, fp2_guzai, fp2_inv
+from export_formula.fp2 import fp2_add, fp2_sub, fp2_neg, fp2_mul, fp2_guzai, fp2_inv, fp2_constMul, fp2_conj
 
 fp4_qnr = [1, 1]
 
@@ -11,7 +11,7 @@ def fp4_sub(opr1: str, opr2: str, ret: str):
 
 
 def fp4_constMul(opr1: str, k: int, ret: str):
-    return fp2_sub(opr1+'0', k, ret+'0') + fp2_sub(opr1+'1', k, ret+'1')
+    return fp2_constMul(opr1+'0', k, ret+'0') + fp2_constMul(opr1+'1', k, ret+'1')
 
 
 def fp4_mul(opr1: str, opr2: str, ret: str):
@@ -92,6 +92,12 @@ def fp4_exp(opr1: str, x: int, ret: str):
         i += 1
         formulaList += fp4_mul(twiceVal, twiceVal, nextTwiceVal)
     formulaList[-1].ret = ret
+    return formulaList
+
+def fp4_frob(opr1: str, ret: str):
+    formulaList = fp2_conj(opr1+"0", ret+"0")
+    formulaList += fp2_conj(opr1+"1", ret+"1_")
+    formulaList += fp2_conj(ret+"1_", ret+"1")
     return formulaList
 
 if __name__ == "__main__":
