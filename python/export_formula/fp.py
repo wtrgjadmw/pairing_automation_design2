@@ -1,15 +1,7 @@
 from lib.util import bits_of
+from export_formula.transform import *
 
 fp2_qnr = -1
-
-
-class formulaSet:
-    def __init__(self, opr1: str, opr2: str, ret: str, type) -> None:
-        self.opr1 = opr1
-        self.opr2 = opr2
-        self.ret = ret
-        self.type = type
-
 
 def add(opr1: str, opr2: str, ret: str):
     return [formulaSet(opr1=opr1, opr2=opr2, ret=ret, type="ADD")]

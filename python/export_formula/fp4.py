@@ -1,4 +1,5 @@
 from export_formula.fp2 import fp2_add, fp2_sub, fp2_neg, fp2_mul, fp2_guzai, fp2_inv, fp2_constMul, fp2_conj
+from export_formula.transform import *
 
 fp4_qnr = [1, 1]
 
@@ -102,6 +103,7 @@ def fp4_frob(opr1: str, ret: str):
 
 if __name__ == "__main__":
     formulaList = fp4_mul("a", "b", "c")
+    formulaList = remove_extra_formula(formulaList)
     for formula in formulaList:
         print("{},{},{},{}".format(formula.ret, formula.opr1, formula.opr2, formula.type))
         # print(formula)
