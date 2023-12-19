@@ -19,12 +19,11 @@ def px(u, curve_group):
 
 
 class Fp_t:
-    def __init__(self, p: int, formulaMode: bool) -> None:
+    def __init__(self, p: int) -> None:
         self.p = p
         self.p_len = p.bit_length()
         self.L = 2**self.p_len
         self.montgomery_inv = pow(self.L, -1, self.p)
-        self.formulaMode = formulaMode
 
     def MontConvInv(self, a):
         c = (a * self.montgomery_inv) % self.p
@@ -44,8 +43,6 @@ class Fp_t:
         return self.MontConv(1)
 
     def add(self, a, b):
-        if self.formulaMode:
-            print("ADD")
         t0 = a + b
         t1 = a + b - self.p
         if t1 >= 0:
@@ -55,8 +52,6 @@ class Fp_t:
         return out
 
     def sub(self, a, b):
-        if self.formulaMode:
-            print("SUB")
         t0 = a - b
         t1 = a - b + self.p
         if t0 >= 0:
@@ -92,13 +87,9 @@ class Fp_t:
         return a_
 
     def mul(self, a, b):
-        if self.formulaMode:
-            print("MUL")
         return (a * b % self.p) * self.montgomery_inv % self.p
 
     def inv(self, a):
-        if self.formulaMode:
-            print("INV")
         b = pow(a, self.p - 2, self.p)
         b = (b * self.L % self.p) * self.L % self.p
         return b
@@ -614,8 +605,8 @@ if __name__ == "__main__":
     p = 0x1A0111EA397FE69A4B1BA7B6434BACD764774B84F38512BF6730D2A0F6B0F6241EABFFFEB153FFFFB9FEFFFFFFFFAAAB
     # bls12-381
     Fp_bls12_381 = Fp_t(p=p)
-    Fp2_bls12_381 = Fp2_t(Fp=Fp_bls12_381, xi=-1)
-    Fp4_bls12_381 = Fp4_t(Fp=Fp_bls12_381, Fp2=Fp2_bls12_381, xi=[1, 1])
-    Fp12_bls12_381 = Fp12_t(Fp2=Fp2_bls12_381, Fp4=Fp4_bls12_381, xi=[[0, 0], [1, 0]])
+    Fp2_bls12_381 = Fp2_t(Fp=Fp_bls12_381, qnr=-1)
+    Fp4_bls12_381 = Fp4_t(Fp2=Fp2_bls12_381, qnr=[1, 1])
+    Fp12_bls12_381 = Fp12_t(Fp2=Fp2_bls12_381, Fp4=Fp4_bls12_381, cnr=[[0, 0], [1, 0]])
 
     # check_mul(Fp12_bls12_381)
