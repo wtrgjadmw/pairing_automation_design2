@@ -1,6 +1,6 @@
 from export_formula.fp import add, sub, neg, mul, guzai, inv, constMul
 
-fp4_qnr = [1, 1]
+fp2_qnr = [1, 1]
 
 def fp2_add(opr1: str, opr2: str, ret: str):
 
@@ -53,26 +53,16 @@ def fp2_inv(opr1: str, ret: str):
 def fp2_neg(opr1: str, ret: str):
     return neg(opr1+'0', ret+'0') + neg(opr1+'1', ret+'1')
 
-def fp2_guzai(opr1: str, ret: str):  # qnr = x + yi
-    x0Val, x1Val, y0Val, y1Val = "ZERO", "ZERO", "ZERO", "ZERO"
+# (ret: Fp2) = (opr1: Fp2) * fp2_qnr
+def fp2_guzai(opr1: str, ret: str):  # Fp4 = Fp2[v]/(v^2 - fp2_qnr), fp2_qnr = x + yi
     formulaList = []
-    for i in range(fp4_qnr[0]):
-        nextX0Val = ret+"_x0{}".format(i)
-        nextX1Val = ret+"_x1{}".format(i)
-        formulaList += add(x0Val, opr1+'0', nextX0Val)
-        formulaList += add(x1Val, opr1+'0', nextX1Val)
-        x0Val = nextX0Val
-        x1Val = nextX1Val
-    for i in range(fp4_qnr[1]):
-        nextY0Val = ret+"_y0{}".format(i)
-        nextY1Val = ret+"_y1{}".format(i)
-        formulaList += add(y0Val, opr1+'0', nextY0Val)
-        formulaList += add(y1Val, opr1+'0', nextY1Val)
-        y0Val = nextY0Val
-        y1Val = nextY1Val
-    formulaList += guzai(y1Val, ret+"_y1_")
-    formulaList += add(x0Val, ret+"_y1_", ret+"0")
-    formulaList += add(x1Val, y0Val, ret+"1")
+    formulaList += constMul(opr1+'0', fp2_qnr[0], ret+"_x0")
+    formulaList += constMul(opr1+'1', fp2_qnr[0], ret+"_x1")
+    formulaList += constMul(opr1+'0', fp2_qnr[1], ret+"_y0")
+    formulaList += constMul(opr1+'1', fp2_qnr[1], ret+"_y1")
+    formulaList += guzai(ret+"_y1", ret+"_y1_")
+    formulaList += add(ret+"_x0", ret+"_y1_", ret+"0")
+    formulaList += add(ret+"_x1", ret+"_y0", ret+"1")
     return formulaList
 
 def fp2_exp(opr1: str, x: int, ret: str):

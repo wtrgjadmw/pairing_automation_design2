@@ -1,7 +1,7 @@
-from lib.util import bits_of
+from lib.util import bits_of, formulaSet
 from export_formula.transform import *
 
-fp2_qnr = -1
+fp_qnr = -1
 
 def add(opr1: str, opr2: str, ret: str):
     return [formulaSet(opr1=opr1, opr2=opr2, ret=ret, type="ADD")]
@@ -27,8 +27,6 @@ def constMul(opr1: str, k: int, ret: str):
     # print("-----constMul: {}={}*{}-------------------".format(ret, opr1, k))
     if k == 0:
         raise Exception("ERROR: *0の掛け算です".format(opr1))
-    if k == 1:
-        return [add(opr1=opr1, opr2="ZERO", ret=ret)]
     formulaList = []
     bits_k = bits_of(abs(k))
     twiceVal = opr1
@@ -38,9 +36,9 @@ def constMul(opr1: str, k: int, ret: str):
         nextTmpVal = ret + str(i)
         if bits_k[i]:
             formulaList += add(twiceVal, tmpVal, nextTmpVal)
+            tmpVal = nextTmpVal
         formulaList += add(twiceVal, twiceVal, nextTwiceVal)
         twiceVal = nextTwiceVal
-        tmpVal = nextTmpVal
     if k > 0:
         formulaList += add(twiceVal, tmpVal, ret)
     else:
@@ -49,9 +47,9 @@ def constMul(opr1: str, k: int, ret: str):
         formulaList += neg(negVal, ret)
     return formulaList
 
-
-def guzai(opr1: str, ret: str):
-    return constMul(opr1, fp2_qnr, ret)
+# (ret: Fp) = (opr1: Fp) * fp_qnr
+def guzai(opr1: str, ret: str): # Fp2 = Fp[i]/(i^2 - fp_qnr)
+    return constMul(opr1, fp_qnr, ret)
 
 
 def exp(opr1: str, x: int, ret: str):
@@ -69,3 +67,8 @@ def exp(opr1: str, x: int, ret: str):
         formulaList += mul(twiceVal, twiceVal, nextTwiceVal)
     formulaList[-1].ret = ret
     return formulaList
+
+if __name__ == "__main__":
+    formulaList = constMul("x", -5, "y")
+    for formula in formulaList:
+        print("{},{},{},{}".format(formula.ret, formula.opr1, formula.opr2, formula.type))

@@ -1,7 +1,6 @@
 from export_formula.fp2 import fp2_add, fp2_neg, fp2_conj, fp2_mul
 from export_formula.fp4 import fp4_add, fp4_sub, fp4_neg, fp4_mul, fp4_guzai, fp4_inv, fp4_constMul, fp4_sqr
-
-fp4_qnr = [1, 1]
+from export_formula.transform import remove_extra_formula
 
 def fp12_add(opr1: str, opr2: str, ret: str):
     return fp4_add(opr1+'0', opr2+'0', ret+'0') + fp4_add(opr1+'1', opr2+'1', ret+'1') + fp4_add(opr1+'2', opr2+'2', ret+'2')
@@ -97,7 +96,8 @@ def fp12_inv(opr1: str, ret: str):
 def fp12_neg(opr1: str, ret: str):
     return fp4_neg(opr1+'0', ret+'0') + fp4_neg(opr1+'1', ret+'1') + fp4_neg(opr1+'2', ret+'2')
 
-def fp12_guzai(opr1: str, ret: str):  # qnr = x + yi
+# (ret: Fp12) = (opr1: Fp12) * w
+def fp12_guzai(opr1: str, ret: str):  # Fp24 = Fp12[z]/(z^3 - w)
     formulaList = fp4_guzai(opr1+"2", ret+"0")
     formulaList += fp4_add(opr1+"0", "ZERO", ret+"1")
     formulaList += fp4_add(opr1+"1", "ZERO", ret+"2")
@@ -132,3 +132,9 @@ def frob(opr1, ret):
     formulaList += fp2_mul(ret+"_f11", "XI4", ret+"11")
     formulaList += fp2_mul(ret+"_f21", "XI5", ret+"21")
     return formulaList
+
+if __name__ == "__main__":
+    formulaList = fp12_mul("a", "b", "c")
+    formulaList = remove_extra_formula(formulaList)
+    for formula in formulaList:
+        print("{},{},{},{}".format(formula.ret, formula.opr1, formula.opr2, formula.type))

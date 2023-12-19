@@ -57,28 +57,6 @@ def fp24_inv(opr1: str, ret: str):
 def fp24_neg(opr1: str, ret: str):
     return fp12_neg(opr1+'0', ret+'0') + fp12_neg(opr1+'1', ret+'1')
 
-def fp24_guzai(opr1: str, ret: str):  # qnr = x + yi
-    x0Val, x1Val, y0Val, y1Val = "ZERO", "ZERO", "ZERO", "ZERO"
-    formulaList = []
-    for i in range(fp24_qnr[0]):
-        nextX0Val = ret+"_x0{}".format(i)
-        nextX1Val = ret+"_x1{}".format(i)
-        formulaList += fp12_add(x0Val, opr1+'0', nextX0Val)
-        formulaList += fp12_add(x1Val, opr1+'0', nextX1Val)
-        x0Val = nextX0Val
-        x1Val = nextX1Val
-    for i in range(fp24_qnr[1]):
-        nextY0Val = ret+"_y0{}".format(i)
-        nextY1Val = ret+"_y1{}".format(i)
-        formulaList += fp12_add(y0Val, opr1+'0', nextY0Val)
-        formulaList += fp12_add(y1Val, opr1+'0', nextY1Val)
-        y0Val = nextY0Val
-        y1Val = nextY1Val
-    formulaList += fp12_guzai(y1Val, ret+"_y1_")
-    formulaList += fp12_add(x0Val, ret+"_y1_", ret+"0")
-    formulaList += fp12_add(x1Val, y0Val, ret+"1")
-    return formulaList
-
 def frob(opr1: str, ret: str):
     formulaList = fp4_frob(opr1+"10", ret+"_f10")
     formulaList += fp4_frob(opr1+"01", ret+"_f01")
