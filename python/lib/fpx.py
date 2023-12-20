@@ -83,10 +83,7 @@ class Fp_t:
         return r0
 
     def guzai(self, a, fp2_qnr):
-        a_ = self.constMulNotMont(a, abs(fp2_qnr))
-        if fp2_qnr < 0:
-            a_ = self.neg(a_)
-        return a_
+        return self.constMulNotMont(a, fp2_qnr)
 
     def mul(self, a, b):
         return (a * b % self.p) * self.montgomery_inv % self.p
@@ -149,7 +146,7 @@ class Fp2_t:
 
     def guzai(self, a, fp4_qnr):  # qnr = x + yi
         ax = self.constMulNotMont(a, fp4_qnr[0])
-        ay = self.constMulNotMont(a, fp4_qnr[0])
+        ay = self.constMulNotMont(a, fp4_qnr[1])
         a1y_ = self.Fp.guzai(ay[1], self.qnr)
         new_r = self.Fp.add(ax[0], a1y_)
         new_i = self.Fp.add(ax[1], ay[0])
@@ -385,6 +382,12 @@ class Fp12_t:
         a2 = self.Fp4.constMul(a[2], k)
         return [a0, a1, a2]
 
+    def constMulNotMont(self, a, k):  # モンゴメリ乗算
+        a0 = self.Fp4.constMulNotMont(a[0], k)
+        a1 = self.Fp4.constMulNotMont(a[1], k)
+        a2 = self.Fp4.constMulNotMont(a[2], k)
+        return [a0, a1, a2]
+
     def guzai(self, a, fp24_qnr):  # v^2 = guzai = u
         return [self.Fp4.guzai(a[2], self.cnr), a[0], a[1]]
 
@@ -544,9 +547,10 @@ class Fp24_t:
         new_i = self.Fp12.constMul(a[1], k)
         return [new_r, new_i]
 
-    # def guzai(self, a):
-    #     a2 = self.Fp12.guzai(a[2])
-    #     return [a2, a[0], a[1]]
+    def constMulNotMont(self, a, k):
+        new_r = self.Fp12.constMulNotMont(a[0], k)
+        new_i = self.Fp12.constMulNotMont(a[1], k)
+        return [new_r, new_i]
 
     def mul(self, a, b):
         t0 = self.Fp12.mul(a[0], b[0])
