@@ -67,20 +67,16 @@ class Fp_t:
         if k == 0:
             return 0
         bits_k = bits_of(abs(k))
-        r0 = a
-        r1 = self.add(a, a)
-        for i in range(1, len(bits_k)):
+        tmp = 0
+        twice = a
+        for i in range(0, len(bits_k)-1):
             if bits_k[i]:
-                r0_tmp = self.add(r0, r1)
-                r1_tmp = self.add(r1, r1)
-            else:
-                r0_tmp = self.add(r0, r0)
-                r1_tmp = self.add(r0, r1)
-            r0 = r0_tmp
-            r1 = r1_tmp
-        if k < 0:
-            r0 = self.neg(r0)
-        return r0
+                tmp = self.add(tmp, twice)
+            twice = self.add(twice, twice)
+        tmp = self.add(tmp, twice)
+        if k > 0:
+            return tmp
+        return self.neg(tmp)
 
     def guzai(self, a, fp2_qnr):
         return self.constMulNotMont(a, fp2_qnr)

@@ -1,5 +1,6 @@
 from export_formula.fp2 import fp2_add, fp2_sub, fp2_neg, fp2_mul, fp2_guzai, fp2_inv, fp2_constMul, fp2_conj
 from export_formula.transform import *
+from lib.parameters import fp12_cnr
 
 def fp4_add(opr1: str, opr2: str, ret: str):
     return fp2_add(opr1+'0', opr2+'0', ret+'0') + fp2_add(opr1+'1', opr2+'1', ret+'1')
@@ -55,11 +56,14 @@ def fp4_inv(opr1: str, ret: str):
 def fp4_neg(opr1: str, ret: str):
     return fp2_neg(opr1+'0', ret+'0') + fp2_neg(opr1+'1', ret+'1')
 
-# (ret: Fp4) = (opr1: Fp4) * v
+# (ret: Fp4) = (opr1: Fp4) * fp12_cnr
 def fp4_guzai(opr1: str, ret: str):  # Fp12 = Fp4[w]/(w^3 - v)
     formulaList = []
-    formulaList += fp2_guzai(opr1+'1', ret+"0")
-    formulaList += fp2_add(opr1+'0', "ZERO", ret+"1")
+    formulaList += fp4_constMul(opr1, fp12_cnr[0], ret+"_x")
+    formulaList += fp4_constMul(opr1, fp12_cnr[1], ret+"_y")
+    formulaList += fp2_guzai(ret+"_y1", ret+"_y1_")
+    formulaList += fp2_add(ret+"_x0", ret+"_y1_", ret+"0")
+    formulaList += fp2_add(ret+"_x1", ret+"_y0", ret+"1")
     return formulaList
 
 def fp4_exp(opr1: str, x: int, ret: str):

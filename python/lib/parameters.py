@@ -1,5 +1,7 @@
 import sys, csv
 import json
+import argparse
+from lib.fpx import *
 
 # 曲線によってimport元を変更
 def MontConvInv(a):
@@ -49,46 +51,41 @@ def read_json(filename):
         dict = json.load(f)
     return dict
 
-args = sys.argv
-dict = read_json(args[1])
 
-curve_group = dict["curve_group"]
-A = 0
-B = dict["b"]
+psr = argparse.ArgumentParser(
+    prog="プログラムの名前", usage="プログラムの使い方", description="プログラムの説明"
+)
+psr.add_argument("-c", "--curve", default=1, help="楕円曲線群")
+psr.add_argument("-p", "--characteristic", default=1, help="楕円曲線の標数のbit幅")
+psr.add_argument("-f", "--filename", default=1, help="読み込むJSONファイル")
+args = psr.parse_args()
+curve_group = args.curve
+curve_name = args.characteristic
+param = read_json(args.filename)[curve_group][curve_name]
 
-u = dict["u"]
+b = param["b"]
+u = param["u"]
 U = bits_list(u)
-D_twist = dict["D_twist"]
-r = dict["r"]
-p = dict["p"]
+D_twist = param["D_twist"]
+r = param["r"]
+p = param["p"]
 
-p_len = p.bit_length()
-L = 2 ** p_len
-montgomery_inv = pow(L, -1, p)
-inv_init_val = (2 ** (2 * p_len)) % p
-p_inv = (-pow(p, -1, L))%L
-p_mod8 = p % 8
-if p & 1 == 0:
-    Exception("characteristic number p is not prime")
+if curve_group == "bls12":
+    fp2_qnr = param["beta"]
+    fp4_qnr = param["xi"]
+    Fp = Fp_t(p=p)
+    Fp2 = Fp2_t(Fp=Fp, qnr=param["beta"])
+    Fp4 = Fp4_t(Fp2=Fp2, qnr=param["xi"])
+    Fp12 = Fp12_t(Fp4=Fp4, cnr=[[0, 0], [1, 0]])
 
-one = MontConv(1)
-
-# PはFpの楕円曲線(y^2 = x^3 + 1)上，QはFp4の楕円曲線(y^2 = x^3 - 1/v)上，TはQの射影座標変換
-if curve_group == "bls12" or curve_group == "bn":
-    A2 = [0, 0]
-    B2 = [MontConv(x) for x in dict["btw"]]
-    P = [[MontConv(x), 0] for x in dict["P"]] # 計算のためFp2の形式
-    Q = [[MontConv(x) for x in xx] for xx in dict["Q"]]
-    T = [Q[0], Q[1], [one, 0]]
-elif curve_group == "bls24":
-    A4 = [[0, 0], [0, 0]]
-    btw = dict["btw"]
-    B4 = [[MontConv(btw[0]), MontConv(btw[1])], [MontConv(btw[2]), MontConv(btw[3])]]
-    P = [[[MontConv(x), 0], [0, 0]] for x in dict["P"]] # 計算のためFp4の形式
-    Q = [[[MontConv(x[0]), MontConv(x[1])], [MontConv(x[2]), MontConv(x[3])]] for x in dict["Q"]]
-    T = [Q[0], Q[1], [[one, 0], [0, 0]]]
-
-
-if __name__ == "__main__":
-    print(p_mod8)
-    print(p_len)
+if curve_group == "bls24":
+    fp2_qnr = param["beta"]
+    fp4_qnr = param["beta2"]
+    fp12_cnr = param["xi"]
+    Fp = Fp_t(p=p)
+    Fp2 = Fp2_t(Fp=Fp, qnr=param["beta"])
+    Fp4 = Fp4_t(Fp2=Fp2, qnr=param["beta2"])
+    Fp12 = Fp12_t(Fp4=Fp4, cnr=[[param["xi"][0], 0], [param["xi"][1], 0]])
+    Fp24 = Fp24_t(
+        Fp12=Fp12, qnr=[[[0, 0], [0, 0]], [[1, 0], [0, 0]], [[0, 0], [0, 0]]]
+    )

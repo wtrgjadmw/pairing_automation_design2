@@ -1,4 +1,5 @@
 import json
+import argparse
 
 def read_json(filename):
     with open(filename, "r") as f:
@@ -6,7 +7,7 @@ def read_json(filename):
     return dict
 
 def bits_of(k):
-    return [int(c) for c in "{0:b}".format(k)]
+    return list(reversed([int(c) for c in "{0:b}".format(k)]))
 
 def bits_list(a):
     a_abs = abs(a)

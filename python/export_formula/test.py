@@ -1,6 +1,7 @@
 import csv
 from lib.fpx import Fp_t, Fp2_t, Fp4_t, Fp12_t, Fp24_t
 from lib.util import formulaSet
+from lib.parameters import Fp, Fp2, Fp4, Fp12, Fp24, p
 
 def csv2Formula(path):
     f = open(path, "r")
@@ -9,14 +10,10 @@ def csv2Formula(path):
         formulaList.append(formulaSet(ret=line[0], opr1=line[1], opr2=line[2], type=line[3]))
     return formulaList
 
-def test_formula(formulaList: list, p: int, k: int):
+def test_formula(formulaList: list, k: int):
     valueList = {}
+
     # initialize
-    Fp = Fp_t(p=p)
-    Fp2 = Fp2_t(Fp=Fp, qnr=-1)
-    Fp4 = Fp4_t(Fp2=Fp2, qnr=[1, 1])
-    Fp12 = Fp12_t(Fp4=Fp4, cnr=[[0, 0], [1, 0]])
-    Fp24 = Fp24_t(Fp12=Fp12, qnr=[[[0, 0], [0, 0]], [[1, 0], [0, 0]]])
     valueList["ZERO"] = Fp.zero()
     valueList["ONE"] = Fp.one()
     if k == 2:
@@ -96,19 +93,5 @@ def test_formula(formulaList: list, p: int, k: int):
 
 
 if __name__ == "__main__":
-    formulaList = csv2Formula(path="/home/mfukuda/pairing_automation_design/python/M12.csv")
-    # bls12-381
-    u = -(2**63 + 2**62 + 2**60 + 2**57 + 2**48 + 2**16)
-    # bls12
-    r = u**4 - u**2 + 1
-    p = (((u-1)**2) * r) // 3 + u
-    test_formula(formulaList, p, 12)
-
-    # formulaList = csv2Formula(path="/home/mfukuda/pairing_automation_design/python/M24.csv")
-    # # bls24-317 
-    # u = 2**31 + 2**30 + 2**28 + 2**27 + 2**24 + 2**16 + 2**15
-    # # bls24
-    # r = u**8 - u**4 + 1
-    # n = (((u-1)**2) * r) // 3
-    # p = n + u
-    # test_formula(formulaList, p, 24)
+    formulaList = csv2Formula(path="/home/mfukuda/pairing_automation_design/python/M24.csv")
+    test_formula(formulaList, 24)
