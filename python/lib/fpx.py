@@ -63,7 +63,9 @@ class Fp_t:
     def neg(self, a):
         return self.sub(0, a)
 
-    def constMul(self, a, k):  # モンゴメリ乗算じゃない
+    def constMulNotMont(self, a, k):  # モンゴメリ乗算じゃない
+        if k == 0:
+            return 0
         bits_k = bits_of(abs(k))
         r0 = a
         r1 = self.add(a, a)
@@ -81,7 +83,7 @@ class Fp_t:
         return r0
 
     def guzai(self, a, fp2_qnr):
-        a_ = self.constMul(a, abs(fp2_qnr))
+        a_ = self.constMulNotMont(a, abs(fp2_qnr))
         if fp2_qnr < 0:
             a_ = self.neg(a_)
         return a_
@@ -140,17 +142,17 @@ class Fp2_t:
         new_i = self.Fp.mul(a[1], k)
         return [new_r, new_i]
 
+    def constMulNotMont(self, a, k):  # モンゴメリ乗算
+        new_r = self.Fp.constMulNotMont(a[0], k)
+        new_i = self.Fp.constMulNotMont(a[1], k)
+        return [new_r, new_i]
+
     def guzai(self, a, fp4_qnr):  # qnr = x + yi
-        a0x, a1x, a0y, a1y = 0, 0, 0, 0
-        for i in range(fp4_qnr[0]):
-            a0x = self.Fp.add(a0x, a[0])
-            a1x = self.Fp.add(a1x, a[1])
-        for i in range(fp4_qnr[1]):
-            a0y = self.Fp.add(a0y, a[0])
-            a1y = self.Fp.add(a1y, a[1])
-        a1y_ = self.Fp.guzai(a1y, self.qnr)
-        new_r = self.Fp.add(a0x, a1y_)
-        new_i = self.Fp.add(a1x, a0y)
+        ax = self.constMulNotMont(a, fp4_qnr[0])
+        ay = self.constMulNotMont(a, fp4_qnr[0])
+        a1y_ = self.Fp.guzai(ay[1], self.qnr)
+        new_r = self.Fp.add(ax[0], a1y_)
+        new_i = self.Fp.add(ax[1], ay[0])
         return [new_r, new_i]
 
     def mul(self, a, b):
@@ -186,8 +188,9 @@ class Fp2_t:
         a_ = self.conj(a)
         t = self.mul(a, a_)
         s = self.Fp.inv(t[0])
-        ainv = self.constMul(a_, s)
-        return ainv
+        ainv0 = self.Fp.mul(a_[0], s)
+        ainv1 = self.Fp.mul(a_[1], s)
+        return [ainv0, ainv1]
 
     def neg(self, a):
         return [self.Fp.neg(a[0]), self.Fp.neg(a[1])]
@@ -243,8 +246,18 @@ class Fp4_t:
         new_i = self.Fp2.constMul(a[1], k)
         return [new_r, new_i]
 
-    def guzai(self, a, fp12_cnr):  # v^2 = guzai = u
-        return [self.Fp2.guzai(a[1], self.qnr), a[0]]
+    def constMulNotMont(self, a, k):  # モンゴメリ乗算
+        new_r = self.Fp2.constMulNotMont(a[0], k)
+        new_i = self.Fp2.constMulNotMont(a[1], k)
+        return [new_r, new_i]
+
+    def guzai(self, a, fp12_cnr):  # v^2 = guzai = (x + 0i) + (y + 0i)v
+        ax = self.constMulNotMont(a, fp12_cnr[0][0])
+        ay = self.constMulNotMont(a, fp12_cnr[1][0])
+        a1y_ = self.Fp2.guzai(ay[1], self.qnr)
+        new_r = self.Fp2.add(ax[0], a1y_)
+        new_i = self.Fp2.add(ax[1], ay[0])
+        return [new_r, new_i]
 
     def mul(self, a, b):
         t0 = self.Fp2.mul(a[0], b[0])

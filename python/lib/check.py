@@ -171,9 +171,9 @@ if __name__ == "__main__":
     xi_montconv = Fq.MontConv([[param["xi"][0], 0], [param["xi"][1], 0]])
     if D_twist:
         xi_inv = Fq.inv(xi_montconv)
-        b_t = Fq.constMul(xi_inv, Fp.MontConv(b))
+        b_t = Fq.constMulNotMont(xi_inv, b)
     else:
-        b_t = Fq.constMul(xi_montconv, Fp.MontConv(b))
+        b_t = Fq.constMulNotMont(xi_montconv, b)
 
     P = [Fp.MontConv(param["P"][0]), Fp.MontConv(param["P"][1])]
     Q = [Fq.MontConv(param["Q"][0]), Fq.MontConv(param["Q"][1])]
