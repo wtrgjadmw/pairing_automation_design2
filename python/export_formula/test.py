@@ -16,6 +16,7 @@ def test_formula(formulaList: list, p: int, k: int):
     Fp2 = Fp2_t(Fp=Fp, qnr=-1)
     Fp4 = Fp4_t(Fp2=Fp2, qnr=[1, 1])
     Fp12 = Fp12_t(Fp4=Fp4, cnr=[[0, 0], [1, 0]])
+    Fp24 = Fp24_t(Fp12=Fp12, qnr=[[[0, 0], [0, 0]], [[1, 0], [0, 0]]])
     valueList["ZERO"] = Fp.zero()
     valueList["ONE"] = Fp.one()
     if k == 2:
@@ -39,6 +40,15 @@ def test_formula(formulaList: list, p: int, k: int):
                 for i in range(2):
                     valueList['a{}{}{}'.format(m, j, i)] = a[m][j][i]
                     valueList['b{}{}{}'.format(m, j, i)] = b[m][j][i]
+    elif k == 24:
+        a = Fp24.random_element()
+        b = Fp24.random_element()
+        for n in range(2):
+            for m in range(3):
+                for j in range(2):
+                    for i in range(2):
+                        valueList['a{}{}{}{}'.format(n, m, j, i)] = a[n][m][j][i]
+                        valueList['b{}{}{}{}'.format(n, m, j, i)] = b[n][m][j][i]
 
     # calculate
     for formula in formulaList:
@@ -73,8 +83,32 @@ def test_formula(formulaList: list, p: int, k: int):
                     if valueList['c{}{}{}'.format(m, j, i)] != c[m][j][i]:
                         print("Error: this formula has some error;")
                         return
+    elif k == 24:
+        c = Fp24.mul(a, b)
+        for n in range(2):
+            for m in range(3):
+                for j in range(2):
+                    for i in range(2):
+                        if valueList['c{}{}{}{}'.format(n, m, j, i)] != c[n][m][j][i]:
+                            print("Error: this formula has some error;")
+                            return
     print("Success!")
+
 
 if __name__ == "__main__":
     formulaList = csv2Formula(path="/home/mfukuda/pairing_automation_design/python/M12.csv")
-    test_formula(formulaList, 0x1a0111ea397fe69a4b1ba7b6434bacd764774b84f38512bf6730d2a0f6b0f6241eabfffeb153ffffb9feffffffffaaab, 12)
+    # bls12-381
+    u = -(2**63 + 2**62 + 2**60 + 2**57 + 2**48 + 2**16)
+    # bls12
+    r = u**4 - u**2 + 1
+    p = (((u-1)**2) * r) // 3 + u
+    test_formula(formulaList, p, 12)
+
+    # formulaList = csv2Formula(path="/home/mfukuda/pairing_automation_design/python/M24.csv")
+    # # bls24-317 
+    # u = 2**31 + 2**30 + 2**28 + 2**27 + 2**24 + 2**16 + 2**15
+    # # bls24
+    # r = u**8 - u**4 + 1
+    # n = (((u-1)**2) * r) // 3
+    # p = n + u
+    # test_formula(formulaList, p, 24)

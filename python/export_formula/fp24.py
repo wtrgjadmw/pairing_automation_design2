@@ -1,5 +1,6 @@
 from export_formula.fp4 import fp4_frob, fp4_mul
 from export_formula.fp12 import fp12_add, fp12_sub, fp12_neg, fp12_mul, fp12_guzai, fp12_inv, fp12_constMul
+from export_formula.transform import remove_extra_formula
 
 fp24_qnr = [1, 1]
 
@@ -89,6 +90,7 @@ def fp24_exp(opr1: str, x: int, ret: str):
 
 if __name__ == "__main__":
     formulaList = fp24_mul("a", "b", "c")
+    formulaList = remove_extra_formula(formulaList)
     for formula in formulaList:
         print("{},{},{},{}".format(formula.ret, formula.opr1, formula.opr2, formula.type))
         # print(formula)

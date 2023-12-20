@@ -2,6 +2,8 @@ import re
 from lib.util import formulaSet
 
 def transform_valuename(transformList: dict, opr: str):
+    if "ZERO" in opr:
+        return "ZERO"
     for key in transformList.keys():
         if opr == key:
             # transform_used_list.append(key)
