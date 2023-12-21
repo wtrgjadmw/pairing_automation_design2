@@ -119,7 +119,7 @@ def fp12_exp(opr1: str, x: int, ret: str):
     formulaList[-1].ret = ret
     return formulaList
 
-def frob(opr1, ret):
+def fp12_frob(opr1, ret):
     formulaList = fp2_conj(opr1+"10", ret+"_f10")
     formulaList += fp2_conj(opr1+"20", ret+"_f12")
     formulaList += fp2_conj(opr1+"01", ret+"_f01")

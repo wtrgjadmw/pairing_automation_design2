@@ -1,4 +1,4 @@
-from export_formula.fp2 import fp2_add, fp2_sub, fp2_neg, fp2_mul, fp2_guzai, fp2_inv, fp2_constMul, fp2_conj
+from export_formula.fp2 import fp2_add, fp2_sub, fp2_neg, fp2_mul, fp2_guzai, fp2_inv, fp2_constMul, fp2_conj, fp2_constMulNotMont
 from export_formula.transform import *
 from lib.parameters import fp12_cnr
 
@@ -12,6 +12,9 @@ def fp4_sub(opr1: str, opr2: str, ret: str):
 
 def fp4_constMul(opr1: str, k: int, ret: str):
     return fp2_constMul(opr1+'0', k, ret+'0') + fp2_constMul(opr1+'1', k, ret+'1')
+
+def fp4_constMulNotMont(opr1: str, opr2: int, ret: str):
+    return fp2_constMulNotMont(opr1+'0', opr2, ret+'0') + fp2_constMulNotMont(opr1+'1', opr2, ret+'1')
 
 
 def fp4_mul(opr1: str, opr2: str, ret: str):
@@ -59,8 +62,8 @@ def fp4_neg(opr1: str, ret: str):
 # (ret: Fp4) = (opr1: Fp4) * fp12_cnr
 def fp4_guzai(opr1: str, ret: str):  # Fp12 = Fp4[w]/(w^3 - v)
     formulaList = []
-    formulaList += fp4_constMul(opr1, fp12_cnr[0], ret+"_x")
-    formulaList += fp4_constMul(opr1, fp12_cnr[1], ret+"_y")
+    formulaList += fp4_constMul(opr1, fp12_cnr[0][0], ret+"_x")
+    formulaList += fp4_constMul(opr1, fp12_cnr[1][0], ret+"_y")
     formulaList += fp2_guzai(ret+"_y1", ret+"_y1_")
     formulaList += fp2_add(ret+"_x0", ret+"_y1_", ret+"0")
     formulaList += fp2_add(ret+"_x1", ret+"_y0", ret+"1")
@@ -89,7 +92,7 @@ def fp4_frob(opr1: str, ret: str):
     return formulaList
 
 if __name__ == "__main__":
-    formulaList = fp4_mul("a", "b", "c")
+    formulaList = fp4_inv("a", "c")
     formulaList = remove_extra_formula(formulaList)
     for formula in formulaList:
         print("{},{},{},{}".format(formula.ret, formula.opr1, formula.opr2, formula.type))

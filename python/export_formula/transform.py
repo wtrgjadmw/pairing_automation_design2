@@ -4,14 +4,10 @@ from lib.util import formulaSet
 def transform_valuename(transformList: dict, opr: str):
     if "ZERO" in opr:
         return "ZERO"
-    while True:
-        isChanged = False
-        for key in transformList.keys():
-            if opr == key:
-                # transform_used_list.append(key)
-                opr = transformList[key]
-                isChanged = True
-        if not isChanged:
+    for key in transformList.keys():
+        if opr == key:
+            # transform_used_list.append(key)
+            opr = transformList[key]
             break
     return opr
 

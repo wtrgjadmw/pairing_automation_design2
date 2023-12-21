@@ -12,6 +12,9 @@ def fp2_sub(opr1: str, opr2: str, ret: str):
 def fp2_constMul(opr1: str, k: int, ret: str):
     return constMul(opr1+'0', k, ret+'0') + constMul(opr1+'1', k, ret+'1')
 
+def fp2_constMulNotMont(opr1: str, opr2: int, ret: str):
+    return mul(opr1+'0', opr2, ret+'0') + mul(opr1+'1', opr2, ret+'1')
+
 def fp2_mul(opr1: str, opr2: str, ret: str):
     formulaList = []
     formulaList += mul(opr1+'0', opr2+'0', ret+"_t0")

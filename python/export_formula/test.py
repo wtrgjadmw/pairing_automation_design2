@@ -1,7 +1,7 @@
 import csv
-from lib.fpx import Fp_t, Fp2_t, Fp4_t, Fp12_t, Fp24_t
+from lib.pairing import add_line_twist6, double_line_twist6, sparse_mult_m6_twist, sparse_mult_d6_twist, SQR012345
 from lib.util import formulaSet
-from lib.parameters import Fp, Fp2, Fp4, Fp12, Fp24, p
+from lib.parameters import Fp, Fp2, Fp4, Fp12, Fp24, P, Q, T, b_t, D_twist, xi
 
 def csv2Formula(path):
     f = open(path, "r")
@@ -16,6 +16,8 @@ def test_formula(formulaList: list, k: int):
     # initialize
     valueList["ZERO"] = Fp.zero()
     valueList["ONE"] = Fp.one()
+    valueList["xp"] = P[0]
+    valueList["yp"] = P[1]
     if k == 2:
         a = Fp2.random_element()
         b = Fp2.random_element()
@@ -46,6 +48,15 @@ def test_formula(formulaList: list, k: int):
                     for i in range(2):
                         valueList['a{}{}{}{}'.format(n, m, j, i)] = a[n][m][j][i]
                         valueList['b{}{}{}{}'.format(n, m, j, i)] = b[n][m][j][i]
+        # T_ = scalar_mul_twist6(Fp4, 2, T, P, b_t, xi, D_twist)
+        # for j in range(2):
+        #     for i in range(2):
+        #         valueList['b_t{}{}'.format(j, i)] = b_t[j][i]
+        #         valueList['xq{}{}'.format(j, i)] = Q[0][j][i]
+        #         valueList['yq{}{}'.format(j, i)] = Q[1][j][i]
+        #         valueList['xt{}{}'.format(j, i)] = T_[0][j][i]
+        #         valueList['yt{}{}'.format(j, i)] = T_[1][j][i]
+        #         valueList['zt{}{}'.format(j, i)] = T_[2][j][i]
 
     # calculate
     for formula in formulaList:
@@ -56,7 +67,7 @@ def test_formula(formulaList: list, k: int):
         elif formula.type == "MUL":
             valueList[formula.ret] = Fp.mul(valueList[formula.opr1], valueList[formula.opr2])
         elif formula.type == "INV":
-            valueList[formula.ret] = Fp.inv(valueList[formula.opr1], valueList[formula.opr2])
+            valueList[formula.ret] = Fp.inv(valueList[formula.opr1])
 
     # check result
     if k == 2:
@@ -66,7 +77,6 @@ def test_formula(formulaList: list, k: int):
                 print("Error: this formula has some error;")
                 return            
     elif k == 4:
-        c = Fp4.mul(a, b)
         for j in range(2):
             for i in range(2):
                 if valueList['c{}{}'.format(j, i)] != c[j][i]:
@@ -81,17 +91,30 @@ def test_formula(formulaList: list, k: int):
                         print("Error: this formula has some error;")
                         return
     elif k == 24:
-        c = Fp24.mul(a, b)
+        c = SQR012345(Fp4, xi, [a[0][0], a[1][0], a[0][1], a[1][1], a[0][2], a[1][2]])
+        # print(c)
+        # for j in range(2):
+        #     for i in range(2):
+        #         if valueList['l01{}{}'.format(j, i)] != c[0][j][i]:
+        #             print("Error: this formula has some error;")
+        #             return
+        #         if valueList['l10{}{}'.format(j, i)] != c[2][j][i]:
+        #             print("Error: this formula has some error;")
+        #             return
+        #         if valueList['l00{}{}'.format(j, i)] != c[3][j][i]:
+        #             print("Error: this formula has some error;")
+        #             return
         for n in range(2):
             for m in range(3):
                 for j in range(2):
                     for i in range(2):
-                        if valueList['c{}{}{}{}'.format(n, m, j, i)] != c[n][m][j][i]:
+                        # print(valueList['c{}{}{}{}'.format(n, m, j, i)])
+                        if valueList['c{}{}{}{}'.format(n, m, j, i)] != c[n+m*2][j][i]:
                             print("Error: this formula has some error;")
                             return
     print("Success!")
 
 
 if __name__ == "__main__":
-    formulaList = csv2Formula(path="/home/mfukuda/pairing_automation_design/python/M24.csv")
+    formulaList = csv2Formula(path="/home/mfukuda/pairing_automation_design/python/SQR012345.csv")
     test_formula(formulaList, 24)

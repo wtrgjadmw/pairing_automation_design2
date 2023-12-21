@@ -74,18 +74,32 @@ if curve_group == "bls12":
     fp2_qnr = param["beta"]
     fp4_qnr = param["xi"]
     Fp = Fp_t(p=p)
-    Fp2 = Fp2_t(Fp=Fp, qnr=param["beta"])
-    Fp4 = Fp4_t(Fp2=Fp2, qnr=param["xi"])
+    Fp2 = Fp2_t(Fp=Fp, qnr=fp2_qnr)
+    Fq = Fp2
+    Fp4 = Fp4_t(Fp2=Fp2, qnr=fp4_qnr)
     Fp12 = Fp12_t(Fp4=Fp4, cnr=[[0, 0], [1, 0]])
 
 if curve_group == "bls24":
     fp2_qnr = param["beta"]
     fp4_qnr = param["beta2"]
-    fp12_cnr = param["xi"]
+    fp12_cnr = [[param["xi"][0], 0], [param["xi"][1], 0]]
+    xi = fp12_cnr
     Fp = Fp_t(p=p)
-    Fp2 = Fp2_t(Fp=Fp, qnr=param["beta"])
-    Fp4 = Fp4_t(Fp2=Fp2, qnr=param["beta2"])
-    Fp12 = Fp12_t(Fp4=Fp4, cnr=[[param["xi"][0], 0], [param["xi"][1], 0]])
+    Fp2 = Fp2_t(Fp=Fp, qnr=fp2_qnr)
+    Fp4 = Fp4_t(Fp2=Fp2, qnr=fp4_qnr)
+    Fq = Fp4
+    Fp12 = Fp12_t(Fp4=Fp4, cnr=fp12_cnr)
     Fp24 = Fp24_t(
         Fp12=Fp12, qnr=[[[0, 0], [0, 0]], [[1, 0], [0, 0]], [[0, 0], [0, 0]]]
     )
+
+xi_montconv = Fq.MontConv(xi)
+if D_twist:
+    xi_inv = Fq.inv(xi_montconv)
+    b_t = Fq.constMulNotMont(xi_inv, b)
+else:
+    b_t = Fq.constMulNotMont(xi_montconv, b)
+
+P = [Fp.MontConv(param["P"][0]), Fp.MontConv(param["P"][1])]
+Q = [Fq.MontConv(param["Q"][0]), Fq.MontConv(param["Q"][1])]
+T = [Fq.MontConv(param["Q"][0]), Fq.MontConv(param["Q"][1]), Fq.one()]
