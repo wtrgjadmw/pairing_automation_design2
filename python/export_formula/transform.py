@@ -1,39 +1,110 @@
-import re
-from lib.util import formulaSet
+from lib.util import FormulaSet
 
-def transform_valuename(transformList: dict, opr: str):
-    if "ZERO" in opr:
-        return "ZERO"
-    for key in transformList.keys():
-        if opr == key:
-            # transform_used_list.append(key)
-            opr = transformList[key]
-            break
-    return opr
 
-def remove_extra_formula(formulaList: list[formulaSet]):
-    isToAdd = True
-    transformList = {}
-    negList = {}
-    resultList = []
-    for formula in formulaList:
-        opr1 = transform_valuename(transformList, formula.opr1)
-        opr2 = transform_valuename(transformList, formula.opr2)
-        if "ZERO" in opr1 and formula.type == "ADD":
-            transformList[formula.ret] = transform_valuename(transformList, opr2)
-            continue
-        if "ZERO" in opr2 and formula.type == "ADD":
-            transformList[formula.ret] = transform_valuename(transformList, opr1)
-            continue
-        if ("ZERO" in opr1 or "ZERO" in opr2) and formula.type == "MUL":
-            transformList[formula.ret] = "ZERO"
-            continue
-        if "ZERO" in opr2 and formula.type == "SUB":
-            transformList[formula.ret] = transform_valuename(transformList, opr1)
-            continue
-        resultList.append(formulaSet(
-            opr1=opr1, 
-            opr2=opr2,
-            ret=formula.ret, type=formula.type
-        ))
-    return resultList
+class TransformElement:
+    def __init__(self, value: str, isMinus: bool) -> None:
+        self.value = value
+        self.isMinus = isMinus
+        self.isUsed = False
+
+
+class FormulaOrganizer:
+    def __init__(self) -> None:
+        self.transformList: dict[str, TransformElement] = {}
+
+    def find_transform_element(self, value):
+        try:
+            element = self.transformList[value]
+            self.transformList[value].isUsed = True
+        except KeyError:
+            element = TransformElement(
+                value, isMinus=False)
+        return element
+
+    def set_transform_element(self, key, value, isMinus=False):
+        element = self.find_transform_element(value)
+        self.transformList[key] = TransformElement(
+            value, isMinus=(element.isMinus) ^ isMinus)
+
+    def transform_formula(self, formula: FormulaSet):
+        opr1_element = self.find_transform_element(formula.opr1)
+        opr2_element = self.find_transform_element(formula.opr2)
+
+        if opr1_element.isMinus and (not opr2_element.isMinus):
+            if formula.type == "ADD":
+                return FormulaSet(
+                    opr1=opr2_element.value,
+                    opr2=opr1_element.value,
+                    ret=formula.ret,
+                    type="SUB")
+            self.set_transform_element(formula.ret, formula.ret, isMinus=True)
+            if formula.type == "SUB":
+                return FormulaSet(
+                    opr1=opr1_element.value,
+                    opr2=opr2_element.value,
+                    ret=formula.ret,
+                    type="ADD")
+            return FormulaSet(
+                opr1=opr1_element.value,
+                opr2=opr2_element.value,
+                ret=formula.ret,
+                type=formula.type)
+
+        if (not opr1_element.isMinus) and opr2_element.isMinus:
+            if formula.type == "ADD":
+                return FormulaSet(
+                    opr1=opr1_element.value,
+                    opr2=opr2_element.value,
+                    ret=formula.ret,
+                    type="SUB")
+            if formula.type == "SUB":
+                return FormulaSet(
+                    opr1=opr1_element.value,
+                    opr2=opr2_element.value,
+                    ret=formula.ret,
+                    type="ADD")
+            self.set_transform_element(formula.ret, formula.ret, isMinus=True)
+            return FormulaSet(
+                opr1=opr1_element.value,
+                opr2=opr2_element.value,
+                ret=formula.ret,
+                type=formula.type)
+
+        if opr1_element.isMinus and opr2_element.isMinus:
+            if formula.type == "ADD" or formula.type == "SUB":
+                self.set_transform_element(
+                    formula.ret, formula.ret, isMinus=True)
+                return FormulaSet(
+                    opr1=opr1_element.value,
+                    opr2=opr1_element.value,
+                    ret=formula.ret,
+                    type=formula.type)
+        return FormulaSet(
+            opr1=opr1_element.value,
+            opr2=opr2_element.value,
+            ret=formula.ret,
+            type=formula.type
+        )
+
+    def remove_extra_formula(self, formulaList: list[FormulaSet]):
+        resultList = []
+        for formula in formulaList:
+            if "ZERO" in formula.opr1:
+                opr2_element = self.find_transform_element(formula.opr2)
+                if formula.type == "ADD":
+                    self.set_transform_element(formula.ret, opr2_element.value)
+                    continue
+                if formula.type == "SUB":
+                    self.set_transform_element(
+                        formula.ret, opr2_element.value, True)
+                    continue
+            if "ZERO" in formula.opr2:
+                opr1_element = self.find_transform_element(formula.opr1)
+                self.set_transform_element(
+                    formula.ret, opr1_element.value)
+                continue
+            resultList.append(self.transform_formula(formula))
+        for key, element in self.transformList.items():
+            if not element.isUsed:
+                resultList.append(FormulaSet(opr1=element.value, opr2="ZERO", ret=key, type="ADD"))
+        return resultList

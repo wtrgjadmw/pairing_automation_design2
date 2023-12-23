@@ -1,25 +1,26 @@
-from lib.util import bits_of, formulaSet
+from lib.util import bits_of, FormulaSet
 from lib.parameters import fp2_qnr
 from export_formula.transform import *
 
+
 def add(opr1: str, opr2: str, ret: str):
-    return [formulaSet(opr1=opr1, opr2=opr2, ret=ret, type="ADD")]
+    return [FormulaSet(opr1=opr1, opr2=opr2, ret=ret, type="ADD")]
 
 
 def sub(opr1: str, opr2: str, ret: str):
-    return [formulaSet(opr1=opr1, opr2=opr2, ret=ret, type="SUB")]
+    return [FormulaSet(opr1=opr1, opr2=opr2, ret=ret, type="SUB")]
 
 
 def mul(opr1: str, opr2: str, ret: str):
-    return [formulaSet(opr1=opr1, opr2=opr2, ret=ret, type="MUL")]
+    return [FormulaSet(opr1=opr1, opr2=opr2, ret=ret, type="MUL")]
 
 
 def inv(opr1: str, ret: str):
-    return [formulaSet(opr1=opr1, opr2=opr1, ret=ret, type="INV")]
+    return [FormulaSet(opr1=opr1, opr2=opr1, ret=ret, type="INV")]
 
 
 def neg(opr1: str, ret: str):
-    return [formulaSet(opr1="ZERO", opr2=opr1, ret=ret, type="SUB")]
+    return [FormulaSet(opr1="ZERO", opr2=opr1, ret=ret, type="SUB")]
 
 
 def constMulNotMont(opr1: str, k: int, ret: str):
@@ -47,7 +48,9 @@ def constMulNotMont(opr1: str, k: int, ret: str):
     return formulaList
 
 # (ret: Fp) = (opr1: Fp) * fp2_qnr
-def guzai(opr1: str, ret: str): # Fp2 = Fp[i]/(i^2 - fp2_qnr)
+
+
+def guzai(opr1: str, ret: str):  # Fp2 = Fp[i]/(i^2 - fp2_qnr)
     return constMulNotMont(opr1, fp2_qnr, ret)
 
 
@@ -67,7 +70,9 @@ def exp(opr1: str, x: int, ret: str):
     formulaList[-1].ret = ret
     return formulaList
 
+
 if __name__ == "__main__":
     formulaList = constMulNotMont("x", 13, "y")
     for formula in formulaList:
-        print("{},{},{},{}".format(formula.ret, formula.opr1, formula.opr2, formula.type))
+        print("{},{},{},{}".format(formula.ret,
+              formula.opr1, formula.opr2, formula.type))

@@ -6,11 +6,13 @@ from export_formula.transform import remove_extra_formula
 from lib.parameters import curve_group, curve_name
 import os
 
+
 def printCsv(filename, formulaList):
     write_f = open(filename, 'w')
     formulaList = remove_extra_formula(formulaList)
     for formula in formulaList:
-        write_f.write("{},{},{},{}\n".format(formula.ret, formula.opr1, formula.opr2, formula.type))
+        write_f.write("{},{},{},{}\n".format(
+            formula.ret, formula.opr1, formula.opr2, formula.type))
 
 
 def fp12_makeCsv(directory: str):
@@ -25,6 +27,7 @@ def fp12_makeCsv(directory: str):
     printCsv(directory+"SPARSE_D.csv", fp12_sparse_d6("a", "b", "c"))
     printCsv(directory+"SPARSE_M.csv", fp12_sparse_m6("a", "b", "c"))
 
+
 def fp24_makeCsv(directory: str):
     os.makedirs(directory, exist_ok=True)
     printCsv(directory+"CONJ.csv", fp24_conj("a", "c"))
@@ -37,5 +40,7 @@ def fp24_makeCsv(directory: str):
     printCsv(directory+"SPARSE_D.csv", fp24_sparse_d6("a", "b", "c"))
     printCsv(directory+"SPARSE_M.csv", fp24_sparse_m6("a", "b", "c"))
 
+
 if __name__ == "__main__":
-    fp24_makeCsv("/home/mfukuda/pairing_automation_design/csv/{}/{}/".format(curve_group, curve_name))
+    fp24_makeCsv(
+        "/home/mfukuda/pairing_automation_design/csv/{}/{}/".format(curve_group, curve_name))

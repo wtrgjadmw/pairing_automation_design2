@@ -4,6 +4,7 @@ from export_formula.transform import remove_extra_formula
 
 fp24_qnr = [1, 1]
 
+
 def fp24_add(opr1: str, opr2: str, ret: str):
     return fp12_add(opr1+'0', opr2+'0', ret+'0') + fp12_add(opr1+'1', opr2+'1', ret+'1')
 
@@ -29,6 +30,7 @@ def fp24_mul(opr1: str, opr2: str, ret: str):
     formulaList += fp12_sub(ret+"_t4", ret+"_t5", ret+"1")
     return formulaList
 
+
 def fp24_sqr(opr1: str, ret: str):
     formulaList = []
     formulaList += fp12_guzai(opr1+'1', ret+"_a1_")
@@ -41,6 +43,7 @@ def fp24_sqr(opr1: str, ret: str):
     formulaList += fp12_sub(ret+"_t2", ret+"_t5", ret+"0")
     formulaList += fp12_add(ret+"_t3", ret+"_t3", ret+"1")
     return formulaList
+
 
 def fp24_conj(opr1: str, ret: str):
     return fp12_add(opr1+'0', "ZERO", ret+'0') + fp12_neg(opr1+'1', ret+'1')
@@ -55,8 +58,10 @@ def fp24_inv(opr1: str, ret: str):
     formulaList += fp12_mul(ret+'_a_1', ret+'_s', ret+"1")
     return formulaList
 
+
 def fp24_neg(opr1: str, ret: str):
     return fp12_neg(opr1+'0', ret+'0') + fp12_neg(opr1+'1', ret+'1')
+
 
 def fp24_frob(opr1: str, ret: str):
     formulaList = fp4_frob(opr1+"10", ret+"_f10")
@@ -71,6 +76,7 @@ def fp24_frob(opr1: str, ret: str):
     formulaList += fp4_mul(ret+"_f02", "XI1", ret+"02")
     formulaList += fp4_mul(ret+"_f12", "XI1", ret+"12")
     return formulaList
+
 
 def fp24_exp(opr1: str, x: int, ret: str):
     twiceVal = opr1
@@ -88,9 +94,11 @@ def fp24_exp(opr1: str, x: int, ret: str):
     formulaList[-1].ret = ret
     return formulaList
 
+
 if __name__ == "__main__":
     formulaList = fp24_mul("a", "b", "c")
     formulaList = remove_extra_formula(formulaList)
     for formula in formulaList:
-        print("{},{},{},{}".format(formula.ret, formula.opr1, formula.opr2, formula.type))
+        print("{},{},{},{}".format(formula.ret,
+              formula.opr1, formula.opr2, formula.type))
         # print(formula)
