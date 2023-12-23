@@ -1,5 +1,5 @@
 from export_formula.fp import sub
-from export_formula.fp4 import fp4_mul, fp4_sub, fp4_add, fp4_sqr, fp4_neg, fp4_constMulNotMont, fp4_guzai
+from export_formula.fp4 import fp4_mul, fp4_sub, fp4_add, fp4_sqr, fp4_neg, fp4_constMul, fp4_guzai
 from export_formula.transform import remove_extra_formula
 
 def ep4_dbl():
@@ -27,8 +27,8 @@ def ep4_dbl():
     formulaList += fp4_mul("b3", "t16", "t17")
     formulaList += fp4_sqr("t0", "t18")
     formulaList += fp4_add("t17", "t18", "new_yt")
-    formulaList += fp4_constMulNotMont("t11", "yp", "l00")
-    formulaList += fp4_constMulNotMont("t9", "xp", "l10")
+    formulaList += fp4_constMul("t11", "yp", "l00")
+    formulaList += fp4_constMul("t9", "xp", "l10")
     return formulaList
 
 def ep4_add():
@@ -51,8 +51,8 @@ def ep4_add():
     formulaList += fp4_add("t13", "t14", "t15")
     formulaList += fp4_neg("t13", "new_yt")
     formulaList += fp4_mul("zt", "t6", "new_zt")
-    formulaList += fp4_constMulNotMont("t3", "yp", "l00")
-    formulaList += fp4_constMulNotMont("t1", "xp", "l10")
+    formulaList += fp4_constMul("t3", "yp", "l00")
+    formulaList += fp4_constMul("t1", "xp", "l10")
     formulaList += fp4_mul("yq", "t3", "t16")
     formulaList += fp4_mul("xq", "t1", "t17")
     formulaList += fp4_sub("t16", "t17", "l01")

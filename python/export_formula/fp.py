@@ -22,7 +22,7 @@ def neg(opr1: str, ret: str):
     return [formulaSet(opr1="ZERO", opr2=opr1, ret=ret, type="SUB")]
 
 
-def constMul(opr1: str, k: int, ret: str):
+def constMulNotMont(opr1: str, k: int, ret: str):
     # print("-----constMul: {}={}*{}-------------------".format(ret, opr1, k))
     if k == 0:
         return [formulaSet(opr1=opr1, opr2="ZERO", ret=ret, type="MUL")]
@@ -48,7 +48,7 @@ def constMul(opr1: str, k: int, ret: str):
 
 # (ret: Fp) = (opr1: Fp) * fp2_qnr
 def guzai(opr1: str, ret: str): # Fp2 = Fp[i]/(i^2 - fp2_qnr)
-    return constMul(opr1, fp2_qnr, ret)
+    return constMulNotMont(opr1, fp2_qnr, ret)
 
 
 def exp(opr1: str, x: int, ret: str):
@@ -68,6 +68,6 @@ def exp(opr1: str, x: int, ret: str):
     return formulaList
 
 if __name__ == "__main__":
-    formulaList = constMul("x", 13, "y")
+    formulaList = constMulNotMont("x", 13, "y")
     for formula in formulaList:
         print("{},{},{},{}".format(formula.ret, formula.opr1, formula.opr2, formula.type))

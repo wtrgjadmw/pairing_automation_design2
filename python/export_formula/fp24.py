@@ -12,8 +12,8 @@ def fp24_sub(opr1: str, opr2: str, ret: str):
     return fp12_sub(opr1+'0', opr2+'0', ret+'0') + fp12_sub(opr1+'1', opr2+'1', ret+'1')
 
 
-def fp24_constMul(opr1: str, k: int, ret: str):
-    return fp12_constMul(opr1+'0', k, ret+'0') + fp12_constMul(opr1+'1', k, ret+'1')
+def fp24_constMulNotMont(opr1: str, k: int, ret: str):
+    return fp12_constMulNotMont(opr1+'0', k, ret+'0') + fp12_constMulNotMont(opr1+'1', k, ret+'1')
 
 
 def fp24_mul(opr1: str, opr2: str, ret: str):
