@@ -106,5 +106,8 @@ class FormulaOrganizer:
             resultList.append(self.transform_formula(formula))
         for key, element in self.transformList.items():
             if not element.isUsed:
-                resultList.append(FormulaSet(opr1=element.value, opr2="ZERO", ret=key, type="ADD"))
+                if element.isMinus:
+                    resultList.append(FormulaSet(opr1="ZERO", opr2=element.value, ret=key, type="SUB"))
+                else:
+                    resultList.append(FormulaSet(opr1=element.value, opr2="ZERO", ret=key, type="ADD"))
         return resultList

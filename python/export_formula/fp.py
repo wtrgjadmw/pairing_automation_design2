@@ -24,27 +24,26 @@ def neg(opr1: str, ret: str):
 
 
 def constMulNotMont(opr1: str, k: int, ret: str):
-    # print("-----constMul: {}={}*{}-------------------".format(ret, opr1, k))
     if k == 0:
         raise ValueError("*ZERO")
     formulaList = []
     bits_k = bits_of(abs(k))
-    twiceVal = opr1
-    tmpVal = "ZERO"
-    for i in range(0, len(bits_k) - 1):
-        nextTwiceVal = ret + "_twice{}".format(i)
-        nextTmpVal = ret + str(i)
+    tmpVal = opr1
+    cnt = 0
+    for i in range(1, len(bits_k)):
+        nextTmpVal = ret + str(cnt)
+        formulaList += add(tmpVal, tmpVal, nextTmpVal)
+        tmpVal = nextTmpVal
+        cnt += 1
         if bits_k[i]:
-            formulaList += add(twiceVal, tmpVal, nextTmpVal)
+            nextTmpVal = ret + str(cnt)
+            formulaList += add(tmpVal, opr1, nextTmpVal)
             tmpVal = nextTmpVal
-        formulaList += add(twiceVal, twiceVal, nextTwiceVal)
-        twiceVal = nextTwiceVal
+            cnt += 1
     if k > 0:
-        formulaList += add(twiceVal, tmpVal, ret)
+        formulaList += add("ZERO", tmpVal, ret)
     else:
-        negVal = ret + "_neg"
-        formulaList += add(twiceVal, tmpVal, negVal)
-        formulaList += neg(negVal, ret)
+        formulaList += neg(tmpVal, ret)
     return formulaList
 
 # (ret: Fp) = (opr1: Fp) * fp2_qnr
@@ -72,7 +71,7 @@ def exp(opr1: str, x: int, ret: str):
 
 
 if __name__ == "__main__":
-    formulaList = constMulNotMont("x", 13, "y")
+    formulaList = constMulNotMont("x", -1, "y")
     for formula in formulaList:
         print("{},{},{},{}".format(formula.ret,
               formula.opr1, formula.opr2, formula.type))

@@ -58,11 +58,14 @@ def fp2_conj(opr1: str, ret: str):
 
 def fp2_inv(opr1: str, ret: str):
     formulaList = []
-    formulaList += fp2_conj(opr1, ret + '_a_')
-    formulaList += fp2_mul(opr1, ret + '_a_', ret + "_aa_")
-    formulaList += inv(ret + "_aa_0", ret + "_s")
-    formulaList += mul(ret + '_a_0', ret + '_s', ret + "0")
-    formulaList += mul(ret + '_a_1', ret + '_s', ret + "1")
+    formulaList += mul(opr1 + "0", opr1 + "0", ret + '_aa')
+    formulaList += mul(opr1 + "1", opr1 + "1", ret + '_bb')
+    formulaList += guzai(ret + '_bb', ret + '_bbxi')
+    formulaList += sub(ret + '_aa', ret + '_bbxi', ret + '_denom')
+    formulaList += inv(ret + '_denom', ret + '_denom_inv')
+    formulaList += mul(opr1 + "0", ret + '_denom_inv', ret + "0")
+    formulaList += mul(opr1 + "1", ret + '_denom_inv', ret + '1_')
+    formulaList += neg(ret + "1_", ret + "1")
     return formulaList
 
 
@@ -107,8 +110,8 @@ def fp2_exp(opr1: str, x: int, ret: str):
 
 if __name__ == "__main__":
     formulaList = fp2_inv("a", "c")
-    # organizer = FormulaOrganizer()
-    # formulaList = organizer.remove_extra_formula(formulaList)
+    organizer = FormulaOrganizer()
+    formulaList = organizer.remove_extra_formula(formulaList)
     for formula in formulaList:
         print(
             "{},{},{},{}".format(

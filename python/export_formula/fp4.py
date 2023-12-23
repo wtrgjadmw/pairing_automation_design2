@@ -58,11 +58,14 @@ def fp4_conj(opr1: str, ret: str):
 
 def fp4_inv(opr1: str, ret: str):
     formulaList = []
-    formulaList += fp4_conj(opr1, ret + '_a_')
-    formulaList += fp4_mul(opr1, ret + '_a_', ret + "_aa_")
-    formulaList += fp2_inv(ret + "_aa_0", ret + "_s")
-    formulaList += fp2_mul(ret + '_a_0', ret + '_s', ret + "0")
-    formulaList += fp2_mul(ret + '_a_1', ret + '_s', ret + "1")
+    formulaList += fp2_mul(opr1 + "0", opr1 + "0", ret + '_aa')
+    formulaList += fp2_mul(opr1 + "1", opr1 + "1", ret + '_bb')
+    formulaList += fp2_guzai(ret + '_bb', ret + '_bbxi')
+    formulaList += fp2_sub(ret + '_aa', ret + '_bbxi', ret + '_denom')
+    formulaList += fp2_inv(ret + '_denom', ret + '_denom_inv')
+    formulaList += fp2_mul(opr1 + "0", ret + '_denom_inv', ret + "0")
+    formulaList += fp2_mul(opr1 + "1", ret + '_denom_inv', ret + '1_')
+    formulaList += fp2_neg(ret + "1_", ret + "1")
     return formulaList
 
 
