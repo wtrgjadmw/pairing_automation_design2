@@ -1,4 +1,4 @@
-from export_formula.fp import add, sub, neg, mul, guzai, inv, constMul
+from export_formula.fp import add, sub, neg, mul, guzai, inv, constMulNotMont
 from lib.parameters import fp4_qnr
 from export_formula.transform import remove_extra_formula
 
@@ -10,7 +10,7 @@ def fp2_sub(opr1: str, opr2: str, ret: str):
     return sub(opr1+'0', opr2+'0', ret+'0') + sub(opr1+'1', opr2+'1', ret+'1')
 
 def fp2_constMulNotMont(opr1: str, k: int, ret: str):
-    return constMul(opr1+'0', k, ret+'0') + constMul(opr1+'1', k, ret+'1')
+    return constMulNotMont(opr1+'0', k, ret+'0') + constMulNotMont(opr1+'1', k, ret+'1')
 
 def fp2_constMul(opr1: str, opr2: int, ret: str):
     return mul(opr1+'0', opr2, ret+'0') + mul(opr1+'1', opr2, ret+'1')
@@ -59,11 +59,16 @@ def fp2_neg(opr1: str, ret: str):
 # (ret: Fp2) = (opr1: Fp2) * fp4_qnr
 def fp2_guzai(opr1: str, ret: str):  # Fp4 = Fp2[v]/(v^2 - fp4_qnr), fp4_qnr = x + yi
     formulaList = []
-    formulaList += fp2_constMulNotMont(opr1, fp4_qnr[0], ret+"_x")
-    formulaList += fp2_constMulNotMont(opr1, fp4_qnr[1], ret+"_y")
-    formulaList += guzai(ret+"_y1", ret+"_y1_")
-    formulaList += add(ret+"_x0", ret+"_y1_", ret+"0")
-    formulaList += add(ret+"_x1", ret+"_y0", ret+"1")
+    xValue, yValue = "ZERO", "ZERO"
+    if fp4_qnr[0] != 0:
+        xValue = ret+"_x"
+        formulaList += fp2_constMulNotMont(opr1, fp4_qnr[0], xValue)
+    if fp4_qnr[1] != 0:
+        yValue = ret+"_y"
+        formulaList += fp2_constMulNotMont(opr1, fp4_qnr[1], yValue)
+        formulaList += guzai(yValue+"1", yValue+"1_")
+    formulaList += add(xValue+"0", yValue+"1_", ret+"0")
+    formulaList += add(xValue+"1", yValue+"0", ret+"1")
     return formulaList
 
 def fp2_exp(opr1: str, x: int, ret: str):
@@ -84,6 +89,6 @@ def fp2_exp(opr1: str, x: int, ret: str):
 
 if __name__ == "__main__":
     formulaList = fp2_mul("a", "b", "c")
-    # formulaList = remove_extra_formula(formulaList)
+    formulaList = remove_extra_formula(formulaList)
     for formula in formulaList:
         print("{},{},{},{}".format(formula.ret, formula.opr1, formula.opr2, formula.type))

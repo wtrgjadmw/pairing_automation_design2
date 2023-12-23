@@ -25,7 +25,7 @@ def neg(opr1: str, ret: str):
 def constMulNotMont(opr1: str, k: int, ret: str):
     # print("-----constMul: {}={}*{}-------------------".format(ret, opr1, k))
     if k == 0:
-        return [formulaSet(opr1=opr1, opr2="ZERO", ret=ret, type="MUL")]
+        raise ValueError("*ZERO")
     formulaList = []
     bits_k = bits_of(abs(k))
     twiceVal = opr1

@@ -1,5 +1,5 @@
 from export_formula.fp2 import fp2_add, fp2_neg, fp2_conj, fp2_mul
-from export_formula.fp4 import fp4_add, fp4_sub, fp4_neg, fp4_mul, fp4_guzai, fp4_inv, fp4_constMul, fp4_sqr
+from export_formula.fp4 import fp4_add, fp4_sub, fp4_neg, fp4_mul, fp4_guzai, fp4_inv, fp4_constMulNotMont, fp4_sqr
 from export_formula.transform import remove_extra_formula
 
 def fp12_add(opr1: str, opr2: str, ret: str):
