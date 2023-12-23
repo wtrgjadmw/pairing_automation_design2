@@ -58,7 +58,7 @@ def fp24_inv(opr1: str, ret: str):
 def fp24_neg(opr1: str, ret: str):
     return fp12_neg(opr1+'0', ret+'0') + fp12_neg(opr1+'1', ret+'1')
 
-def frob(opr1: str, ret: str):
+def fp24_frob(opr1: str, ret: str):
     formulaList = fp4_frob(opr1+"10", ret+"_f10")
     formulaList += fp4_frob(opr1+"01", ret+"_f01")
     formulaList += fp4_frob(opr1+"11", ret+"_f11")
