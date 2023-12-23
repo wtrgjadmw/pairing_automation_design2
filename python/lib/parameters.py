@@ -1,50 +1,8 @@
-import sys, csv
 import json
 import argparse
-from lib.fpx import *
+from lib.fpx import Fp_t, Fp2_t, Fp4_t, Fp12_t, Fp24_t
+from lib.util import bits_list
 
-# 曲線によってimport元を変更
-def MontConvInv(a):
-    c = (a*montgomery_inv) % p
-    return c
-
-
-def MontConv(a):
-    t = (a * L) % p
-    return t
-
-
-def bits_of(k):
-    return [int(c) for c in "{0:b}".format(k)]
-
-
-def bits_list(a):
-    a_abs = abs(a)
-    mask = 0b11
-    res = []
-    while (a_abs != 0):
-        if (a_abs & 1):
-            ui = 2 - (a_abs & mask)
-            if (ui > 0):
-                a_abs -= 1
-            else:
-                a_abs += 1
-            res.append(ui)
-        else:
-            res.append(0)
-        a_abs >>= 1
-    if (a < 0):
-        res = [-ui for ui in res]
-    return res
-
-
-def bits_calc(U):
-    res = 1
-    u = 0
-    for ui in U:
-        u += res * ui
-        res <<= 1
-    return u
 
 def read_json(filename):
     with open(filename, "r") as f:
@@ -73,11 +31,13 @@ p = param["p"]
 if curve_group == "bls12":
     fp2_qnr = param["beta"]
     fp4_qnr = param["xi"]
+    xi = fp4_qnr
     Fp = Fp_t(p=p)
     Fp2 = Fp2_t(Fp=Fp, qnr=fp2_qnr)
     Fq = Fp2
     Fp4 = Fp4_t(Fp2=Fp2, qnr=fp4_qnr)
     Fp12 = Fp12_t(Fp4=Fp4, cnr=[[0, 0], [1, 0]])
+    Fq6 = Fp12
 
 if curve_group == "bls24":
     fp2_qnr = param["beta"]
@@ -92,6 +52,7 @@ if curve_group == "bls24":
     Fp24 = Fp24_t(
         Fp12=Fp12, qnr=[[[0, 0], [0, 0]], [[1, 0], [0, 0]], [[0, 0], [0, 0]]]
     )
+    Fq6 = Fp24
 
 xi_montconv = Fq.MontConv(xi)
 if D_twist:

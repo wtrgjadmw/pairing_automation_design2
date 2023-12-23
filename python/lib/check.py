@@ -1,4 +1,3 @@
-from lib.fpx import *
 from lib.pairing import (
     double_line_twist6,
     add_line_twist6,
@@ -10,8 +9,8 @@ from lib.pairing import (
     final_exp_bls24,
 )
 from lib.ep import scalar_mul
-import argparse
-from lib.util import read_json, bits_list, bits_of
+import random
+from lib.parameters import p, curve_group, Fp, Fq, Fq6, P, Q, T, b_t, xi, D_twist, U
 
 
 def change_to_affine(Fq, T):
@@ -130,57 +129,6 @@ def check_bilinear(curve_group, Fq6, Fq, Fp, P, Q, b_t, xi, D_twist, U):
 
 
 if __name__ == "__main__":
-    psr = argparse.ArgumentParser(
-        prog="プログラムの名前", usage="プログラムの使い方", description="プログラムの説明"
-    )
-    psr.add_argument("-c", "--curve", default=1, help="楕円曲線群")
-    psr.add_argument("-p", "--characteristic", default=1, help="楕円曲線の標数のbit幅")
-    psr.add_argument("-f", "--filename", default=1, help="読み込むJSONファイル")
-    args = psr.parse_args()
-    curve_group = args.curve
-    curve_name = args.characteristic
-    param = read_json(args.filename)[curve_group][curve_name]
-    b = param["b"]
-    u = param["u"]
-    U = bits_list(u)
-    D_twist = param["D_twist"]
-    r = param["r"]
-    p = param["p"]
-
-    if curve_group == "bls12":
-        # bls12-381
-        Fp = Fp_t(p=p)
-        Fp2 = Fp2_t(Fp=Fp, qnr=param["beta"])
-        Fq = Fp2
-        Fp4 = Fp4_t(Fp2=Fp2, qnr=param["xi"])
-        Fp12 = Fp12_t(Fp4=Fp4, cnr=[[0, 0], [1, 0]])
-        Fq6 = Fp12
-        # b_t = Fq.MontConv([4, 4])
-        # xi = [1, 1]
-    elif curve_group == "bls24":
-        Fp = Fp_t(p=p)
-        Fp2 = Fp2_t(Fp=Fp, qnr=param["beta"])
-        Fp4 = Fp4_t(Fp2=Fp2, qnr=param["beta2"])
-        Fq = Fp4
-        Fp12 = Fp12_t(Fp4=Fp4, cnr=[[param["xi"][0], 0], [param["xi"][1], 0]])
-        Fp24 = Fp24_t(
-            Fp12=Fp12, qnr=[[[0, 0], [0, 0]], [[1, 0], [0, 0]], [[0, 0], [0, 0]]]
-        )
-        Fq6 = Fp24
-
-    xi_montconv = Fq.MontConv([[param["xi"][0], 0], [param["xi"][1], 0]])
-    if D_twist:
-        xi_inv = Fq.inv(xi_montconv)
-        b_t = Fq.constMulNotMont(xi_inv, b)
-    else:
-        b_t = Fq.constMulNotMont(xi_montconv, b)
-
-    P = [Fp.MontConv(param["P"][0]), Fp.MontConv(param["P"][1])]
-    Q = [Fq.MontConv(param["Q"][0]), Fq.MontConv(param["Q"][1])]
-    T = [Fq.MontConv(param["Q"][0]), Fq.MontConv(param["Q"][1]), Fq.one()]
-
-    # check_ml(Fq6, Fq, Fp, r, P, Q, b_t, xi, D_twist, miller_param_list=U[::-1])
-
     check_bilinear(
         curve_group,
         Fq6,
@@ -189,7 +137,7 @@ if __name__ == "__main__":
         P,
         Q,
         b_t,
-        [[param["xi"][0], 0], [param["xi"][1], 0]],
+        xi,
         D_twist,
         U,
     )

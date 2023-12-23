@@ -67,13 +67,11 @@ class Fp_t:
         if k == 0:
             return 0
         bits_k = bits_of(abs(k))
-        tmp = 0
-        twice = a
-        for i in range(0, len(bits_k)-1):
+        tmp = a
+        for i in range(1, len(bits_k)):
+            tmp = self.add(tmp, tmp)
             if bits_k[i]:
-                tmp = self.add(tmp, twice)
-            twice = self.add(twice, twice)
-        tmp = self.add(tmp, twice)
+                tmp = self.add(tmp, a)
         if k > 0:
             return tmp
         return self.neg(tmp)
@@ -179,8 +177,11 @@ class Fp2_t:
 
     def inv(self, a):  # Itoh-Tsujii Inversion
         a_ = self.conj(a)
-        t = self.mul(a, a_)
-        s = self.Fp.inv(t[0])
+        a02 = self.Fp.mul(a[0], a[0])
+        a12 = self.Fp.mul(a[1], a[1])
+        a12_ = self.Fp.guzai(a12, self.qnr)
+        t = self.Fp.sub(a02, a12_)
+        s = self.Fp.inv(t)
         ainv0 = self.Fp.mul(a_[0], s)
         ainv1 = self.Fp.mul(a_[1], s)
         return [ainv0, ainv1]
