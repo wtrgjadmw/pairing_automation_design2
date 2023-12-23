@@ -73,11 +73,9 @@ def fp12_SQR012345(opr1: str, ret: str):
     formulaList += fp2_mul(opr1+"10", opr1+"02", "t7")
     formulaList += fp2_guzai("t11", "t12")
     formulaList += fp2_add("t0", "t12", "t13")
-    formulaList += fp2_add("t13", "t13", "t14")
-    formulaList += sub("t1400", "ONE", ret+"0000")
-    formulaList += sub("t1401", "ZERO", ret+"0001")
-    formulaList += sub("t1410", "ZERO", ret+"0010")
-    formulaList += sub("t1411", "ZERO", ret+"0011")
+    formulaList += sub("t130", "ONE", "t140")
+    formulaList += sub("t131", "ZERO", "t141")
+    formulaList += fp2_add("t13", "t14", ret+"00")
     formulaList += fp2_add("t0", "t4", "t15")
     formulaList += fp2_add("t15", "t15", "t16")
     formulaList += fp2_sub("t9", "t16", "t17")
@@ -163,7 +161,7 @@ def fp12_sparse_d6(opr1: str, opr2: str, ret: str): # opr1: line evaluation
     return formulaList
 
 if __name__ == "__main__":
-    formulaList = ep2_add()
+    formulaList = fp12_SQR012345()
     formulaList = remove_extra_formula(formulaList)
     for formula in formulaList:
         print("{},{},{},{}".format(formula.ret, formula.opr1, formula.opr2, formula.type))
