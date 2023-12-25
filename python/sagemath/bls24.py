@@ -13,6 +13,7 @@ from parameter import (
 )
 from test_pairing import test_order, test_ate_pairing_bls24_aklgl
 
+
 def Fp4ToFp22(a, p, xi):
     try:
         coeffs_xi = xi.polynomial().list()
@@ -26,11 +27,12 @@ def Fp4ToFp22(a, p, xi):
         i1 = i1 - p
     i0 = int(i0)
     i1 = int(i1)
-    out0 = a[0] + a[2]*i0
-    out1 = a[2]*i1
-    out2 = a[1] + a[3]*i0
-    out3 = a[3]*i1
+    out0 = a[0] + a[2] * i0
+    out1 = a[2] * i1
+    out2 = a[1] + a[3] * i0
+    out3 = a[3] * i1
     return [[out0, out1], [out2, out3]]
+
 
 def get_parameters(u0):
     print("u0 = {:#x}".format(u0))
@@ -44,7 +46,8 @@ def get_parameters(u0):
     tx = x + 1
     cx = (x - 1) ** 2 / 3
     yx = (x - 1) * (2 * x**4 - 1) / 3
-    c2x = (x**32 - 8 * x**31 + 28 * x**30 - 56 * x**29 + 67 * x**28 - 32 * x**27 - 56 * x**26 + 160 * x**25 - 203 * x**24 + 132 * x**23 + 12 * x**22 - 132 * x**21 + 170 * x**20 - 124 * x**19 + 44 * x**18 - 4 * x**17 + 2 * x**16 + 20 * x**15 - 46 * x**14 + 20 * x**13 + 5 * x**12 + 24 * x**11 - 42 * x**10 + 48 * x**9 - 101 * x**8 + 100 * x**7 + 70 * x**6 - 128 * x**5 + 70 * x**4 - 56 * x**3 - 44 * x**2 + 40 * x + 100) / 81  # cofactor for G2
+    c2x = (x**32 - 8 * x**31 + 28 * x**30 - 56 * x**29 + 67 * x**28 - 32 * x**27 - 56 * x**26 + 160 * x**25 - 203 * x**24 + 132 * x**23 + 12 * x**22 - 132 * x**21 + 170 * x**20 - 124 * x**19 + 44 * x**18 - 4 * x**17 + 2 * x **
+           16 + 20 * x**15 - 46 * x**14 + 20 * x**13 + 5 * x**12 + 24 * x**11 - 42 * x**10 + 48 * x**9 - 101 * x**8 + 100 * x**7 + 70 * x**6 - 128 * x**5 + 70 * x**4 - 56 * x**3 - 44 * x**2 + 40 * x + 100) / 81  # cofactor for G2
     D = 3  # discriminant (-D = -3)
     k = 24
 
@@ -101,7 +104,8 @@ def get_parameters(u0):
     a21m = ZZ(a21)
     if abs(a21m - p) < abs(a21m):
         a21m = a21m - p
-    # w^2 = a21*i+a20 <=> w^2-a20 = a21*i <=> (w^2-a20)^2 = a21*a <=> w^4 -2*a20*w^2 + a20^2 - a21*a = 0
+    # w^2 = a21*i+a20 <=> w^2-a20 = a21*i <=> (w^2-a20)^2 = a21*a <=> w^4
+    # -2*a20*w^2 + a20^2 - a21*a = 0
     Fp4 = Fp.extension(z**4 - 2 * a20 * z**2 + a20**2 - a21 * a, names=("v",))
     (ii,) = Fp4._first_ngens(1)
     print(
@@ -114,7 +118,7 @@ def get_parameters(u0):
     Fp4s = Fp4["s"]
     (s,) = Fp4s._first_ngens(1)
     E2, xi, btw, D_twist = find_twist_curve_parameter_xi_ab(b, Fp4, r, d=6)
-    
+
     print("test E' (G2): ", end="")
     test_order(E2, r * c2)
     if D_twist:
@@ -129,7 +133,7 @@ def get_parameters(u0):
                 k, p.nbits(), b, xi
             )
         )
-    
+
     # (px, py, 1)
     P = c * E.random_element()
     while P == E(0) or r * P != E(0):
@@ -141,18 +145,21 @@ def get_parameters(u0):
 
     params = {
         "u": int(u0),
-        "p": int(p), 
-        "r": int(r), 
-        "b": int(b), 
-        "beta": int(a), # Fp2[i]/(i^2-beta)
-        "beta2": [int(x) for x in a2.polynomial().list()], # Fp4[v]/(v^2-(beta21*i+beta20))
-        "xi": [int(x) for x in xi.polynomial().list()], # Fp24[w]/(w^6-(xi1*v+xi0))
+        "p": int(p),
+        "r": int(r),
+        "b": int(b),
+        "beta": int(a),  # Fp2[i]/(i^2-beta)
+        # Fp4[v]/(v^2-(beta21*i+beta20))
+        "beta2": [int(x) for x in a2.polynomial().list()],
+        # Fp24[w]/(w^6-(xi1*v+xi0))
+        "xi": [int(x) for x in xi.polynomial().list()],
         "D_twist": D_twist,
         "P": [int(P[0]), int(P[1])],
         "Q": [Fp4ToFp22([int(x) for x in Q[0].polynomial().list()], p, a2), Fp4ToFp22([int(x) for x in Q[1].polynomial().list()], p, a2)]
     }
 
-    return params 
+    return params
+
 
 def test_curve(u0):
     print("u0 = {:#x}".format(u0))
@@ -166,7 +173,8 @@ def test_curve(u0):
     tx = x + 1
     cx = (x - 1) ** 2 / 3
     yx = (x - 1) * (2 * x**4 - 1) / 3
-    c2x = (x**32 - 8 * x**31 + 28 * x**30 - 56 * x**29 + 67 * x**28 - 32 * x**27 - 56 * x**26 + 160 * x**25 - 203 * x**24 + 132 * x**23 + 12 * x**22 - 132 * x**21 + 170 * x**20 - 124 * x**19 + 44 * x**18 - 4 * x**17 + 2 * x**16 + 20 * x**15 - 46 * x**14 + 20 * x**13 + 5 * x**12 + 24 * x**11 - 42 * x**10 + 48 * x**9 - 101 * x**8 + 100 * x**7 + 70 * x**6 - 128 * x**5 + 70 * x**4 - 56 * x**3 - 44 * x**2 + 40 * x + 100) / 81  # cofactor for G2
+    c2x = (x**32 - 8 * x**31 + 28 * x**30 - 56 * x**29 + 67 * x**28 - 32 * x**27 - 56 * x**26 + 160 * x**25 - 203 * x**24 + 132 * x**23 + 12 * x**22 - 132 * x**21 + 170 * x**20 - 124 * x**19 + 44 * x**18 - 4 * x**17 + 2 * x **
+           16 + 20 * x**15 - 46 * x**14 + 20 * x**13 + 5 * x**12 + 24 * x**11 - 42 * x**10 + 48 * x**9 - 101 * x**8 + 100 * x**7 + 70 * x**6 - 128 * x**5 + 70 * x**4 - 56 * x**3 - 44 * x**2 + 40 * x + 100) / 81  # cofactor for G2
     D = 3  # discriminant (-D = -3)
     k = 24
 
@@ -225,7 +233,8 @@ def test_curve(u0):
     a21m = ZZ(a21)
     if abs(a21m - p) < abs(a21m):
         a21m = a21m - p
-    # w^2 = a21*i+a20 <=> w^2-a20 = a21*i <=> (w^2-a20)^2 = a21*a <=> w^4 -2*a20*w^2 + a20^2 - a21*a = 0
+    # w^2 = a21*i+a20 <=> w^2-a20 = a21*i <=> (w^2-a20)^2 = a21*a <=> w^4
+    # -2*a20*w^2 + a20^2 - a21*a = 0
     Fp4 = Fp.extension(z**4 - 2 * a20 * z**2 + a20**2 - a21 * a, names=("v",))
     (ii,) = Fp4._first_ngens(1)
     print(
@@ -284,7 +293,9 @@ def test_curve(u0):
             ]
         )
 
-    test_ate_pairing_bls24_aklgl(E, E2, r, c, c2, u0, Fq6, map_Fq6_Fp24, D_twist)
+    test_ate_pairing_bls24_aklgl(
+        E, E2, r, c, c2, u0, Fq6, map_Fq6_Fp24, D_twist)
+
 
 if __name__ == "__main__":
     args = sys.argv
@@ -316,6 +327,6 @@ if __name__ == "__main__":
     u0 = ZZ(-(2**51) - 2**28 + 2**11 - 1)
     json_load["bls24"]["P509"] = get_parameters(u0)
     # test_curve(u0)
-    
+
     with open(param_file, "w") as file:
         json.dump(json_load, file, indent=4)

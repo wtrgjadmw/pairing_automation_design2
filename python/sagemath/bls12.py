@@ -14,6 +14,7 @@ from parameter import find_curve_parameter_b, find_twist_curve_parameter_xi_ab
 from test_pairing import test_order, test_ate_pairing_bls12_aklgl
 import json
 
+
 def get_parameters(u0):
     QQx = QQ["x"]
     (x,) = QQx._first_ngens(1)
@@ -23,7 +24,8 @@ def get_parameters(u0):
     tx = x + 1
     cx = (x - 1) ** 2 / 3
     yx = (x - 1) * (2 * x**2 - 1) / 3
-    c2x = (x**8 - 4 * x**7 + 5 * x**6 - 4 * x**4 + 6 * x**3 - 4 * x**2 - 4 * x + 13) / 9  # cofactor for G2
+    c2x = (x**8 - 4 * x**7 + 5 * x**6 - 4 * x**4 + 6 * x **
+           3 - 4 * x**2 - 4 * x + 13) / 9  # cofactor for G2
     p = ZZ(px(u0))
     r = ZZ(rx(u0))
     c = ZZ(cx(u0))
@@ -40,7 +42,7 @@ def get_parameters(u0):
     print("y = {:#x}".format(y))
     print("t = {:#x}".format(t))
     print("BLS{}-{} E: y^2 = x^3 {:+d}".format(k, p.nbits(), b))
-    
+
     # define Fp2
     Fpz = Fp["z"]
     (z,) = Fpz._first_ngens(1)
@@ -65,7 +67,7 @@ def get_parameters(u0):
         print("BLS{}-{} E'(Fp4): y^2 = x^3 {:+d}/({}): D-twist".format(k, p.nbits(), b, xi))
     else:
         print("BLS{}-{} E'(Fp4): y^2 = x^3 {:+d}*({}): M-twist".format(k, p.nbits(), b, xi))
-    
+
     P = c * E.random_element()
     while P == E(0) or r * P != E(0):
         P = c * E.random_element()
@@ -73,18 +75,21 @@ def get_parameters(u0):
     while Q == E2(0) or r * Q != E2(0):
         Q = c2 * E2.random_element()
 
-
     params = {
         "u": int(u0),
-        "p": int(p), 
-        "r": int(r), 
-        "b": int(b), 
-        "beta": int(a), # Fp2[i]/(i^2-beta)
-        "xi": [int(x) for x in xi.polynomial().list()], # Fp12[w]/(w^6-(xi1*v+xi0))
-        "D_twist": D_twist
+        "p": int(p),
+        "r": int(r),
+        "b": int(b),
+        "beta": int(a),  # Fp2[i]/(i^2-beta)
+        # Fp12[w]/(w^6-(xi1*v+xi0))
+        "xi": [int(x) for x in xi.polynomial().list()],
+        "D_twist": D_twist,
+        "P": [int(P[0]), int(P[1])],
+        "Q": [[int(x) for x in Q[0].polynomial().list()], [int(x) for x in Q[1].polynomial().list()]]
     }
 
-    return params 
+    return params
+
 
 def test_curve(u0):
     # preparse("QQx.<x> = QQ[]")
@@ -96,7 +101,8 @@ def test_curve(u0):
     tx = x + 1
     cx = (x - 1) ** 2 / 3
     yx = (x - 1) * (2 * x**2 - 1) / 3
-    c2x = (x**8 - 4 * x**7 + 5 * x**6 - 4 * x**4 + 6 * x**3 - 4 * x**2 - 4 * x + 13) / 9  # cofactor for G2
+    c2x = (x**8 - 4 * x**7 + 5 * x**6 - 4 * x**4 + 6 * x **
+           3 - 4 * x**2 - 4 * x + 13) / 9  # cofactor for G2
     p = ZZ(px(u0))
     r = ZZ(rx(u0))
     c = ZZ(cx(u0))
@@ -177,7 +183,8 @@ def test_curve(u0):
     def map_Fq6_Fp12(x):
         # evaluate elements of Fp12 = Fp[i]/(i^2+1)[s]/(s^6-(i+1)) at i=S^6-1 and s=S
         # i <-> w^6-1 = S^6-1 and w <-> S
-        # return sum([sum([yj*(S**6-1)**j for j,yj in enumerate(xi.polynomial())]) * S**i for i,xi in enumerate(x.list())])
+        # return sum([sum([yj*(S**6-1)**j for j,yj in
+        # enumerate(xi.polynomial())]) * S**i for i,xi in enumerate(x.list())])
         return sum(
             [
                 xi.polynomial()((S**6 - i0) / i1) * S**e
@@ -185,7 +192,9 @@ def test_curve(u0):
             ]
         )
 
-    test_ate_pairing_bls12_aklgl(E, E2, r, c, c2, u0, Fq6, map_Fq6_Fp12, D_twist)
+    test_ate_pairing_bls12_aklgl(
+        E, E2, r, c, c2, u0, Fq6, map_Fq6_Fp12, D_twist)
+
 
 if __name__ == "__main__":
     args = sys.argv
