@@ -1,36 +1,18 @@
 from export_formula.fp2 import fp2_add, fp2_neg, fp2_conj, fp2_mul
 from export_formula.fp4 import fp4_add, fp4_sub, fp4_neg, fp4_mul, fp4_guzai, fp4_inv, fp4_constMulNotMont, fp4_sqr
-from export_formula.transform import remove_extra_formula
+from export_formula.transform import FormulaOrganizer
 
 
 def fp12_add(opr1: str, opr2: str, ret: str):
-    return fp4_add(opr1 + '0',
-                   opr2 + '0',
-                   ret + '0') + fp4_add(opr1 + '1',
-                                        opr2 + '1',
-                                        ret + '1') + fp4_add(opr1 + '2',
-                                                             opr2 + '2',
-                                                             ret + '2')
+    return fp4_add(opr1 + '0', opr2 + '0', ret + '0') + fp4_add(opr1 + '1', opr2 + '1', ret + '1') + fp4_add(opr1 + '2', opr2 + '2', ret + '2')
 
 
 def fp12_sub(opr1: str, opr2: str, ret: str):
-    return fp4_sub(opr1 + '0',
-                   opr2 + '0',
-                   ret + '0') + fp4_sub(opr1 + '1',
-                                        opr2 + '1',
-                                        ret + '1') + fp4_sub(opr1 + '2',
-                                                             opr2 + '2',
-                                                             ret + '2')
+    return fp4_sub(opr1 + '0', opr2 + '0', ret + '0') + fp4_sub(opr1 + '1', opr2 + '1', ret + '1') + fp4_sub(opr1 + '2', opr2 + '2', ret + '2')
 
 
 def fp12_constMulNotMont(opr1: str, k: int, ret: str):
-    return fp4_constMulNotMont(opr1 + '0',
-                               k,
-                               ret + '0') + fp4_constMulNotMont(opr1 + '1',
-                                                                k,
-                                                                ret + '1') + fp4_constMulNotMont(opr1 + '2',
-                                                                                                 k,
-                                                                                                 ret + '2')
+    return fp4_constMulNotMont(opr1 + '0', k, ret + '0') + fp4_constMulNotMont(opr1 + '1', k, ret + '1') + fp4_constMulNotMont(opr1 + '2', k, ret + '2')
 
 
 def fp12_mul(opr1: str, opr2: str, ret: str):
@@ -68,8 +50,8 @@ def fp12_sqr(opr1: str, ret: str):
     formulaList += fp4_sqr(ret + "_t30", ret + "_t3")
     formulaList += fp4_add(opr1 + '1', opr1 + '2', ret + "_t40")
     formulaList += fp4_sqr(ret + "_t40", ret + "_t4")
-    formulaList += fp4_add(opr1 + '2', opr1 + '0', ret + "_t40")
-    formulaList += fp4_sqr(ret + "_t40", ret + "_t4")
+    formulaList += fp4_add(opr1 + '2', opr1 + '0', ret + "_t50")
+    formulaList += fp4_sqr(ret + "_t50", ret + "_t5")
     formulaList += fp4_add(ret + "_t0", ret + "_t1", ret + "_s00")
     formulaList += fp4_sub(ret + "_t3", ret + "_s00", ret + "_s0")
     formulaList += fp4_add(ret + "_t1", ret + "_t2", ret + "_s10")
@@ -152,7 +134,7 @@ def fp12_exp(opr1: str, x: int, ret: str):
 
 def fp12_frob(opr1, ret):
     formulaList = fp2_conj(opr1 + "10", ret + "_f10")
-    formulaList += fp2_conj(opr1 + "20", ret + "_f12")
+    formulaList += fp2_conj(opr1 + "20", ret + "_f20")
     formulaList += fp2_conj(opr1 + "01", ret + "_f01")
     formulaList += fp2_conj(opr1 + "11", ret + "_f11")
     formulaList += fp2_conj(opr1 + "21", ret + "_f21")
@@ -167,7 +149,8 @@ def fp12_frob(opr1, ret):
 
 if __name__ == "__main__":
     formulaList = fp12_mul("a", "b", "c")
-    formulaList = remove_extra_formula(formulaList)
+    organizer = FormulaOrganizer()
+    formulaList = organizer.remove_extra_formula(formulaList)
     for formula in formulaList:
         print(
             "{},{},{},{}".format(

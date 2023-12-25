@@ -31,12 +31,13 @@ p = param["p"]
 if curve_group == "bls12":
     fp2_qnr = param["beta"]
     fp4_qnr = param["xi"]
+    fp12_cnr = [[0, 0], [1, 0]]
     xi = fp4_qnr
     Fp = Fp_t(p=p)
     Fp2 = Fp2_t(Fp=Fp, qnr=fp2_qnr)
     Fq = Fp2
     Fp4 = Fp4_t(Fp2=Fp2, qnr=fp4_qnr)
-    Fp12 = Fp12_t(Fp4=Fp4, cnr=[[0, 0], [1, 0]])
+    Fp12 = Fp12_t(Fp4=Fp4, cnr=fp12_cnr)
     Fq6 = Fp12
 
 if curve_group == "bls24":

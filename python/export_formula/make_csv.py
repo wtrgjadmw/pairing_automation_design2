@@ -2,14 +2,15 @@ from export_formula.fp12 import fp12_mul, fp12_conj, fp12_frob, fp12_sqr
 from export_formula.ep2 import ep2_add, ep2_dbl, fp12_sparse_d6, fp12_sparse_m6, fp12_SQR012345
 from export_formula.fp24 import fp24_mul, fp24_conj, fp24_frob, fp24_sqr
 from export_formula.ep4 import ep4_add, ep4_dbl, fp24_sparse_d6, fp24_sparse_m6, fp24_SQR012345
-from export_formula.transform import remove_extra_formula
+from export_formula.transform import FormulaOrganizer
 from lib.parameters import curve_group, curve_name
 import os
 
 
 def printCsv(filename, formulaList):
     write_f = open(filename, 'w')
-    formulaList = remove_extra_formula(formulaList)
+    organizer = FormulaOrganizer()
+    formulaList = organizer.remove_extra_formula(formulaList)
     for formula in formulaList:
         write_f.write("{},{},{},{}\n".format(
             formula.ret, formula.opr1, formula.opr2, formula.type))
@@ -42,5 +43,9 @@ def fp24_makeCsv(directory: str):
 
 
 if __name__ == "__main__":
-    fp24_makeCsv(
-        "/home/mfukuda/pairing_automation_design/csv/{}/{}/".format(curve_group, curve_name))
+    if curve_group == "bls12":
+        fp12_makeCsv(
+            "/home/mfukuda/pairing_automation_design/csv/{}/{}/".format(curve_group, curve_name))
+    elif curve_group == "bls24":
+        fp24_makeCsv(
+            "/home/mfukuda/pairing_automation_design/csv/{}/{}/".format(curve_group, curve_name))

@@ -1,7 +1,0 @@
-c_aa,a0,a0,MUL
-c_bb,a1,a1,MUL
-c_denom,c_aa,c_bb,ADD
-c_denom_inv,c_denom,c_denom,INV
-c0,a0,c_denom_inv,MUL
-c1_,a1,c_denom_inv,MUL
-c1,ZERO,c1_,SUB
