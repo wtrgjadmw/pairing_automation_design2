@@ -18,6 +18,14 @@ note: The test for the CSVs is following;
 $ python export_formula/test.py -c <curve_group> -p <p[bit]> -f ../parameter/param.json
 ```
 
-3. create python scripts for split scheduling
+3. create python scripts for split scheduling & repeat scheduling
+```bash
+$ python scheduling/scheduling.py -n <csv_name> -m <number_of_multipliers> -a <number_of_adders>
+```
+The command generate test file like `padd_mul1_add4.txt` which contains the information about the algorithm's input, output, scheduling result, formulas, assignment of RAM addresses
 
-
+4. convert the scheduling result to RTL of sequencer & modify other parts as needed
+```bash
+$ python makeRTL/bls12_modify.py ./parameter/bls12/P$(P_BIT)_param.csv $(DIRNAME)/BLS12-$(P_BIT)
+$ python makeRTL/bls12_sequence_write.py $(DIRNAME)/BLS12-$(P_BIT)
+```
