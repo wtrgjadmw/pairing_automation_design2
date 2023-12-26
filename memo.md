@@ -20,9 +20,9 @@ $ python export_formula/test.py -c <curve_group> -p <p[bit]> -f ../parameter/par
 
 3. create python scripts for split scheduling & repeat scheduling
 ```bash
-$ python scheduling/scheduling.py -n <csv_name> -m <number_of_multipliers> -a <number_of_adders>
+$ python scheduling/all_schedule.py  -c <curve_group> -p <p[bit]> -m <number_of_multipliers: default=1> -a <number_of_adders: default=4>
 ```
-The command generate test file like `padd_mul1_add4.txt` which contains the information about the algorithm's input, output, scheduling result, formulas, assignment of RAM addresses
+The command generate text file like `padd_mul1_add4.txt` which contains the information about the algorithm's input, output, scheduling result, formulas, assignment of RAM addresses
 
 4. convert the scheduling result to RTL of sequencer & modify other parts as needed
 ```bash

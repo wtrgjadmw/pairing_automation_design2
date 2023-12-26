@@ -30,8 +30,6 @@ def make_split_scheduling(formulas):
             outputs.remove(s[2])
         if s[3] in outputs:
             outputs.remove(s[3])
-    # このinputsのlabel情報をmake_veriに回す？
-    # print("\n\n\ninput\n", inputs, "\n\n\n")
     input_first = copy.deepcopy(inputs)
     knows = inputs
     alls = []
@@ -41,11 +39,9 @@ def make_split_scheduling(formulas):
     cnt = 0
     split_ope = [[] for i in range(0, 100)]
     split_index = 0
-    division_num = 70
+    DIVIDE_NUM = 30  # RAMの読み出しのスケジューリングに時間がかかるので1番目だけ30, 後は70
     add_num = 0
     mul_num = 0
-    add_num_list = []
-    mul_num_list = []
     output_formulas = []
     while (set(knows) != set(alls)):
         knows_tmp = []
@@ -60,31 +56,24 @@ def make_split_scheduling(formulas):
                         output_formulas.append(s)
                     else:
                         split_tmp.append(s)
-                        if s[1] == "MONTMUL":
+                        if s[1] == "MUL":
                             mul_num += 1
                         elif s[1] == "ADD" or s[1] == "SUB":
                             add_num += 1
 
-        # print(split_index)
-        # print(mul_num_list)
-        # print(add_num_list)
-        # print(len(knows_tmp), knows_tmp)
-        if len(split_ope[split_index]) + len(split_tmp) > division_num:
-            divided_split_tmp = split_list(split_tmp, division_num)
+        if len(split_ope[split_index]) + len(split_tmp) > DIVIDE_NUM:
+            divided_split_tmp = split_list(split_tmp, DIVIDE_NUM)
             for i in range(len(divided_split_tmp)):
                 if len(split_ope[split_index]) != 0:
                     split_index += 1
                 split_ope[split_index] += divided_split_tmp[i]
-            # mul_num_list.append(mul_num)
-            # add_num_list.append(add_num)
         else:
             split_ope[split_index] += split_tmp
-            # if len(mul_num_list) == 0:
-            #     mul_num_list.append(mul_num)
-            #     add_num_list.append(add_num)
-            # else:
-            #     mul_num_list[split_index] = mul_num
-            #     add_num_list[split_index] = add_num
+        if cnt == 0:
+            DIVIDE_NUM = 70
+            split_index += 1
+
+        print(split_ope[split_index])
 
         knows += knows_tmp
         cnt += 1
@@ -96,6 +85,8 @@ def make_split_scheduling(formulas):
     for s in split_ope:
         if s != []:
             split_ope_c.append(s)
-    split_ope_c[-1] += output_formulas
+    if len(split_ope_c) == 0:
+        split_ope_c = [output_formulas]
+    else:
+        split_ope_c[-1] += output_formulas
     return split_ope_c, input_first, outputs, input_num
-    # return split_ope_c, input_first, outputs, mul_num_list, add_num_list, input_num

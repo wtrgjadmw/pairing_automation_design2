@@ -8,26 +8,19 @@ import os
 import argparse
 args = sys.argv
 
-
 def alpha2num(c): return ord(c) - ord('A')
 
 
 def read_formula_csv(filename):
     f_read = open(filename, "r")
     formulas = []
-    add_num = 0
-    mul_num = 0
     for line in csv.reader(f_read):
         if len(line) > 0 and line[0][0] == '#':
             continue
         if len(line) == 4:
             formulas.append([line[0], line[3], line[1], line[2]])
-            if line[3] == "ADD" or line[3] == "SUB":
-                add_num += 1
-            elif line[3] == "MONTMUL":
-                mul_num += 1
     f_read.close()
-    return formulas, add_num, mul_num
+    return formulas
 
 
 def find_prev_formula(formulas, operand):
@@ -74,7 +67,7 @@ def make_mem_task_definition(
                 f_write.write("\tS += {0}<{1}\n".format(operand, value))
                 continue
             f_write.write("\t{0} = S.Task('{0}', length=1, delay_cost=1)\n".format(mem_value_name))
-            if opcode == "MONTMUL":
+            if opcode == "MUL":
                 if pre_resource is None:
                     f_write.write("\t{0} += alt(MUL_mem)\n".format(mem_value_name))
                     for j in range(MULnum):
@@ -106,7 +99,7 @@ def find_mistake(split_ope, depth, pre_sche_result):
                     mem_is_exist = True
                     mem_results.append(sol)
             if not is_exist:
-                split_ope[depth].append(formula)
+                split_ope[depth].insert(0, formula)
                 if mem_is_exist:
                     for mem_result in mem_results:
                         pre_sche_result.remove(mem_result)
@@ -114,15 +107,27 @@ def find_mistake(split_ope, depth, pre_sche_result):
     return pre_sche_result, split_ope
 
 
-def make_pyschedule(file_name, formulas, mem_table, split_ope, pre_sche_result, depth, filename_write, input_value, MULnum, ADDnum, input_num):
+def make_pyschedule(
+        file_name,
+        formulas,
+        mem_table,
+        split_ope,
+        pre_sche_result,
+        depth,
+        filename_write,
+        input_value,
+        output_value,
+        MULnum,
+        ADDnum,
+        input_num):
     # def make_pyschedule(file_name, formulas, mem_table, split_ope,
     # pre_sche_result, depth, filename_write, input_value, MULnum, ADDnum,
     # mul_num_list, add_num_list, input_num):
     scheduling_title = file_name + "_" + str(depth)
 
     f_write = open(filename_write, "w")
-    f_write.write("from pyschedule import Scenario, solvers, plotters, alt\n\n")
-    f_write.write("def solve_{0}(ConstStep, ExpStep):\n".format(scheduling_title))
+    f_write.write("from pyschedule import Scenario, solvers, plotters, alt\n\n\n")
+    f_write.write("def solve():\n")
 
     # mul_cycle = mul_num_list[depth]
     # add_cycle = (add_num_list[depth] // ADDnum)
@@ -132,7 +137,7 @@ def make_pyschedule(file_name, formulas, mem_table, split_ope, pre_sche_result, 
     f_write.write("\thorizon = {0}\n".format(max(pre_cycle + 90, input_num // 2 + 50)))
     # f_write.write("\thorizon = {0}\n".format(max(mul_cycle+70, add_cycle+70, pre_cycle+90, input_num//2+50)))
 
-    f_write.write("\tS=Scenario(\"" + scheduling_title + "\",horizon = horizon)\n")
+    f_write.write("\tS = Scenario(\"" + scheduling_title + "\", horizon=horizon)\n")
 
     f_write.write("\n\t# resource\n")
     f_write.write("\tMUL = S.Resources('MUL', num={0}, size=7)\n".format(MULnum))
@@ -182,18 +187,12 @@ def make_pyschedule(file_name, formulas, mem_table, split_ope, pre_sche_result, 
     f_write.write("\n\t# new tasks\n")
 
     for line in split_ope[depth]:
-        if line[1] == "MONTMUL":
+        if line[1] == "MUL":
             f_write.write("\t{0}_in = S.Task('{0}_in', length=1, delay_cost=1)\n".format(line[0]))
             f_write.write("\t" + line[0] + "_in += alt(MUL_in)\n")
             f_write.write("\t{0} = S.Task('{0}', length=7, delay_cost=1)\n".format(line[0]))
             f_write.write("\t" + line[0] + " += alt(MUL)\n")
-            f_write.write("\tS+={0}>={0}_in\n\n".format(line[0]))
-        elif line[1] == "CONST":
-            f_write.write("\t{0} = S.Task('{0}', length=ConstStep, delay_cost=1)\n".format(line[0]))
-            f_write.write("\t" + line[0] + " += alt(CONST)\n\n")
-        elif line[1] == "EXP":
-            f_write.write("\t{0} = S.Task('{0}', length=ExpStep, delay_cost=1)\n".format(line[0]))
-            f_write.write("\t" + line[0] + " += alt(EXP)\n\n")
+            f_write.write("\tS += {0}>={0}_in\n\n".format(line[0]))
         elif line[1] == "ADD" or line[1] == "SUB":
             f_write.write("\t{0} = S.Task('{0}', length=1, delay_cost=1)\n".format(line[0]))
             f_write.write("\t" + line[0] + " += alt(ADD)\n\n")
@@ -220,13 +219,10 @@ def make_pyschedule(file_name, formulas, mem_table, split_ope, pre_sche_result, 
     f_write.write("\tpic_file_name = \"" + file_name + "/" + scheduling_title + ".png\"\n")
     f_write.write("\tif(S.solution() != []):\n\t\tplotters.matplotlib.plot(S,img_filename=pic_file_name, vertical_text=True, fig_size=(cycles*0.25+3, 5), show_task_labels=False)\n\n")
     f_write.write("\treturn solution\n\n")
-    f_write.write("if __name__ == \"__main__\":\n")
-    f_write.write("\tsolution = solve_" + scheduling_title + "(0, 0)")
     return
 
 
 if __name__ == "__main__":
-
     start_time = time.perf_counter()
     psr = argparse.ArgumentParser(
         prog='プログラムの名前',
@@ -235,17 +231,21 @@ if __name__ == "__main__":
     )
     psr.add_argument('-m', '--mul', default=1, help='乗算器の個数')
     psr.add_argument('-a', '--add', default=4, help='加減算器の個数')
+    psr.add_argument("-c", "--curve", required=True, help="楕円曲線群")
+    psr.add_argument("-p", "--characteristic", required=True, help="楕円曲線の標数のbit幅")
     psr.add_argument('-n', '--name', required=True, help='スケジューリング対象の名前')
     args = psr.parse_args()
 
     mul_num = int(args.mul)
     add_num = int(args.add)
+    curve_group = args.curve
+    curve_name = args.characteristic
     algo_name = args.name
 
-    func_name = "{2}_mul{0}_add{1}_".format(mul_num, add_num, algo_name)
-    # formulas, add_formula_num, mul_formula_num = read_formula_csv("/home/mfukuda/optimal-ate-pairing/make_RTL/formula/csv/BLS24/P509_MontOnly.csv".format(algo_name))
+    func_name = "{2}_mul{0}_add{1}".format(mul_num, add_num, algo_name)
     formulas, add_formula_num, mul_formula_num = read_formula_csv(
-        "/home/mfukuda/optimal-ate-pairing/RTL/BLS24-509/formulas/{0}.csv".format(algo_name))
+        "/home/mfukuda/pairing_automation_design/csv/{}/{}/{}.csv".format(curve_group, curve_name, algo_name)
+    )
 
     # exec(open("./" + "sche_test.py", 'r', encoding="utf-8").read())
     file_name = func_name
@@ -255,19 +255,11 @@ if __name__ == "__main__":
     # 分割したfomulas
     split_ope, input_value, output_value, input_num = make_split_scheduling(formulas)
     split_ope.append([])
-    # split_ope, input_value, output_value, mul_num_list, add_num_list, input_num = make_split_scheduling(formulas)
     os.makedirs(file_name, exist_ok=True)
     mem_table = {}
 
     for i in range(len(split_ope)):
         print(i, len(split_ope[i]), split_ope[i])
-    # print(len(split_ope))
-    # print(mul_num_list)
-    # print(add_num_list)
-    print(input_value)
-    print(output_value)
-
-    # exec(open("/home/mfukuda/optimal-ate-pairing/scheduling/new_split_sche/m24_mul1_add4/m24_mul1_add4_1.py").read())
 
     pre_sche_result = solution
 
@@ -276,14 +268,26 @@ if __name__ == "__main__":
         if len(split_ope[i]) == 0:
             continue
         write_file = "{0}/{0}_{1}.py".format(file_name, i)
-        make_pyschedule(file_name, formulas, mem_table, split_ope, pre_sche_result, i, write_file, input_value, mul_num, add_num, input_num)
+        make_pyschedule(
+            file_name,
+            formulas,
+            mem_table,
+            split_ope,
+            pre_sche_result,
+            i,
+            write_file,
+            input_value,
+            output_value,
+            mul_num,
+            add_num,
+            input_num)
         print(i)
         # print(split_ope[i])
         # make_pyschedule(file_name, formulas, mem_table, split_ope, pre_sche_result, i, write_file, input_value, mul_num, add_num, mul_num_list, add_num_list, input_num)
-        # exec(open(write_file).read())
-        # if solution == []:
-        #     raise Exception("no solution found in schedule_{0}".format(i))
-        # pre_sche_result = solution
+        exec(open(write_file).read())
+        if solution == []:
+            raise Exception("no solution found in schedule_{0}".format(i))
+        pre_sche_result = solution
 
     end_time = time.perf_counter()
 
@@ -304,5 +308,5 @@ if __name__ == "__main__":
         if filename.endswith(".log") and "clone" in filename:
             file_path = os.path.join("./", filename)
             os.remove(file_path)
-    # # os.remove("./Integer_Program-pulp.lp")
-    # # os.remove("./Integer_Program-pulp.sol")
+    os.remove("./Integer_Program-pulp.lp")
+    os.remove("./Integer_Program-pulp.sol")
