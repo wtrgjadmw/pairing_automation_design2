@@ -1,33 +1,48 @@
-import csv, os, copy, re, sys
+import os
+import copy
+import sys
+
 
 def inputvalue2num(value):
     if len(value) == 4:
-        num=int(value[1])*4+int(value[2])*2+int(value[3])
+        num = int(value[1]) * 4 + int(value[2]) * 2 + int(value[3])
     else:
         raise Exception("the length of value: {0} is {1}".format(value, len(value)))
     return num
+
 
 def outputvalue2num(value):
     if len(value) == 4:
-        num=int(value[1])*4+int(value[2])*2+int(value[3])
+        num = int(value[1]) * 4 + int(value[2]) * 2 + int(value[3])
     elif len(value) == 5:
-        num=int(value[1])*4+int(value[2])*2+int(value[4])
+        num = int(value[1]) * 4 + int(value[2]) * 2 + int(value[4])
     elif len(value) == 6:
-        num=int(value[1])*4+int(value[2])*2+int(value[5])
+        num = int(value[1]) * 4 + int(value[2]) * 2 + int(value[5])
     else:
         raise Exception("the length of value: {0} is {1}".format(value, len(value)))
     return num
 
+
 class schedulingData:
-    def __init__(self, output_seq_filename: str, input: list, output: list, scheduling_solution: list, formulas: list, mem_table: dict, MULnum: int, ADDnum: int) -> None:
+    def __init__(
+            self,
+            output_seq_filename: str,
+            input: list,
+            output: list,
+            scheduling_solution: list,
+            formulas: list,
+            mem_table: dict,
+            MULnum: int,
+            ADDnum: int) -> None:
         self.MULnum = MULnum
         self.ADDnum = ADDnum
 
         self.output_seq_filename = output_seq_filename
         self.input = input
         self.output = output
-        self.consts = ['PX3', 'PY_', 'B20', 'B21', 'PX_', 'PX', 'PY', 'QX0', 'QX1', 'QY0', 'QY1', 'QY_0', 'QY_1', 'TX0', 'TX1', 'TY0', 'TY1', 'TZ0', 'TZ1', 'XI10', 'XI11', 'XI20', 'XI21', 'XI30', 'XI31', 'XI40', 'XI41', 'XI50', 'XI51', 'ZERO', 'ONE']
-        
+        self.consts = ['PX3', 'PY_', 'B20', 'B21', 'PX_', 'PX', 'PY', 'QX0', 'QX1', 'QY0', 'QY1', 'QY_0', 'QY_1', 'TX0', 'TX1',
+                       'TY0', 'TY1', 'TZ0', 'TZ1', 'XI10', 'XI11', 'XI20', 'XI21', 'XI30', 'XI31', 'XI40', 'XI41', 'XI50', 'XI51', 'ZERO', 'ONE']
+
         self.scheduling_solution = scheduling_solution
         self.formulas = formulas
         self.seq_finish_time = 0
@@ -58,7 +73,7 @@ class schedulingData:
             if formula[0] == operand:
                 return formula
         return None
-    
+
     # 演算器がmm0/add0~3の内どれなのか出力
     def check_operator(self, operator, start_time):
         operator_name = operator[:-1]
@@ -71,8 +86,8 @@ class schedulingData:
             self.inv_start_time = start_time
             return "inv"
         else:
-            raise Exception("invalid operator: "+operator)
-    
+            raise Exception("invalid operator: " + operator)
+
     # 最初に実行
     # c = a + b, ["c", "ADD0", start_time, end_time] の時
     # self.solution_data["c"] = ["a", "b", "ADD", "add0", start_time, end_time]
@@ -93,10 +108,16 @@ class schedulingData:
             elif "_mem" not in value_name:
                 formula = self.find_prev_formula(value_name)
                 operator = self.check_operator(operator_name, start_time)
-                self.solution_data[value_name] = {"opr1": formula[2], "opr2": formula[3], "ope_type": formula[1], "operator": operator, "start_time": start_time, "end_time": end_time}
+                self.solution_data[value_name] = {
+                    "opr1": formula[2],
+                    "opr2": formula[3],
+                    "ope_type": formula[1],
+                    "operator": operator,
+                    "start_time": start_time,
+                    "end_time": end_time}
 
-        self.operator_init_seq = [[] for i in range(self.seq_finish_time+1)]
-        self.mem_ctrl_seq = [[] for i in range(self.seq_finish_time+1)]
+        self.operator_init_seq = [[] for i in range(self.seq_finish_time + 1)]
+        self.mem_ctrl_seq = [[] for i in range(self.seq_finish_time + 1)]
 
     # cが10clk目で出力され、15clk目でオペランドとして最後に呼び出される時
     # self.mem_data["c"] = [11（RAMに入るのは11clk目）, 15]
@@ -136,8 +157,8 @@ class schedulingData:
         else:
             self.mem_ctrl_seq[write_t].append("ram_{operator}_wr_n <= 0;\n".format(operator=operator))
         self.mem_ctrl_seq[write_t].append("ram_{operator}_waddr <= {waddr};\n".format(operator=operator, waddr=addr))
-        if "ram_{operator}_wr_n <= 0;\n".format(operator=operator) not in self.mem_ctrl_seq[write_t+1]:
-            self.mem_ctrl_seq[write_t+1].append("ram_{operator}_wr_n <= 1;\n".format(operator=operator))
+        if "ram_{operator}_wr_n <= 0;\n".format(operator=operator) not in self.mem_ctrl_seq[write_t + 1]:
+            self.mem_ctrl_seq[write_t + 1].append("ram_{operator}_wr_n <= 1;\n".format(operator=operator))
 
     # RAMの読み出し先アドレスの制御
     def ram_rctrl(self, operator, read_t, ram_num, addr):
@@ -157,20 +178,20 @@ class schedulingData:
                     self.ram_wctrl(operator=operator, write_t=start_time, addr=i)
                     self.mem_data[value].append(i)
                     self.mem_addr_list[operator][i] = end_time
-                    is_added = True 
+                    is_added = True
                     break
             if not is_added:
                 self.ram_wctrl(operator=operator, write_t=start_time, addr=len(self.mem_addr_list[operator]))
                 self.mem_data[value].append(len(self.mem_addr_list[operator]))
                 self.mem_addr_list[operator].append(end_time)
-        
 
     # 変数の保存先を調べる＋RAMに保存されてた場合は読み出しの制御命令生成
+
     def judge_input_ram_rctrl(self, value_name, mem_value_name, time):
         if value_name in self.consts:
             raddr = "`RAM_{0}".format(value_name)
         else:
-            num=inputvalue2num(value_name)
+            num = inputvalue2num(value_name)
             if value_name[0] == 'A' or value_name[0] == 'F':
                 raddr = "inst_addr_opr1 + `RAM_ADDR_SIZE'd{0}".format(num)
             elif value_name[0] == 'B':
@@ -178,12 +199,12 @@ class schedulingData:
             else:
                 print(value_name)
         ram_num = self.ram_num_list[mem_value_name]
-        self.ram_rctrl(operator="input", read_t=time-1, ram_num=ram_num, addr=raddr)
+        self.ram_rctrl(operator="input", read_t=time - 1, ram_num=ram_num, addr=raddr)
         return 1, "ram_input_out{ram_num}".format(ram_num=ram_num)
 
     def judge_save_place_ram_rctrl(self, value_name, mem_value_name, time):
         data = self.solution_data[value_name]
-        operator=data["operator"]
+        operator = data["operator"]
         if data["end_time"] == time:
             if operator == "inv":
                 return 1, "inv_out"
@@ -193,7 +214,7 @@ class schedulingData:
         if data["end_time"] + 1 == time:
             return 1, "{operator}_out_reg".format(operator=operator)
         ram_num = self.ram_num_list[mem_value_name]
-        self.ram_rctrl(operator=operator, read_t=time-1, ram_num=ram_num, addr=self.mem_data[value_name][2])
+        self.ram_rctrl(operator=operator, read_t=time - 1, ram_num=ram_num, addr=self.mem_data[value_name][2])
         return 1, "ram_{operator}_out{ram_num}".format(operator=operator, ram_num=ram_num)
 
     # 演算器の入力の制御＋RAMの読み出しの制御命令生成
@@ -205,7 +226,8 @@ class schedulingData:
             if data["opr1"] in self.input:
                 num, opr1_save_place = self.judge_input_ram_rctrl(value_name=data["opr1"], mem_value_name=mem_value_name, time=data["start_time"])
             else:
-                num, opr1_save_place = self.judge_save_place_ram_rctrl(value_name=data["opr1"], mem_value_name=mem_value_name, time=data["start_time"])
+                num, opr1_save_place = self.judge_save_place_ram_rctrl(
+                    value_name=data["opr1"], mem_value_name=mem_value_name, time=data["start_time"])
             if data["opr1"] == data["opr2"]:
                 opr2_save_place = opr1_save_place
             else:
@@ -213,14 +235,17 @@ class schedulingData:
                 if data["opr2"] in self.input:
                     num, opr2_save_place = self.judge_input_ram_rctrl(value_name=data["opr2"], mem_value_name=mem_value_name, time=data["start_time"])
                 else:
-                    num, opr2_save_place = self.judge_save_place_ram_rctrl(value_name=data["opr2"], mem_value_name=mem_value_name, time=data["start_time"])
+                    num, opr2_save_place = self.judge_save_place_ram_rctrl(
+                        value_name=data["opr2"], mem_value_name=mem_value_name, time=data["start_time"])
             if data["operator"] == "inv":
                 init_seq = "{operator}_opr <= {save1};".format(operator=data["operator"], save1=opr1_save_place)
-            else:    
-                init_seq = "{operator}_opr1 <= {save1}; {operator}_opr2 <= {save2}; ".format(operator=data["operator"], save1=opr1_save_place, save2=opr2_save_place)
+            else:
+                init_seq = "{operator}_opr1 <= {save1}; {operator}_opr2 <= {save2}; ".format(
+                    operator=data["operator"], save1=opr1_save_place, save2=opr2_save_place)
             if "add" in data["operator"]:
-                init_seq += "issub{operator_num} <= {issub};".format(operator_num=data["operator"][-1], issub=('1' if data["ope_type"] == "SUB" else '0'))
-            self.operator_init_seq[data["start_time"]].append(init_seq+"\n")
+                init_seq += "issub{operator_num} <= {issub};".format(operator_num=data["operator"]
+                                                                     [-1], issub=('1' if data["ope_type"] == "SUB" else '0'))
+            self.operator_init_seq[data["start_time"]].append(init_seq + "\n")
             # if value_name in self.output:
             #     self.operator_init_seq[data["end_time"]].append("{output_name}_reg <= {operator}_out;\n".format(output_name=value_name, operator=data["operator"]))
 
@@ -240,7 +265,7 @@ class schedulingData:
         for out in self.output:
             operator = self.solution_data[out]["operator"].upper()
             write_t = self.solution_data[out]["end_time"] - 1
-            ram_num = self.ram_num_list[out+"_w"]
+            ram_num = self.ram_num_list[out + "_w"]
             if "w{ram_num}_n_reg <= 1;\n".format(ram_num=ram_num) in self.mem_ctrl_seq[write_t]:
                 index = self.mem_ctrl_seq[write_t].index("w{ram_num}_n_reg <= 1;\n".format(ram_num=ram_num))
                 self.mem_ctrl_seq[write_t][index] = "w{ram_num}_n_reg <= 0;\n".format(ram_num=ram_num)
@@ -253,13 +278,12 @@ class schedulingData:
                     waddr = "`RAM_{0}".format(const)
                     is_const = True
             if not is_const:
-                num=outputvalue2num(out)
+                num = outputvalue2num(out)
                 waddr = "ret_addr + `RAM_ADDR_SIZE'd{0}".format(num)
             self.mem_ctrl_seq[write_t].append("waddr{ram_num}_reg <= {waddr};\n".format(ram_num=ram_num, waddr=waddr))
             self.mem_ctrl_seq[write_t].append("wdata_s{ram_num} <= `{operator};\n".format(ram_num=ram_num, operator=operator))
-            if "w{ram_num}_n_reg <= 0;\n".format(ram_num=ram_num) not in self.mem_ctrl_seq[write_t+1]:
-                self.mem_ctrl_seq[write_t+1].append("w{ram_num}_n_reg <= 1;\n".format(ram_num=ram_num))
-
+            if "w{ram_num}_n_reg <= 0;\n".format(ram_num=ram_num) not in self.mem_ctrl_seq[write_t + 1]:
+                self.mem_ctrl_seq[write_t + 1].append("w{ram_num}_n_reg <= 1;\n".format(ram_num=ram_num))
 
     def make_sequence(self):
         self.set_solution_data()
@@ -270,7 +294,7 @@ class schedulingData:
 
         f = open(self.output_seq_filename, "w")
         f.write("case (state)\n")
-        for i in range(0, self.seq_finish_time+1):
+        for i in range(0, self.seq_finish_time + 1):
             f.write("{state}: begin\n".format(state=i))
             state_str = ""
             if i == self.inv_start_time:
@@ -286,11 +310,12 @@ class schedulingData:
             f.write(state_str)
             if (i == self.seq_finish_time):
                 f.write("\tstate <= 0;\n")
-            elif i != self.inv_start_time + 1: 
+            elif i != self.inv_start_time + 1:
                 f.write("\tstate <= state + 1;\n")
             f.write("end\n")
         f.write("endcase\n")
         f.close()
+
 
 def file_replace(old_filename, new_filename, old_str, new_str):
     with open(old_filename, "r") as file:
@@ -298,6 +323,7 @@ def file_replace(old_filename, new_filename, old_str, new_str):
     updated_content = content.replace(old_str, new_str)
     with open(new_filename, "w") as file:
         file.write(updated_content)
+
 
 if __name__ == "__main__":
     input = []
@@ -307,30 +333,38 @@ if __name__ == "__main__":
     mem_table = {}
 
     state_sizes = {}
-        
+
     args = sys.argv
     output_directory = args[1]
 
-    #TODO: スケジューリング毎回実行するように修正
+    # TODO: スケジューリング毎回実行するように修正
     directory = "/home/mfukuda/optimal-ate-pairing/scheduling/new_split_sche/inRAM/bls12-381/result/"
     for root, dirs, files in os.walk(directory):
         for file in files:
             csv_file_path = os.path.join(root, file)
-            verilog_file_path = output_directory+"/include/ALU_mode/seq_{0}.v".format(file[:-4])
+            verilog_file_path = output_directory + "/include/ALU_mode/seq_{0}.v".format(file[:-4])
             mem_table = {}
             print(csv_file_path)
             exec(open(csv_file_path, 'r', encoding="utf-8").read())
-            sche_data = schedulingData(output_seq_filename=verilog_file_path, input=input, output=output, scheduling_solution=solution, formulas=formulas, mem_table=mem_table, MULnum=1, ADDnum=4)
+            sche_data = schedulingData(
+                output_seq_filename=verilog_file_path,
+                input=input,
+                output=output,
+                scheduling_solution=solution,
+                formulas=formulas,
+                mem_table=mem_table,
+                MULnum=1,
+                ADDnum=4)
             try:
                 sche_data.make_sequence()
             except KeyError as e:
                 print(type(e), e)
-            state_sizes[file[:-4].replace("_mul1_add4", "")] = sche_data.seq_finish_time+1
-            
+            state_sizes[file[:-4].replace("_mul1_add4", "")] = sche_data.seq_finish_time + 1
+
     calc_state_size = max(state_sizes.values()).bit_length()
-    calc_param_file = output_directory+"/include/CalcCore_param.vh"
+    calc_param_file = output_directory + "/include/CalcCore_param.vh"
     f = open(calc_param_file, 'a')
-    f.write("`define CALC_STATE_SIZE "+str(calc_state_size)+"\n")
+    f.write("`define CALC_STATE_SIZE " + str(calc_state_size) + "\n")
     for key, value in state_sizes.items():
-        f.write("`define CALC_"+key.upper()+"_STATE_SIZE `CALC_STATE_SIZE'd"+str(value)+"\n")
+        f.write("`define CALC_" + key.upper() + "_STATE_SIZE `CALC_STATE_SIZE'd" + str(value) + "\n")
     f.close()

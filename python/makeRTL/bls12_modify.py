@@ -93,7 +93,7 @@ def write_input_vh(f_input):
 
 def print_commands_list(cnt, commands_list, f):
     for index, command in enumerate(commands_list):
-        f.write("writeCommands({0}, {{`{1}, {2}, {3}, {4}}});\n".format(cnt + index, command[0], command[1], command[2], command[3]))
+        f.write("writeCommands({}, {{`{}, {}, {}, {}}});\n".format(cnt + index, command[0], command[1], command[2], command[3]))
 
 
 def make_ML_commands(f_ML_commands):
@@ -180,39 +180,39 @@ def make_FE_commands(f_FE_commands):
     f.write("// t2 = expFp12(f)\n")
     cnt = expFp12_commands(6, "`RAM_F", "`RAM_E", f)
 
-    f.write("writeCommands({0}, {{`MODE_MUL_CONJ, `RAM_E, `RAM_G, `RAM_G}}); // t1 = mulFp12_conj_forRTL(t2, t1)\n".format(cnt))
+    f.write("writeCommands({}, {{`MODE_MUL_CONJ, `RAM_E, `RAM_G, `RAM_G}}); // t1 = mulFp12_conj_forRTL(t2, t1)\n".format(cnt))
 
     f.write("// t4 = expFp12(t1)\n")
     cnt = expFp12_commands(cnt + 1, "`RAM_G", "`RAM_B", f)
 
-    f.write("writeCommands({0}, {{`MODE_MUL_CONJ, `RAM_F, `RAM_G, `RAM_G}}); // t1 = mulFp12_conj_forRTL(f, t1) \n".format(cnt))
+    f.write("writeCommands({}, {{`MODE_MUL_CONJ, `RAM_F, `RAM_G, `RAM_G}}); // t1 = mulFp12_conj_forRTL(f, t1) \n".format(cnt))
 
     f.write("// t5 = expFp12(t4)\n")
     cnt = expFp12_commands(cnt + 1, "`RAM_B", "`RAM_A", f)
 
-    f.write("writeCommands({0}, {{`MODE_MUL, `RAM_F, `RAM_B, `RAM_B}}); // t4 = mulFp12(f, t4)\n".format(cnt))
+    f.write("writeCommands({}, {{`MODE_MUL, `RAM_F, `RAM_B, `RAM_B}}); // t4 = mulFp12(f, t4)\n".format(cnt))
 
     f.write("// t3 = expFp12(t5)\n")
     cnt = expFp12_commands(cnt + 1, "`RAM_A", "`RAM_D", f)
 
-    f.write("writeCommands({0}, {{`MODE_MUL, `RAM_E, `RAM_A, `RAM_A}}); // t5 = mulFp12(t2, t5)\n".format(cnt))
-    f.write("writeCommands({0}, {{`MODE_SQR012345, `RAM_E, `RAM_E, `RAM_E}}); // t2 = SQR012345Fp12(t2)\n".format(cnt + 1))
-    f.write("writeCommands({0}, {{`MODE_FROB, `RAM_B, `RAM_E, `RAM_B}}); // t4 = FrobFp12(FrobFp12(t4))\n".format(cnt + 2))
-    f.write("writeCommands({0}, {{`MODE_FROB, `RAM_B, `RAM_B, `RAM_B}});\n".format(cnt + 3))
-    f.write("writeCommands({0}, {{`MODE_FROB, `RAM_A, `RAM_A, `RAM_A}}); // t5 = FrobFp12(FrobFp12(t5))\n".format(cnt + 4))
-    f.write("writeCommands({0}, {{`MODE_FROB, `RAM_A, `RAM_A, `RAM_A}});\n".format(cnt + 5))
-    f.write("writeCommands({0}, {{`MODE_MUL, `RAM_E, `RAM_D, `RAM_E}}); //t2 = mulFp12(t2, t3)\n".format(cnt + 6))
-    f.write("writeCommands({0}, {{`MODE_FROB, `RAM_B, `RAM_B, `RAM_B}}); // t4 = FrobFp12(t4)\n".format(cnt + 7))
+    f.write("writeCommands({}, {{`MODE_MUL, `RAM_E, `RAM_A, `RAM_A}}); // t5 = mulFp12(t2, t5)\n".format(cnt))
+    f.write("writeCommands({}, {{`MODE_SQR012345, `RAM_E, `RAM_E, `RAM_E}}); // t2 = SQR012345Fp12(t2)\n".format(cnt + 1))
+    f.write("writeCommands({}, {{`MODE_FROB, `RAM_B, `RAM_E, `RAM_B}}); // t4 = FrobFp12(FrobFp12(t4))\n".format(cnt + 2))
+    f.write("writeCommands({}, {{`MODE_FROB, `RAM_B, `RAM_B, `RAM_B}});\n".format(cnt + 3))
+    f.write("writeCommands({}, {{`MODE_FROB, `RAM_A, `RAM_A, `RAM_A}}); // t5 = FrobFp12(FrobFp12(t5))\n".format(cnt + 4))
+    f.write("writeCommands({}, {{`MODE_FROB, `RAM_A, `RAM_A, `RAM_A}});\n".format(cnt + 5))
+    f.write("writeCommands({}, {{`MODE_MUL, `RAM_E, `RAM_D, `RAM_E}}); //t2 = mulFp12(t2, t3)\n".format(cnt + 6))
+    f.write("writeCommands({}, {{`MODE_FROB, `RAM_B, `RAM_B, `RAM_B}}); // t4 = FrobFp12(t4)\n".format(cnt + 7))
 
     f.write("// t3 = expFp12(t2)\n")
     cnt = expFp12_commands(cnt + 8, "`RAM_E", "`RAM_D", f)
 
-    f.write("writeCommands({0}, {{`MODE_MUL, `RAM_B, `RAM_A, `RAM_B}}); // t4 = mulFp12(t4, t5)\n".format(cnt))
-    f.write("writeCommands({0}, {{`MODE_MUL_CONJ, `RAM_E, `RAM_F, `RAM_A}}); // t5 = mulFp12_conj_forRTL(t2, f)\n".format(cnt + 1))
-    f.write("writeCommands({0}, {{`MODE_MUL, `RAM_G, `RAM_D, `RAM_G}}); // t1 = mulFp12(t1, t3)\n".format(cnt + 2))
-    f.write("writeCommands({0}, {{`MODE_FROB, `RAM_A, `RAM_A, `RAM_A}}); // t5 = FrobFp12(t5)\n".format(cnt + 3))
-    f.write("writeCommands({0}, {{`MODE_MUL, `RAM_G, `RAM_B, `RAM_G}}); // t1 = mulFp12(t1, t4)\n".format(cnt + 4))
-    f.write("writeCommands({0}, {{`MODE_MUL, `RAM_G, `RAM_A, `RAM_G}}); // t1 = mulFp12(t1, t3)\n".format(cnt + 5))
+    f.write("writeCommands({}, {{`MODE_MUL, `RAM_B, `RAM_A, `RAM_B}}); // t4 = mulFp12(t4, t5)\n".format(cnt))
+    f.write("writeCommands({}, {{`MODE_MUL_CONJ, `RAM_E, `RAM_F, `RAM_A}}); // t5 = mulFp12_conj_forRTL(t2, f)\n".format(cnt + 1))
+    f.write("writeCommands({}, {{`MODE_MUL, `RAM_G, `RAM_D, `RAM_G}}); // t1 = mulFp12(t1, t3)\n".format(cnt + 2))
+    f.write("writeCommands({}, {{`MODE_FROB, `RAM_A, `RAM_A, `RAM_A}}); // t5 = FrobFp12(t5)\n".format(cnt + 3))
+    f.write("writeCommands({}, {{`MODE_MUL, `RAM_G, `RAM_B, `RAM_G}}); // t1 = mulFp12(t1, t4)\n".format(cnt + 4))
+    f.write("writeCommands({}, {{`MODE_MUL, `RAM_G, `RAM_A, `RAM_G}}); // t1 = mulFp12(t1, t3)\n".format(cnt + 5))
 
     return cnt + 6
 
@@ -238,11 +238,11 @@ def make_RTL():
     cmd_memdepth_ml = make_ML_commands(f_ML_commands="{}/testbench/include/ML_input_commands.v".format(RTL_dir))
     cmd_memdepth_fe = make_FE_commands(f_FE_commands="{}/testbench/include/FE_input_commands.v".format(RTL_dir))
     f = open("{}/include/parameter.vh".format(RTL_dir), 'a')
-    f.write("`define CMD_MEMDEPTH_ML {0}\n".format(cmd_memdepth_ml))
-    f.write("`define CMD_MEMSIZE_ML {0}\n\n".format((cmd_memdepth_ml - 1).bit_length()))
-    f.write("`define CMD_MEMDEPTH_FE {0}\n".format(cmd_memdepth_fe))
-    f.write("`define CMD_MEMSIZE_FE {0}\n\n".format((cmd_memdepth_fe - 1).bit_length()))
-    f.write("`define CMD_MEMSIZE {0}\n".format(max((cmd_memdepth_fe - 1).bit_length(), (cmd_memdepth_ml - 1).bit_length())))
+    f.write("`define CMD_MEMDEPTH_ML {}\n".format(cmd_memdepth_ml))
+    f.write("`define CMD_MEMSIZE_ML {}\n\n".format((cmd_memdepth_ml - 1).bit_length()))
+    f.write("`define CMD_MEMDEPTH_FE {}\n".format(cmd_memdepth_fe))
+    f.write("`define CMD_MEMSIZE_FE {}\n\n".format((cmd_memdepth_fe - 1).bit_length()))
+    f.write("`define CMD_MEMSIZE {}\n".format(max((cmd_memdepth_fe - 1).bit_length(), (cmd_memdepth_ml - 1).bit_length())))
     f.close()
 
 
