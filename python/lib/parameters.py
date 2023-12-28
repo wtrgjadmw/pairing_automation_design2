@@ -13,9 +13,9 @@ def read_json(filename):
 psr = argparse.ArgumentParser(
     prog="プログラムの名前", usage="プログラムの使い方", description="プログラムの説明"
 )
-psr.add_argument("-c", "--curve", default=1, help="楕円曲線群")
-psr.add_argument("-p", "--characteristic", default=1, help="楕円曲線の標数のbit幅")
-psr.add_argument("-f", "--filename", default=1, help="読み込むJSONファイル")
+psr.add_argument("-c", "--curve", required=True, help="楕円曲線群")
+psr.add_argument("-p", "--characteristic", required=True, help="楕円曲線の標数のbit幅")
+psr.add_argument("-f", "--filename", required=True, help="読み込むJSONファイル")
 args = psr.parse_args()
 curve_group = args.curve
 curve_name = args.characteristic

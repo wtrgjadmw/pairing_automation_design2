@@ -5,26 +5,27 @@ import argparse
 import importlib
 from scheduling.schedule import read_formula_csv, make_pyschedule, find_mistake
 from scheduling.split_sche import make_split_scheduling
+sys.path.append("..")
 
 
-def repeat_schedule(curve_group: str, curve_name: str, algo_name: str, mul_num: int, add_num: int):
-    sys.stdout = open("./{}.log".format(algo_name), "w")
+def repeat_schedule(home_dir: str, curve_group: str, curve_name: str, algo_name: str, mul_num: int, add_num: int):
+    sys.stdout = open("{}/scheduling/{}.log".format(home_dir, algo_name), "w")
     start_time = time.perf_counter()
 
-    func_name = "{2}_mul{0}_add{1}".format(mul_num, add_num, algo_name)
     formulas = read_formula_csv(
-        "/home/mfukuda/pairing_automation_design/csv/{}/{}/{}.csv".format(curve_group, curve_name, algo_name)
+        "{}/csv/{}.csv".format(home_dir, algo_name)
     )
 
     # exec(open("./" + "sche_test.py", 'r', encoding="utf-8").read())
-    file_name = func_name
+    dir_name = "{}/scheduling/{}_mul{}_add{}".format(home_dir, algo_name, mul_num, add_num)
+    print(dir_name)
 
     # スケジューリングの解を保存するリスト
     solution = []
     # 分割したfomulas
     split_ope, input_value, output_value, input_num = make_split_scheduling(formulas)
     split_ope.append([])
-    os.makedirs(file_name, exist_ok=True)
+    os.makedirs(dir_name, exist_ok=True)
     mem_table = {}
 
     for i in range(len(split_ope)):
@@ -34,24 +35,25 @@ def repeat_schedule(curve_group: str, curve_name: str, algo_name: str, mul_num: 
 
     i = 0
     while i < len(split_ope):
+        pre_sche_result, split_ope = find_mistake(split_ope, i, pre_sche_result)
         if len(split_ope[i]) == 0:
             break
-        write_file = "{0}/{0}_{1}.py".format(file_name, i)
+        file_name = "{}_{}".format(algo_name, i)
         make_pyschedule(
+            dir_name,
             file_name,
             formulas,
             mem_table,
             split_ope,
             pre_sche_result,
             i,
-            write_file,
             input_value,
             output_value,
             mul_num,
             add_num,
             input_num)
         print(i)
-        scheduling_i = importlib.import_module("{0}.{0}_{1}".format(file_name, i))
+        scheduling_i = importlib.import_module("{}-{}.scheduling.{}_mul{}_add{}.{}".format(curve_group, curve_name, algo_name, mul_num, add_num, file_name))
         # print(split_ope[i])
         # make_pyschedule(file_name, formulas, mem_table, split_ope, pre_sche_result, i, write_file, input_value, mul_num, add_num, mul_num_list, add_num_list, input_num)
         # exec(open(write_file).read())
@@ -60,11 +62,10 @@ def repeat_schedule(curve_group: str, curve_name: str, algo_name: str, mul_num: 
             raise Exception("no solution found in schedule_{0}".format(i))
         pre_sche_result = solution
         i += 1
-        pre_sche_result, split_ope = find_mistake(split_ope, i, pre_sche_result)
 
     end_time = time.perf_counter()
 
-    f = open(file_name + ".txt", "w")
+    f = open("{}/scheduling/result/{}.txt".format(home_dir, algo_name), "w")
     print("input = ", file=f, end="")
     print(input_value, file=f)
     print("output = ", file=f, end="")
@@ -86,6 +87,8 @@ def repeat_schedule(curve_group: str, curve_name: str, algo_name: str, mul_num: 
 
 
 def all_schedule(curve_group: str, curve_name: str, mul_num: int, add_num: int):
+    home_dir = "{}/{}-{}".format(os.path.dirname(os.getcwd()), curve_group, curve_name)
+    os.makedirs("{}/scheduling/result".format(home_dir), exist_ok=True)
     # repeat_schedule(curve_group, curve_name, "CONJ", mul_num, add_num)
     # repeat_schedule(curve_group, curve_name, "FROB", mul_num, add_num)
     # repeat_schedule(curve_group, curve_name, "MUL", mul_num, add_num)
@@ -93,8 +96,8 @@ def all_schedule(curve_group: str, curve_name: str, mul_num: int, add_num: int):
     # repeat_schedule(curve_group, curve_name, "PDBL", mul_num, add_num)
     # repeat_schedule(curve_group, curve_name, "SPARSE_D", mul_num, add_num)
     # repeat_schedule(curve_group, curve_name, "SPARSE_M", mul_num, add_num)
-    # repeat_schedule(curve_group, curve_name, "SQR", mul_num, add_num)
-    repeat_schedule(curve_group, curve_name, "SQR012345", mul_num, add_num)
+    repeat_schedule(home_dir, curve_group, curve_name, "SQR", mul_num, add_num)
+    # repeat_schedule(curve_group, curve_name, "SQR012345", mul_num, add_num)
 
 
 if __name__ == "__main__":
@@ -113,4 +116,5 @@ if __name__ == "__main__":
     add_num = int(args.add)
     curve_group = args.curve
     curve_name = args.characteristic
+
     all_schedule(curve_group, curve_name, mul_num, add_num)

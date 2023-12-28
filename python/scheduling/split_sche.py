@@ -1,14 +1,12 @@
 import copy
+# 大規模スケジューリングの分割
 
 
 def split_list(lst, division_num):
     return [lst[i:i + division_num] for i in range(0, len(lst), division_num)]
 
-# 大規模スケジューリングの分割
-
 
 def make_split_scheduling(formulas):
-
     inputs = []
     outputs = []
     input_num = 0
@@ -72,8 +70,6 @@ def make_split_scheduling(formulas):
         if cnt == 0:
             DIVIDE_NUM = 70
             split_index += 1
-
-        print(split_ope[split_index])
 
         knows += knows_tmp
         cnt += 1

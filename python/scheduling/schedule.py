@@ -8,6 +8,7 @@ import os
 import argparse
 args = sys.argv
 
+
 def alpha2num(c): return ord(c) - ord('A')
 
 
@@ -87,6 +88,7 @@ def make_mem_task_definition(
 
 
 def find_mistake(split_ope, depth, pre_sche_result):
+    mistaken_formulas = []
     for i in range(0, depth):
         for formula in split_ope[i]:
             is_exist = False
@@ -99,22 +101,23 @@ def find_mistake(split_ope, depth, pre_sche_result):
                     mem_is_exist = True
                     mem_results.append(sol)
             if not is_exist:
-                split_ope[depth].insert(0, formula)
+                mistaken_formulas.append(formula)
                 if mem_is_exist:
                     for mem_result in mem_results:
                         pre_sche_result.remove(mem_result)
                         print(mem_result)
+    split_ope[depth] = mistaken_formulas + split_ope[depth]
     return pre_sche_result, split_ope
 
 
 def make_pyschedule(
+        dir_name,
         file_name,
         formulas,
         mem_table,
         split_ope,
         pre_sche_result,
         depth,
-        filename_write,
         input_value,
         output_value,
         MULnum,
@@ -123,9 +126,8 @@ def make_pyschedule(
     # def make_pyschedule(file_name, formulas, mem_table, split_ope,
     # pre_sche_result, depth, filename_write, input_value, MULnum, ADDnum,
     # mul_num_list, add_num_list, input_num):
-    scheduling_title = file_name + "_" + str(depth)
 
-    f_write = open(filename_write, "w")
+    f_write = open("{}/{}.py".format(dir_name, file_name), "w")
     f_write.write("from pyschedule import Scenario, solvers, plotters, alt\n\n\n")
     f_write.write("def solve():\n")
 
@@ -137,7 +139,7 @@ def make_pyschedule(
     f_write.write("\thorizon = {0}\n".format(max(pre_cycle + 90, input_num // 2 + 50)))
     # f_write.write("\thorizon = {0}\n".format(max(mul_cycle+70, add_cycle+70, pre_cycle+90, input_num//2+50)))
 
-    f_write.write("\tS = Scenario(\"" + scheduling_title + "\", horizon=horizon)\n")
+    f_write.write("\tS = Scenario(\"" + file_name + "\", horizon=horizon)\n")
 
     f_write.write("\n\t# resource\n")
     f_write.write("\tMUL = S.Resources('MUL', num={0}, size=7)\n".format(MULnum))
@@ -216,7 +218,7 @@ def make_pyschedule(
     f_write.write("\tcycles = int(solution[-1][3])\n\n")
 
     # TODO: pic_file_nameの変更
-    f_write.write("\tpic_file_name = \"" + file_name + "/" + scheduling_title + ".png\"\n")
+    f_write.write("\tpic_file_name = \"{}/{}.png\"\n".format(dir_name, file_name))
     f_write.write("\tif(S.solution() != []):\n\t\tplotters.matplotlib.plot(S,img_filename=pic_file_name, vertical_text=True, fig_size=(cycles*0.25+3, 5), show_task_labels=False)\n\n")
     f_write.write("\treturn solution\n\n")
     return
@@ -244,7 +246,7 @@ if __name__ == "__main__":
 
     func_name = "{2}_mul{0}_add{1}".format(mul_num, add_num, algo_name)
     formulas, add_formula_num, mul_formula_num = read_formula_csv(
-        "/home/mfukuda/pairing_automation_design/csv/{}/{}/{}.csv".format(curve_group, curve_name, algo_name)
+        "/home/mfukuda/pairing_automation_design/{}-{}/csv/{}.csv".format(curve_group, curve_name, algo_name)
     )
 
     # exec(open("./" + "sche_test.py", 'r', encoding="utf-8").read())

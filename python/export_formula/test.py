@@ -114,7 +114,7 @@ def check_result(valueList: dict, k: int, c, isOnCurve=False):
 def test_formula(k, formulaName, a, b, c, isOnCurve=False):
     valueList = fp12_initialize_value(a, b)
     formulaList = csv2Formula(
-        path="/home/mfukuda/pairing_automation_design/csv/{}/{}/{}.csv".format(curve_group, curve_name, formulaName))
+        path="/home/mfukuda/pairing_automation_design/{}-{}/csv/{}.csv".format(curve_group, curve_name, formulaName))
     valueList = calculate_test(valueList, formulaList)
     print(formulaName, end=": ")
     check_result(valueList, k, c, isOnCurve)
@@ -158,14 +158,14 @@ def fp12_test_formula():
     c_6 = SQR012345(Fq, xi, [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]])
     test_formula(12, "SQR012345", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
     c_6 = sparse_mult_d6_twist(Fq, xi,
-        [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
-        [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
-    )
+                               [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
+                               [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
+                               )
     test_formula(12, "SPARSE_D", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
     c_6 = sparse_mult_m6_twist(Fq, xi,
-        [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
-        [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
-    )
+                               [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
+                               [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
+                               )
     test_formula(12, "SPARSE_M", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
 
 
