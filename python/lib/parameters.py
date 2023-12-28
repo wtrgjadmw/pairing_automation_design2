@@ -1,5 +1,6 @@
 import json
 import argparse
+import os
 from lib.fpx import Fp_t, Fp2_t, Fp4_t, Fp12_t, Fp24_t
 from lib.util import bits_list
 
@@ -15,11 +16,11 @@ psr = argparse.ArgumentParser(
 )
 psr.add_argument("-c", "--curve", required=True, help="楕円曲線群")
 psr.add_argument("-p", "--characteristic", required=True, help="楕円曲線の標数のbit幅")
-psr.add_argument("-f", "--filename", required=True, help="読み込むJSONファイル")
+# psr.add_argument("-f", "--filename", required=True, help="読み込むJSONファイル")
 args = psr.parse_args()
 curve_group = args.curve
 curve_name = args.characteristic
-param = read_json(args.filename)[curve_group][curve_name]
+param = read_json("{}/{}-{}/param.json".format(os.path.dirname(os.getcwd()), curve_group, curve_name))
 
 b = param["b"]
 u = param["u"]
