@@ -217,37 +217,37 @@ always @(posedge clk or negedge rst_n) begin
 		if (I_INPUTMODE == `EXEC_CORE) begin
 			case (mode)
 				`MODE_PDBL: begin
-					`include "./include/ALU_mode/seq_pdbl_mul1_add4.v"
+					`include "./include/ALU_mode/seq_PDBL.v"
 				end 
 				`MODE_PADD: begin
-					`include "./include/ALU_mode/seq_padd_mul1_add4.v"
+					`include "./include/ALU_mode/seq_PADD.v"
 				end 
 				`MODE_PMINUS: begin
-					`include "./include/ALU_mode/seq_pminus_mul1_add4.v"
+					`include "./include/ALU_mode/seq_PMINUS.v"
 				end 
 				`MODE_FROB: begin
-					`include "./include/ALU_mode/seq_frob_mul1_add4.v"
+					`include "./include/ALU_mode/seq_FROB.v"
 				end 
 				`MODE_CONJ: begin
-					`include "./include/ALU_mode/seq_conj_mul1_add4.v"
+					`include "./include/ALU_mode/seq_CONJ.v"
 				end 
 				`MODE_SQR012345: begin
-					`include "./include/ALU_mode/seq_sqr012345_mul1_add4.v"
+					`include "./include/ALU_mode/seq_SQR012345.v"
 				end 
 				`MODE_SPARSE_MUL: begin
-					`include "./include/ALU_mode/seq_sparse_mul1_add4.v"
+					`include "./include/ALU_mode/seq_SPARSE.v"
 				end 
 				`MODE_SQUARE: begin
-					`include "./include/ALU_mode/seq_square_mul1_add4.v"
+					`include "./include/ALU_mode/seq_SQR.v"
 				end 
 				`MODE_MUL: begin
-					`include "./include/ALU_mode/seq_mul_mul1_add4.v"
+					`include "./include/ALU_mode/seq_MUL.v"
 				end 
 				`MODE_MUL_CONJ: begin
-					`include "./include/ALU_mode/seq_mul_conj_mul1_add4.v"
+					`include "./include/ALU_mode/seq_MUL_CONJ.v"
 				end 
 				`MODE_INV: begin
-					`include "./include/ALU_mode/seq_inv_mul1_add4.v"
+					`include "./include/ALU_mode/seq_INV.v"
 				end 
 			endcase
 		end
