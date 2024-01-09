@@ -37,6 +37,20 @@ def fp4_mul(opr1: str, opr2: str, ret: str):
     return formulaList
 
 
+def fp4_mul_conj(opr1: str, opr2: str, ret: str):  # a * conj(b)
+    formulaList = []
+    formulaList += fp2_mul(opr1 + '0', opr2 + '0', ret + "_t0")
+    formulaList += fp2_mul(opr1 + '1', opr2 + '1', ret + "_t1")
+    formulaList += fp2_add(opr1 + '0', opr1 + '1', ret + "_t2")
+    formulaList += fp2_sub(opr2 + '0', opr2 + '1', ret + "_t3")
+    formulaList += fp2_mul(ret + "_t2", ret + "_t3", ret + "_t4")
+    formulaList += fp2_guzai(ret + "_t1", ret + "_s0")
+    formulaList += fp2_sub(ret + "_t0", ret + "_s0", ret + "0")
+    formulaList += fp2_sub(ret + "_t0", ret + "_t1", ret + "_t5")
+    formulaList += fp2_sub(ret + "_t4", ret + "_t5", ret + "1")
+    return formulaList
+
+
 def fp4_sqr(opr1: str, ret: str):
     formulaList = []
     formulaList += fp2_guzai(opr1 + '1', ret + "_a1_")

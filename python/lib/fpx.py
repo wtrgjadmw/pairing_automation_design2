@@ -172,7 +172,7 @@ class Fp2_t:
 
     def conj(self, a):
         new_r = a[0]
-        new_i = self.Fp.p - a[1]
+        new_i = self.Fp.neg(a[1])
         return [new_r, new_i]
 
     def inv(self, a):  # Itoh-Tsujii Inversion
@@ -405,6 +405,23 @@ class Fp12_t:
         c2 = self.Fp4.add(t1, t5)
         return [c0, c1, c2]
 
+    def mul_conj(self, a, b):
+        t0 = self.Fp4.mul(a[0], self.Fp4.conj(b[0]))
+        t1 = self.Fp4.mul(a[1], self.Fp4.conj(b[1]))
+        t2 = self.Fp4.mul(a[2], self.Fp4.conj(b[2]))
+        t3 = self.Fp4.mul(self.Fp4.add(a[0], a[1]), self.Fp4.conj(self.Fp4.sub(b[0], b[1])))
+        t4 = self.Fp4.mul(self.Fp4.add(a[1], a[2]), self.Fp4.conj(self.Fp4.sub(b[1], b[2])))
+        t5 = self.Fp4.mul(self.Fp4.add(a[2], a[0]), self.Fp4.conj(self.Fp4.add(b[2], b[0])))
+        t3 = self.Fp4.sub(t3, self.Fp4.sub(t0, t1))
+        t4 = self.Fp4.sub(t4, self.Fp4.sub(t1, t2))
+        t4 = self.Fp4.guzai(t4, self.cnr)
+        c0 = self.Fp4.sub(t0, t4)
+        t5 = self.Fp4.sub(t5, self.Fp4.add(t2, t0))
+        t2 = self.Fp4.guzai(t2, self.cnr)
+        c1 = self.Fp4.add(t3, t2)
+        c2 = self.Fp4.sub(t5, t1)
+        return [c0, c1, c2]
+
     def sqr(self, a):
         t0 = self.Fp4.sqr(a[0])
         t1 = self.Fp4.sqr(a[1])
@@ -423,8 +440,8 @@ class Fp12_t:
         return [c0, c1, c2]
 
     def conj(self, a):
-        a10 = self.Fp2.neg(a[1][0])
         a01 = self.Fp2.neg(a[0][1])
+        a10 = self.Fp2.neg(a[1][0])
         a21 = self.Fp2.neg(a[2][1])
         return [[a[0][0], a01], [a10, a[1][1]], [a[2][0], a21]]
 

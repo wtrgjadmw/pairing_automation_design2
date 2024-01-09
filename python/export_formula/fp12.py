@@ -1,5 +1,5 @@
 from export_formula.fp2 import fp2_add, fp2_neg, fp2_conj, fp2_mul
-from export_formula.fp4 import fp4_add, fp4_sub, fp4_neg, fp4_mul, fp4_guzai, fp4_inv, fp4_constMulNotMont, fp4_sqr
+from export_formula.fp4 import fp4_add, fp4_sub, fp4_neg, fp4_mul, fp4_guzai, fp4_inv, fp4_constMulNotMont, fp4_sqr, fp4_mul_conj
 from export_formula.transform import FormulaOrganizer
 
 
@@ -30,15 +30,42 @@ def fp12_mul(opr1: str, opr2: str, ret: str):
     formulaList += fp4_mul(ret + "_t50", ret + "_t51", ret + "_t5")
     formulaList += fp4_add(ret + '_t0', ret + '_t1', ret + "_t60")
     formulaList += fp4_sub(ret + '_t3', ret + '_t60', ret + "_t6")
+    formulaList += fp4_guzai(ret + '_t2', ret + "_t9")
+    formulaList += fp4_add(ret + '_t6', ret + '_t9', ret + "1")
     formulaList += fp4_add(ret + '_t1', ret + '_t2', ret + "_t70")
     formulaList += fp4_sub(ret + '_t4', ret + '_t70', ret + "_t71")
     formulaList += fp4_guzai(ret + '_t71', ret + "_t7")
     formulaList += fp4_add(ret + '_t0', ret + '_t7', ret + "0")
     formulaList += fp4_add(ret + '_t2', ret + '_t0', ret + "_t80")
     formulaList += fp4_sub(ret + '_t5', ret + '_t80', ret + "_t8")
+    formulaList += fp4_add(ret + '_t1', ret + '_t8', ret + "2")
+    return formulaList
+
+
+def fp12_mul_conj(opr1: str, opr2: str, ret: str):  # a * conj(b)
+    formulaList = fp4_mul_conj(opr1 + '0', opr2 + '0', ret + "_t0")
+    formulaList += fp4_mul_conj(opr1 + '1', opr2 + '1', ret + "_t1")
+    formulaList += fp4_mul_conj(opr1 + '2', opr2 + '2', ret + "_t2")
+    formulaList += fp4_add(opr1 + '0', opr1 + '1', ret + "_t30")
+    formulaList += fp4_sub(opr2 + '0', opr2 + '1', ret + "_t31")
+    formulaList += fp4_mul_conj(ret + "_t30", ret + "_t31", ret + "_t3")
+    formulaList += fp4_add(opr1 + '1', opr1 + '2', ret + "_t40")
+    formulaList += fp4_sub(opr2 + '1', opr2 + '2', ret + "_t41")
+    formulaList += fp4_mul_conj(ret + "_t40", ret + "_t41", ret + "_t4")
+    formulaList += fp4_add(opr1 + '2', opr1 + '0', ret + "_t50")
+    formulaList += fp4_add(opr2 + '2', opr2 + '0', ret + "_t51")
+    formulaList += fp4_mul_conj(ret + "_t50", ret + "_t51", ret + "_t5")
+    formulaList += fp4_sub(ret + '_t0', ret + '_t1', ret + "_t60")
+    formulaList += fp4_sub(ret + '_t3', ret + '_t60', ret + "_t6")
     formulaList += fp4_guzai(ret + '_t2', ret + "_t9")
     formulaList += fp4_add(ret + '_t6', ret + '_t9', ret + "1")
-    formulaList += fp4_add(ret + '_t1', ret + '_t8', ret + "2")
+    formulaList += fp4_sub(ret + '_t1', ret + '_t2', ret + "_t70")
+    formulaList += fp4_sub(ret + '_t4', ret + '_t70', ret + "_t71")
+    formulaList += fp4_guzai(ret + '_t71', ret + "_t7")
+    formulaList += fp4_sub(ret + '_t0', ret + '_t7', ret + "0")
+    formulaList += fp4_add(ret + '_t2', ret + '_t0', ret + "_t80")
+    formulaList += fp4_sub(ret + '_t5', ret + '_t80', ret + "_t8")
+    formulaList += fp4_sub(ret + '_t8', ret + '_t1', ret + "2")
     return formulaList
 
 

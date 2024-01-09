@@ -94,9 +94,10 @@ def check_result(valueList: dict, k: int, c, isOnCurve=False):
             for m in range(3):
                 for j in range(2):
                     for i in range(2):
+                        # print(valueList['c{}{}{}'.format(m, j, i)])
                         if valueList['c{}{}{}'.format(m, j, i)] != c[m][j][i]:
                             print("Error: this formula has some error;")
-                            return
+                            # return
     elif k == 24:
         # print(c)
         for n in range(2):
@@ -150,6 +151,8 @@ def fp12_test_formula():
     test_formula(12, "CONJ", a, b, Fq6.conj(a))
     test_formula(12, "FROB", a, b, Fq6.frob(a))
     test_formula(12, "MUL", a, b, Fq6.mul(a, b))
+    print(Fq6.mul_conj(a, b) == Fq6.mul(a, Fq6.conj(b)))
+    test_formula(12, "MUL_CONJ", a, b, Fq6.mul_conj(a, b))
     test_formula(12, "SQR", a, b, Fq6.sqr(a))
     new_T, l = double_line_twist6(Fq, T, P, b_t, xi, D_twist)
     test_formula(12, "PDBL", a, b, [[l[0], l[3]], [l[1], l[4]], [l[2], l[5]]], True)
@@ -157,16 +160,18 @@ def fp12_test_formula():
     test_formula(12, "PADD", a, b, [[l[0], l[3]], [l[1], l[4]], [l[2], l[5]]], True)
     c_6 = SQR012345(Fq, xi, [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]])
     test_formula(12, "SQR012345", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
-    c_6 = sparse_mult_d6_twist(Fq, xi,
-                               [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
-                               [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
-                               )
-    test_formula(12, "SPARSE_D", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
-    c_6 = sparse_mult_m6_twist(Fq, xi,
-                               [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
-                               [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
-                               )
-    test_formula(12, "SPARSE_M", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
+    if D_twist:
+        c_6 = sparse_mult_d6_twist(Fq, xi,
+                                [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
+                                [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
+                                )
+        test_formula(12, "SPARSE_D", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
+    else:
+        c_6 = sparse_mult_m6_twist(Fq, xi,
+                                [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
+                                [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
+                                )
+        test_formula(12, "SPARSE_M", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
 
 
 if __name__ == "__main__":
