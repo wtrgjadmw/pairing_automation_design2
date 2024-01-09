@@ -190,7 +190,7 @@ reg [`WORD_SIZE-1: 0] inv_out_reg;
 
 MontgomeryInverter MontInv(clk, rst_n, start, inv_opr, inv_out, inv_comp);
 
-`include "./calc_core/CalcCore_func.v"
+`include "./CalcCore_func.v"
 assign finished_flag = calc_finised(mode, state);
 assign result1 = wdata_func1(mm0_out, add0_out, add1_out, add2_out, add3_out, wdata_s1);
 assign result2 = wdata_func2(mm0_out, add0_out, add1_out, add2_out, add3_out, wdata_s2);

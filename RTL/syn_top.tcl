@@ -4,11 +4,11 @@ set CLK "clk"
 set library_path "~/sotb65nm/160108_REL_VDEC/LIB/LE8U_V02.02.00/liberty/LSTP"
 lappend search_path  $library_path
 lappend search_path "./include"
-lappend search_path "./calc_core"
+lappend search_path "."
 lappend search_path "./"
 lappend link_path  $library_path
 lappend link_path "./include"
-lappend link_path "./calc_core"
+lappend link_path "."
 lappend link_path "./"
 
 set ULLIBRARY LE8UL_LSTP_Ptt_V0p75_T25
@@ -23,7 +23,7 @@ set verilogout_no_tri "true"
 set verilogout_single_bit "false"
 
 set rtl_dir "."
-set rtl_src [list ${{rtl_dir}}/top.v ${{rtl_dir}}/CommandBuffer.v ${{rtl_dir}}/calc_core/CalculationCore.v ${{rtl_dir}}/calc_core/AddSubMod.v ${{rtl_dir}}/calc_core/MontMul.v ${{rtl_dir}}/calc_core/inversion/MontgomeryInverter.v ${{rtl_dir}}/calc_core/inversion/Div2.v ${{rtl_dir}}/calc_core/inversion/Div4.v ${{rtl_dir}}/calc_core/inversion/Div4PathUnit.v]
+set rtl_src [list ${{rtl_dir}}/top.v ${{rtl_dir}}/CommandBuffer.v ${{rtl_dir}}/CalculationCore.v ${{rtl_dir}}/AddSubMod.v ${{rtl_dir}}/MontMul.v ${{rtl_dir}}/inversion/MontgomeryInverter.v ${{rtl_dir}}/inversion/Div2.v ${{rtl_dir}}/inversion/Div4.v ${{rtl_dir}}/inversion/Div4PathUnit.v]
 
 # Do not use TIE CELLs at SYN stage. Connect logic 0 and 1 to TIE NETS at P&R stage.
 set_dont_use [list ${{ULLIBRARY}}/LE8ULTIEHXD ${{ULLIBRARY}}/LE8ULTIELXD]

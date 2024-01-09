@@ -2,7 +2,7 @@ import shutil
 from io import TextIOWrapper
 import os
 
-from lib.parameters import Fp, Fp2, Fp4, fp4_qnr, fp12_cnr, u, U, p, P, Q, T, b_t, curve_group, curve_name
+from lib.parameters import Fp, Fp2, Fp4, fp4_qnr, fp12_cnr, u, U, p, P, Q, T, BT, curve_group, curve_name
 
 
 def int2hexstr(x):
@@ -32,7 +32,7 @@ def write_parameter_vh(home_dir: str, f_param):
     f.write("// parameters for twisted curve (Ep4)\n")
     for i in range(2):
         for j in range(2):
-            f.write("`define B2{}{} {:#d}'h{:#x}\n".format(i, j, p_len, b_t[i][j]))
+            f.write("`define BT{}{} {:#d}'h{:#x}\n".format(i, j, p_len, BT[i][j]))
 
     one = Fp.one()
     k = Fp2.exp(fp4_qnr, (p - 1) // 2)
@@ -239,9 +239,9 @@ def testbench_copy(home_dir, RTL_dir):
     shutil.copy("{}/RTL/lib/bls24/input_values.v".format(home_dir), "{}/testbench/include/".format(RTL_dir))
     shutil.copy("{}/RTL/lib/bls24/SQR_test.v".format(home_dir), "{}/testbench/include/".format(RTL_dir))
     shutil.copy("{}/RTL/lib/bls24/sim_new_arch.v".format(home_dir), "{}/testbench/".format(RTL_dir))
-    shutil.copy("{}/RTL/lib/bls24/simML.v".format(home_dir),  "{}/testbench/".format(RTL_dir))
-    shutil.copy("{}/RTL/lib/bls24/simPairing.v".format(home_dir),  "{}/testbench/".format(RTL_dir))
-    shutil.copy("{}/RTL/lib/bls24/simRAM_wr.v".format(home_dir),  "{}/testbench/".format(RTL_dir))
+    shutil.copy("{}/RTL/lib/bls24/simML.v".format(home_dir), "{}/testbench/".format(RTL_dir))
+    shutil.copy("{}/RTL/lib/bls24/simPairing.v".format(home_dir), "{}/testbench/".format(RTL_dir))
+    shutil.copy("{}/RTL/lib/bls24/simRAM_wr.v".format(home_dir), "{}/testbench/".format(RTL_dir))
 
 
 def make_RTL():

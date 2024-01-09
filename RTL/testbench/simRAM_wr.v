@@ -115,7 +115,7 @@ initial begin
     #(STEP) rst_n = 1;
     `include "./testbench/include/input_values.v" // 19 cycles
     I_INPUTMODE <= `REF_RESULT;
-    I_RADDR <= `RAM_P_B2_0;
+    I_RADDR <= `RAM_P_BT_0;
     #(STEP);
     #(STEP);
     #(STEP);

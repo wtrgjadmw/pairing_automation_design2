@@ -38,8 +38,8 @@
 
 `define RAM_PX	    `RAM_ADDR_SIZE'd0
 `define RAM_PY_	    `RAM_ADDR_SIZE'd1
-`define RAM_B20	    `RAM_ADDR_SIZE'd2
-`define RAM_B21	    `RAM_ADDR_SIZE'd3
+`define RAM_BT0	    `RAM_ADDR_SIZE'd2
+`define RAM_BT1	    `RAM_ADDR_SIZE'd3
 `define RAM_PX_	    `RAM_ADDR_SIZE'd4
 `define RAM_PY      `RAM_ADDR_SIZE'd5
 `define RAM_QX0	    `RAM_ADDR_SIZE'd6
@@ -84,8 +84,8 @@
 `define CHAR_3X 381'h4e0335beac7fb3cee152f722c9e306862d65e28eda8f383e359277e2e412e26c5c03fffc13fbffff2dfcffffffff0001
 
 // parameters for twisted curve (Ep2)
-`define B20 381'h80447a8e5ff9a692c6e9ed90d2eb35d91dd2e13ce144afd9cc34a83dac3d8907aaffffac54ffffee7fbfffffffeaaac
-`define B21 381'h80447a8e5ff9a692c6e9ed90d2eb35d91dd2e13ce144afd9cc34a83dac3d8907aaffffac54ffffee7fbfffffffeaaac
+`define BT0 381'h80447a8e5ff9a692c6e9ed90d2eb35d91dd2e13ce144afd9cc34a83dac3d8907aaffffac54ffffee7fbfffffffeaaac
+`define BT1 381'h80447a8e5ff9a692c6e9ed90d2eb35d91dd2e13ce144afd9cc34a83dac3d8907aaffffac54ffffee7fbfffffffeaaac
 // // constants independent from elliptic curve
 `define ZERO 381'd0
 `define ONE 381'h5feee15c6801965b4e45849bcb453289b88b47b0c7aed4098cf2d5f094f09dbe15400014eac00004601000000005555

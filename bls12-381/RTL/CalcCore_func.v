@@ -7,7 +7,7 @@ function calc_finised;
             `MODE_PADD: calc_finised = (state == `CALC_PADD_STATE_SIZE-1) ? 1 : 0;
             `MODE_PMINUS: calc_finised = (state == `CALC_PADD_STATE_SIZE-1) ? 1 : 0;
             `MODE_SPARSE_MUL: calc_finised = (state == `CALC_SPARSE_STATE_SIZE-1) ? 1 : 0;
-            `MODE_SQUARE: calc_finised = (state == `CALC_SQUARE_STATE_SIZE-1) ? 1 : 0;
+            `MODE_SQUARE: calc_finised = (state == `CALC_SQR_STATE_SIZE-1) ? 1 : 0;
             `MODE_CONJ: calc_finised = (state == `CALC_CONJ_STATE_SIZE-1) ? 1 : 0;
             `MODE_FROB: calc_finised = (state == `CALC_FROB_STATE_SIZE-1) ? 1 : 0;
             `MODE_MUL: calc_finised = (state == `CALC_MUL_STATE_SIZE-1) ? 1 : 0;

@@ -2,7 +2,7 @@ import shutil
 from io import TextIOWrapper
 import os
 
-from lib.parameters import Fp, Fp2, fp4_qnr, u, U, p, P, Q, T, b_t, curve_group, curve_name
+from lib.parameters import Fp, Fp2, fp4_qnr, u, U, p, P, Q, T, BT, curve_group, curve_name
 
 
 def write_parameter_vh(home_dir: str, f_param):
@@ -26,8 +26,8 @@ def write_parameter_vh(home_dir: str, f_param):
     f.write("`define CHAR_3X {:d}'h{:x}\n\n".format(p_len, p3))  # NOTE: Div4PathUnit-aug_p のbit幅要確認
 
     f.write("// parameters for twisted curve (Ep2)\n")
-    f.write("`define B20 {:d}'h{:x}\n".format(p_len, b_t[0]))
-    f.write("`define B21 {:d}'h{:x}\n".format(p_len, b_t[1]))
+    f.write("`define BT0 {:d}'h{:x}\n".format(p_len, BT[0]))
+    f.write("`define BT1 {:d}'h{:x}\n".format(p_len, BT[1]))
 
     one = Fp.one()
     xi = [
@@ -221,9 +221,9 @@ def testbench_copy(home_dir, RTL_dir):
     shutil.copy("{}/RTL/lib/bls12/input_values.v".format(home_dir), "{}/testbench/include/".format(RTL_dir))
     shutil.copy("{}/RTL/lib/bls12/SQR_test.v".format(home_dir), "{}/testbench/include/".format(RTL_dir))
     shutil.copy("{}/RTL/lib/bls12/sim_new_arch.v".format(home_dir), "{}/testbench/".format(RTL_dir))
-    shutil.copy("{}/RTL/lib/bls12/simML.v".format(home_dir),  "{}/testbench/".format(RTL_dir))
-    shutil.copy("{}/RTL/lib/bls12/simPairing.v".format(home_dir),  "{}/testbench/".format(RTL_dir))
-    shutil.copy("{}/RTL/lib/bls12/simRAM_wr.v".format(home_dir),  "{}/testbench/".format(RTL_dir))
+    shutil.copy("{}/RTL/lib/bls12/simML.v".format(home_dir), "{}/testbench/".format(RTL_dir))
+    shutil.copy("{}/RTL/lib/bls12/simPairing.v".format(home_dir), "{}/testbench/".format(RTL_dir))
+    shutil.copy("{}/RTL/lib/bls12/simRAM_wr.v".format(home_dir), "{}/testbench/".format(RTL_dir))
 
 
 def make_RTL():

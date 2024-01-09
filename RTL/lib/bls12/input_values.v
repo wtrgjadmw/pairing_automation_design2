@@ -6,7 +6,7 @@ writeValues(`RAM_XI50, `RAM_XI51, `XI50, `XI51);
 writeValues(`RAM_ZERO, `RAM_ONE, `ZERO, `ONE);
 
 writeValues(`RAM_PX, `RAM_PY_, `PX, `PY_);
-writeValues(`RAM_B20, `RAM_B21, `B20, `B21);
+writeValues(`RAM_BT0, `RAM_BT1, `BT0, `BT1);
 writeValues(`RAM_PX_, `RAM_PY, `PX_, `PY);
 writeValues(`RAM_QX0, `RAM_QX1, `QX0, `QX1);
 writeValues(`RAM_QY0, `RAM_QY1, `QY0, `QY1);

@@ -1,27 +1,27 @@
 from lib.fpx import *
 
 
-def double_line_twist6(Fq, T, P, b_t, xi, D_twist):
-    xt = T[0]
-    yt = T[1]
-    zt = T[2]
-    xp = P[0]
-    yp = P[1]
-    t0 = Fq.sqr(yt)
-    t1 = Fq.sqr(zt)
-    t1 = Fq.mul(b_t, t1)
+def double_line_twist6(Fq, T, P, BT, xi, D_twist):
+    TX = T[0]
+    TY = T[1]
+    TZ = T[2]
+    PX = P[0]
+    PY = P[1]
+    t0 = Fq.sqr(TY)
+    t1 = Fq.sqr(TZ)
+    t1 = Fq.mul(BT, t1)
     b_ = Fq.add(t1, t1)
     t1 = Fq.add(b_, t1)
-    t2 = Fq.mul(xt, yt)
+    t2 = Fq.mul(TX, TY)
     t2 = Fq.add(t2, t2)
-    t3 = Fq.sqr(xt)
+    t3 = Fq.sqr(TX)
     t6 = Fq.add(t3, t3)
     t3 = Fq.add(t6, t3)
-    t4 = Fq.mul(yt, zt)
+    t4 = Fq.mul(TY, TZ)
     t4 = Fq.add(t4, t4)
-    new_zt = Fq.mul(t0, t4)
-    new_zt = Fq.add(new_zt, new_zt)
-    new_zt = Fq.add(new_zt, new_zt)
+    new_TZ = Fq.mul(t0, t4)
+    new_TZ = Fq.add(new_TZ, new_TZ)
+    new_TZ = Fq.add(new_TZ, new_TZ)
     l01 = Fq.sub(t0, t1)
     b2 = Fq.add(t1, t1)
     new_xt = Fq.sub(l01, b2)
@@ -31,64 +31,64 @@ def double_line_twist6(Fq, T, P, b_t, xi, D_twist):
     new_yt = Fq.mul(b3, new_yt)
     t0 = Fq.sqr(t0)
     new_yt = Fq.add(new_yt, t0)
-    # l00 = [mul(t4[0], yp[0]), mul(t4[1], yp[0])]
-    # l10 = [mul(t3[0], negFp(xp[0])), mul(t3[1], negFp(xp[0]))]
-    l00 = Fq.constMul(t4, yp)
-    l10 = Fq.constMul(t3, xp)
+    # l00 = [mul(t4[0], PY[0]), mul(t4[1], PY[0])]
+    # l10 = [mul(t3[0], negFp(PX[0])), mul(t3[1], negFp(PX[0]))]
+    l00 = Fq.constMul(t4, PY)
+    l10 = Fq.constMul(t3, PX)
     zero = Fq.zero()
     if D_twist:
         l = [l00, l10, zero, l01, zero, zero]
     else:
         l = [l01, zero, l10, l00, zero, zero]
-    return [new_xt, new_yt, new_zt], l
+    return [new_xt, new_yt, new_TZ], l
 
 
-def add_line_twist6(Fq, T, P, Q, b_t, xi, D_twist):
-    xt = T[0]
-    yt = T[1]
-    zt = T[2]
-    xp = P[0]
-    yp = P[1]
-    xq = Q[0]
-    yq = Q[1]
-    t0 = Fq.mul(yq, zt)
-    t0 = Fq.sub(yt, t0)
-    t1 = Fq.mul(xq, zt)
-    t1 = Fq.sub(xt, t1)
+def add_line_twist6(Fq, T, P, Q, BT, xi, D_twist):
+    TX = T[0]
+    TY = T[1]
+    TZ = T[2]
+    PX = P[0]
+    PY = P[1]
+    QX = Q[0]
+    QY = Q[1]
+    t0 = Fq.mul(QY, TZ)
+    t0 = Fq.sub(TY, t0)
+    t1 = Fq.mul(QX, TZ)
+    t1 = Fq.sub(TX, t1)
     t2 = Fq.sqr(t0)
     t3 = Fq.sqr(t1)
     t4 = Fq.mul(t1, t3)
-    t5 = Fq.mul(zt, t2)
+    t5 = Fq.mul(TZ, t2)
     t5 = Fq.add(t4, t5)
-    t3 = Fq.mul(xt, t3)
+    t3 = Fq.mul(TX, t3)
     t6 = Fq.add(t3, t3)
     t5 = Fq.sub(t5, t6)
     t7 = Fq.sub(t5, t3)
     new_xt = Fq.mul(t1, t5)
     t7 = Fq.mul(t0, t7)
-    t8 = Fq.mul(yt, t4)
+    t8 = Fq.mul(TY, t4)
     new_yt = Fq.add(t7, t8)
     new_yt = Fq.neg(new_yt)
-    new_zt = Fq.mul(zt, t4)
-    l00 = Fq.constMul(t1, yp)
-    l10 = Fq.constMul(t0, xp)
-    l01 = Fq.mul(yq, t1)
-    t0 = Fq.mul(xq, t0)
+    new_TZ = Fq.mul(TZ, t4)
+    l00 = Fq.constMul(t1, PY)
+    l10 = Fq.constMul(t0, PX)
+    l01 = Fq.mul(QY, t1)
+    t0 = Fq.mul(QX, t0)
     l01 = Fq.sub(l01, t0)
     zero = Fq.zero()
     if D_twist:
         l = [l00, l10, zero, l01, zero, zero]
     else:
         l = [l01, zero, l10, l00, zero, zero]
-    return [new_xt, new_yt, new_zt], l
+    return [new_xt, new_yt, new_TZ], l
 
 
-def scalar_mul_twist6(Fq, n, T, P, b_t, xi, D_twist):
+def scalar_mul_twist6(Fq, n, T, P, BT, xi, D_twist):
     res = T
     for nb in bits_of(n)[1:]:
-        res, l = double_line_twist6(Fq, res, P, b_t, xi, D_twist)
+        res, l = double_line_twist6(Fq, res, P, BT, xi, D_twist)
         if nb == 1:
-            res, l = add_line_twist6(Fq, res, P, T, b_t, xi, D_twist)
+            res, l = add_line_twist6(Fq, res, P, T, BT, xi, D_twist)
     return res
 
 
@@ -155,7 +155,7 @@ def sparse_mult_d6_twist(Fq, xi, l, f):
     return [T0, T7, T1, T8, T2, T9]
 
 
-def miller_function_ate(Fq6, Fq, Fp, P, Q, b_t, xi, D_twist, miller_param_list):
+def miller_function_ate(Fq6, Fq, Fp, P, Q, BT, xi, D_twist, miller_param_list):
     f = Fq6.one()
     negQ = [Q[0], Fq.neg(Q[1])]
     P_dbl = [Fp.neg(P[0]), P[1]]
@@ -167,7 +167,7 @@ def miller_function_ate(Fq6, Fq, Fp, P, Q, b_t, xi, D_twist, miller_param_list):
         T = [Q[0], Q[1], Fq.one()]
 
     for l in miller_param_list[1:]:
-        T, e = double_line_twist6(Fq, T, P_dbl, b_t, xi, D_twist)
+        T, e = double_line_twist6(Fq, T, P_dbl, BT, xi, D_twist)
         f = Fq6.sqr(f)
         f = Fq6.mapToFq6(f)
         if D_twist:
@@ -175,13 +175,13 @@ def miller_function_ate(Fq6, Fq, Fp, P, Q, b_t, xi, D_twist, miller_param_list):
         else:
             f = sparse_mult_m6_twist(Fq, xi, e, f)
         if l == 1:
-            T, e = add_line_twist6(Fq, T, P_add, Q, b_t, xi, D_twist)
+            T, e = add_line_twist6(Fq, T, P_add, Q, BT, xi, D_twist)
             if D_twist:
                 f = sparse_mult_d6_twist(Fq, xi, e, f)
             else:
                 f = sparse_mult_m6_twist(Fq, xi, e, f)
         if l == -1:
-            T, e = add_line_twist6(Fq, T, P_add, negQ, b_t, xi, D_twist)
+            T, e = add_line_twist6(Fq, T, P_add, negQ, BT, xi, D_twist)
             if D_twist:
                 f = sparse_mult_d6_twist(Fq, xi, e, f)
             else:
@@ -290,9 +290,9 @@ def final_exp_bls12(Fp12: Fp12_t, Fp2: Fp2_t, xi, U, f):
     return g
 
 
-def pairing_bls12(Fp12: Fp12_t, Fp2: Fp2_t, Fp: Fp_t, P, Q, b_t, xi, D_twist, U):
+def pairing_bls12(Fp12: Fp12_t, Fp2: Fp2_t, Fp: Fp_t, P, Q, BT, xi, D_twist, U):
     T, f = miller_function_ate(
-        Fp12, Fp2, Fp, P, Q, b_t, xi, D_twist, miller_param_list=U[::-1]
+        Fp12, Fp2, Fp, P, Q, BT, xi, D_twist, miller_param_list=U[::-1]
     )
     f = final_exp_bls12(Fp12, Fp2, xi, U, f)
     return f
@@ -349,9 +349,9 @@ def final_exp_bls24(Fp24: Fp24_t, Fp4: Fp4_t, xi, U, f):
     return g
 
 
-def pairing_bls24(Fp24, Fp4, Fp, P, Q, b_t, xi, D_twist, U):
+def pairing_bls24(Fp24, Fp4, Fp, P, Q, BT, xi, D_twist, U):
     T, f = miller_function_ate(
-        Fp24, Fp4, Fp, P, Q, b_t, xi, D_twist, miller_param_list=U[::-1]
+        Fp24, Fp4, Fp, P, Q, BT, xi, D_twist, miller_param_list=U[::-1]
     )
     f = final_exp_bls24(Fp24, Fp4, xi, U, f)
     return f

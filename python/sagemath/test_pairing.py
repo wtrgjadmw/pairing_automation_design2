@@ -20,7 +20,7 @@ def test_order(E, order):
     return ok
 
 
-def double_line_h_a0_twist6_aklgl(S, P, b_t, D_twist=False):
+def double_line_h_a0_twist6_aklgl(S, P, BT, D_twist=False):
     """
     Computes 2*S and l_{S,S}(P) in Homogeneous coordinates (X,Y,Z) and (x,y) = (X/Z,Y/Z)
 
@@ -64,15 +64,15 @@ def double_line_h_a0_twist6_aklgl(S, P, b_t, D_twist=False):
     A = X1 * Y1 / 2  # M
     B = Y1**2  # S
     C = Z1**2  # S
-    D = 3 * C  #     3*Z1^2
-    E = b_t * D  #     3*b_t*Z1^2
-    F = 3 * E  #     9*b_t*Z1^2
-    X3 = A * (B - F)  # M   A*(B-9*b_t*C) = X1*Y1/2*(Y1^2-9*b_t*Z1^2)
-    G = (B + F) / 2  #     (Y1^2 + 9*b_t*Z1^2)/2
-    Y3 = G**2 - 3 * E**2  # 2S  (Y1^2 + 9*b_t*Z1^2)^2/4 -3*(3*b_t*Z1^2)^2
+    D = 3 * C  # 3*Z1^2
+    E = BT * D  # 3*BT*Z1^2
+    F = 3 * E  # 9*BT*Z1^2
+    X3 = A * (B - F)  # M   A*(B-9*BT*C) = X1*Y1/2*(Y1^2-9*BT*Z1^2)
+    G = (B + F) / 2  # (Y1^2 + 9*BT*Z1^2)/2
+    Y3 = G**2 - 3 * E**2  # 2S  (Y1^2 + 9*BT*Z1^2)^2/4 -3*(3*BT*Z1^2)^2
     H = (Y1 + Z1) ** 2 - (B + C)  # S   2*Y1*Z1
     Z3 = B * H  # M   2*Y1^3*Z1
-    I = E - B  #     3*b_t*Z1^2-Y1^2
+    I = E - B  # 3*BT*Z1^2-Y1^2
     J = X1**2  # S
     l3 = I
     l0 = H * (-yP)  # k/d*m
@@ -210,7 +210,7 @@ def add_line_h_a0_twist6_aklgl(S, Q, P, D_twist=False):
     lx = -t2 * xP  # k/d*m  lx=-(Y1-Z1*Y2)*xP
     T1 = t2 * X2  # M
     T2 = t1 * Y2  # M
-    l0 = T1 - T2  #        l0=(Y1-Z1*Y2)*X2-(X1-Z1*X2)*Y2
+    l0 = T1 - T2  # l0=(Y1-Z1*Y2)*X2-(X1-Z1*X2)*Y2
     ly = t1 * yP  # k/d*m  ly=(X1-Z1*X2)*yP
     if D_twist:
         ln = [ly, lx, 0, l0, 0, 0]  # *w^3 -> (l0*xi,0,0,ly,lx,0)
@@ -219,7 +219,7 @@ def add_line_h_a0_twist6_aklgl(S, Q, P, D_twist=False):
     return ln, (X3, Y3, Z3)  # 11M + 2S + 2*k/d*m
 
 
-def miller_function_ate_aklgl(Q, P, b_t, T, Fq6, D_twist=False, m0=1, xi=None):
+def miller_function_ate_aklgl(Q, P, BT, T, Fq6, D_twist=False, m0=1, xi=None):
     """
     If T < 0, then f_{|T|, -Q}(P) is computed thanks to the formula
     f_{uv,Q} = f_{u,Q}^v*f_{v,[u]Q} and with u=-1, v=|T|:
@@ -244,7 +244,7 @@ def miller_function_ate_aklgl(Q, P, b_t, T, Fq6, D_twist=False, m0=1, xi=None):
     loop = Integer(T).digits(2)
     # very first step: no "m = m**2" needed
     bi = loop[len(loop) - 2]
-    ln, S = double_line_h_a0_twist6_aklgl(S, PP, b_t, D_twist=D_twist)
+    ln, S = double_line_h_a0_twist6_aklgl(S, PP, BT, D_twist=D_twist)
     if with_m0:
         m = m**2
         if D_twist:
@@ -275,7 +275,7 @@ def miller_function_ate_aklgl(Q, P, b_t, T, Fq6, D_twist=False, m0=1, xi=None):
             m = sparse_mult_m6_twist(l0, l2, l3, m, xi, Fq6)
     for i in range(len(loop) - 3, -1, -1):
         bi = loop[i]
-        ln, S = double_line_h_a0_twist6_aklgl(S, PP, b_t, D_twist=D_twist)
+        ln, S = double_line_h_a0_twist6_aklgl(S, PP, BT, D_twist=D_twist)
         m = m**2
         if D_twist:
             l0 = ln[0]
@@ -339,8 +339,8 @@ def final_exp_bls12(m, u):
     return g
 
 
-def ate_pairing_bls12_aklgl(Q, P, b_t, u0, Fq6, map_Fp12_Fp12_A, D_twist=False):
-    m, S = miller_function_ate_aklgl(Q, P, b_t, u0, Fq6, D_twist=D_twist, m0=1)
+def ate_pairing_bls12_aklgl(Q, P, BT, u0, Fq6, map_Fp12_Fp12_A, D_twist=False):
+    m, S = miller_function_ate_aklgl(Q, P, BT, u0, Fq6, D_twist=D_twist, m0=1)
     # convert m from tower field to absolute field
     m = map_Fp12_Fp12_A(m)
     f = final_exp_bls12(m, u0)
@@ -423,8 +423,8 @@ def final_exp_bls24(m, u):
     return g
 
 
-def ate_pairing_bls24_aklgl(Q, P, b_t, u0, Fq6, map_Fp24_Fp24_A, D_twist=False):
-    m, S = miller_function_ate_aklgl(Q, P, b_t, u0, Fq6, D_twist=D_twist, m0=1)
+def ate_pairing_bls24_aklgl(Q, P, BT, u0, Fq6, map_Fp24_Fp24_A, D_twist=False):
+    m, S = miller_function_ate_aklgl(Q, P, BT, u0, Fq6, D_twist=D_twist, m0=1)
     # convert m from tower field to absolute field
     m = map_Fp24_Fp24_A(m)
     f = final_exp_bls24(m, u0)

@@ -1,5 +1,5 @@
 .DS_Store
 .vscode
 *.pyc
-
+xcelium.d
 *.log

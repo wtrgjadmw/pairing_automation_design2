@@ -19,7 +19,7 @@ def copy_and_replace_4padd(input_file, output_file):
         # ファイルの内容を取得
         content = file.read()
 
-    new_content = content.replace("yq", "yq_")
+    new_content = content.replace("QY", "QY_")
 
     # コピー先のファイルを書き込みモードで開いて新しい内容を書き込む
     with open(output_file, 'w') as file:
@@ -87,7 +87,8 @@ def repeat_schedule(target_dir: str, curve_group: str, curve_name: str, algo_nam
             add_num,
             input_num)
         print(i)
-        scheduling_i = importlib.import_module("{}-{}.scheduling.{}_mul{}_add{}.{}".format(curve_group, curve_name, algo_name, mul_num, add_num, file_name))
+        scheduling_i = importlib.import_module("{}-{}.scheduling.{}_mul{}_add{}.{}".format(curve_group,
+                                               curve_name, algo_name, mul_num, add_num, file_name))
         # print(split_ope[i])
         # make_pyschedule(file_name, formulas, mem_table, split_ope, pre_sche_result, i, write_file, input_value, mul_num, add_num, mul_num_list, add_num_list, input_num)
         # exec(open(write_file).read())

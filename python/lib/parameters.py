@@ -53,9 +53,9 @@ if curve_group == "bls24":
 xi_montconv = Fq.MontConv(xi)
 if D_twist:
     xi_inv = Fq.inv(xi_montconv)
-    b_t = Fq.constMulNotMont(xi_inv, b)
+    BT = Fq.constMulNotMont(xi_inv, b)
 else:
-    b_t = Fq.constMulNotMont(xi_montconv, b)
+    BT = Fq.constMulNotMont(xi_montconv, b)
 
 P = [Fp.MontConv(param["P"][0]), Fp.MontConv(param["P"][1])]
 Q = [Fq.MontConv(param["Q"][0]), Fq.MontConv(param["Q"][1])]

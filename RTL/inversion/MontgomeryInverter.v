@@ -26,7 +26,7 @@ reg [5:0]                                                            state;
 assign c = out; // outpu soignal
 
 // Helper functions are stored in another verilog source.
-`include "./calc_core/inversion/mod_InversionHelper.v"
+`include "./inversion/mod_InversionHelper.v"
 
 ///////////////////////////////////////////////////////////////
 // Swap Logic

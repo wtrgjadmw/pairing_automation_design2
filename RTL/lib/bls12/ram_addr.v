@@ -6,8 +6,8 @@
 
 `define RAM_PX	    `RAM_ADDR_SIZE'd0
 `define RAM_PY_	    `RAM_ADDR_SIZE'd1
-`define RAM_B20	    `RAM_ADDR_SIZE'd2
-`define RAM_B21	    `RAM_ADDR_SIZE'd3
+`define RAM_BT0	    `RAM_ADDR_SIZE'd2
+`define RAM_BT1	    `RAM_ADDR_SIZE'd3
 `define RAM_PX_	    `RAM_ADDR_SIZE'd4
 `define RAM_PY      `RAM_ADDR_SIZE'd5
 `define RAM_QX0	    `RAM_ADDR_SIZE'd6

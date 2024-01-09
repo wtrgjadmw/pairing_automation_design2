@@ -1,7 +1,7 @@
 import csv
 from lib.pairing import add_line_twist6, double_line_twist6, sparse_mult_m6_twist, sparse_mult_d6_twist, SQR012345
 from lib.util import FormulaSet
-from lib.parameters import Fp, Fq, Fq6, P, Q, T, b_t, D_twist, xi, curve_group, curve_name
+from lib.parameters import Fp, Fq, Fq6, P, Q, T, BT, D_twist, xi, curve_group, curve_name
 
 
 def csv2Formula(path):
@@ -19,8 +19,8 @@ def initialize_valueList(k: int, a, b):
     # initialize
     valueList["ZERO"] = Fp.zero()
     valueList["ONE"] = Fp.one()
-    valueList["xp"] = P[0]
-    valueList["yp"] = P[1]
+    valueList["PX"] = P[0]
+    valueList["PY"] = P[1]
     if k == 2:
         for i in range(2):
             valueList['a{}'.format(i)] = a[i]
@@ -125,17 +125,17 @@ def fp12_initialize_value(a, b):
     valueList = {}
     valueList["ZERO"] = Fp.zero()
     valueList["ONE"] = Fp.one()
-    valueList["xp"] = P[0]
-    valueList["yp"] = P[1]
+    valueList["PX"] = P[0]
+    valueList["PY"] = P[1]
     valueList["xp_"] = Fp.neg(P[0])
     valueList["yp_"] = Fp.neg(P[1])
     for i in range(2):
-        valueList['xq{}'.format(i)] = Q[0][i]
-        valueList['yq{}'.format(i)] = Q[1][i]
-        valueList['xt{}'.format(i)] = T[0][i]
-        valueList['yt{}'.format(i)] = T[1][i]
-        valueList['zt{}'.format(i)] = T[2][i]
-        valueList['b_t{}'.format(i)] = b_t[i]
+        valueList['QX{}'.format(i)] = Q[0][i]
+        valueList['QY{}'.format(i)] = Q[1][i]
+        valueList['TX{}'.format(i)] = T[0][i]
+        valueList['TY{}'.format(i)] = T[1][i]
+        valueList['TZ{}'.format(i)] = T[2][i]
+        valueList['BT{}'.format(i)] = BT[i]
     for j in range(1, 6):
         for i in range(2):
             valueList['XI{}{}'.format(j, i)] = Fq6.k[j][i]
@@ -155,22 +155,22 @@ def fp12_test_formula():
     test_formula(12, "MUL", a, b, Fq6.mul(a, b))
     test_formula(12, "MUL_CONJ", a, b, Fq6.mul_conj(a, b))
     test_formula(12, "SQR", a, b, Fq6.sqr(a))
-    new_T, l = double_line_twist6(Fq, T, P, b_t, xi, D_twist)
+    new_T, l = double_line_twist6(Fq, T, P, BT, xi, D_twist)
     test_formula(12, "PDBL", a, b, [[l[0], l[3]], [l[1], l[4]], [l[2], l[5]]], True)
-    new_T, l = add_line_twist6(Fq, T, P, Q, b_t, xi, D_twist)
+    new_T, l = add_line_twist6(Fq, T, P, Q, BT, xi, D_twist)
     test_formula(12, "PADD", a, b, [[l[0], l[3]], [l[1], l[4]], [l[2], l[5]]], True)
     c_6 = SQR012345(Fq, xi, [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]])
     test_formula(12, "SQR012345", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
     if D_twist:
         c_6 = sparse_mult_d6_twist(Fq, xi,
-                                [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
-                                [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
-                                )
+                                   [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
+                                   [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
+                                   )
     else:
         c_6 = sparse_mult_m6_twist(Fq, xi,
-                                [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
-                                [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
-                                )
+                                   [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
+                                   [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
+                                   )
     test_formula(12, "SPARSE", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
 
 
