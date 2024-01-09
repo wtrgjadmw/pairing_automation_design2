@@ -2,3 +2,4 @@
 .vscode
 *.pyc
 bls12-381/
+*.log

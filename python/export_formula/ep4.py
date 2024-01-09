@@ -29,7 +29,7 @@ def ep4_dbl():
     formulaList += fp4_sqr("t0", "t18")
     formulaList += fp4_add("t17", "t18", "new_yt")
     formulaList += fp4_constMul("t11", "yp", "l00")
-    formulaList += fp4_constMul("t9", "xp", "l10")
+    formulaList += fp4_constMul("t9", "xp_", "l10")
     return formulaList
 
 
@@ -53,7 +53,7 @@ def ep4_add():
     formulaList += fp4_add("t13", "t14", "t15")
     formulaList += fp4_neg("t13", "new_yt")
     formulaList += fp4_mul("zt", "t6", "new_zt")
-    formulaList += fp4_constMul("t3", "yp", "l00")
+    formulaList += fp4_constMul("t3", "yp_", "l00")
     formulaList += fp4_constMul("t1", "xp", "l10")
     formulaList += fp4_mul("yq", "t3", "t16")
     formulaList += fp4_mul("xq", "t1", "t17")

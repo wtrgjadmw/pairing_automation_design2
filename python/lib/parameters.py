@@ -2,13 +2,7 @@ import json
 import argparse
 import os
 from lib.fpx import Fp_t, Fp2_t, Fp4_t, Fp12_t, Fp24_t
-from lib.util import bits_list
-
-
-def read_json(filename):
-    with open(filename, "r") as f:
-        dict = json.load(f)
-    return dict
+from lib.util import bits_list, read_json
 
 
 psr = argparse.ArgumentParser(

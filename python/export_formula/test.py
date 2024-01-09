@@ -127,6 +127,8 @@ def fp12_initialize_value(a, b):
     valueList["ONE"] = Fp.one()
     valueList["xp"] = P[0]
     valueList["yp"] = P[1]
+    valueList["xp_"] = Fp.neg(P[0])
+    valueList["yp_"] = Fp.neg(P[1])
     for i in range(2):
         valueList['xq{}'.format(i)] = Q[0][i]
         valueList['yq{}'.format(i)] = Q[1][i]
@@ -151,7 +153,6 @@ def fp12_test_formula():
     test_formula(12, "CONJ", a, b, Fq6.conj(a))
     test_formula(12, "FROB", a, b, Fq6.frob(a))
     test_formula(12, "MUL", a, b, Fq6.mul(a, b))
-    print(Fq6.mul_conj(a, b) == Fq6.mul(a, Fq6.conj(b)))
     test_formula(12, "MUL_CONJ", a, b, Fq6.mul_conj(a, b))
     test_formula(12, "SQR", a, b, Fq6.sqr(a))
     new_T, l = double_line_twist6(Fq, T, P, b_t, xi, D_twist)
@@ -165,13 +166,12 @@ def fp12_test_formula():
                                 [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
                                 [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
                                 )
-        test_formula(12, "SPARSE_D", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
     else:
         c_6 = sparse_mult_m6_twist(Fq, xi,
                                 [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
                                 [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
                                 )
-        test_formula(12, "SPARSE_M", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
+    test_formula(12, "SPARSE", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
 
 
 if __name__ == "__main__":
