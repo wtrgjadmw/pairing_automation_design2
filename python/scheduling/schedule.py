@@ -87,13 +87,14 @@ def make_mem_task_definition(
         f_write.write("\tS += {1}<={0}\n\n".format(value, mem_value_name))
 
 
-def find_mistake(split_ope, depth, pre_sche_result):
+def find_mistake(formulas, split_ope, depth, pre_sche_result):
     mistaken_formulas = []
     for i in range(0, depth):
         for formula in split_ope[i]:
             is_exist = False
             mem_is_exist = False
             mem_results = []
+            min_finish_time = 1000
             for sol in pre_sche_result:
                 if formula[0] == sol[0]:
                     is_exist = True
@@ -101,11 +102,17 @@ def find_mistake(split_ope, depth, pre_sche_result):
                     mem_is_exist = True
                     mem_results.append(sol)
             if not is_exist:
-                mistaken_formulas.append(formula)
                 if mem_is_exist:
                     for mem_result in mem_results:
                         pre_sche_result.remove(mem_result)
-                        print(mem_result)
+                for next_formula in formulas:
+                    if (next_formula[2] == formula[0]) or (next_formula[3] == formula[0]):
+                        print(next_formula[0])
+                        for sol in pre_sche_result:
+                            if next_formula[0] == sol[0]:
+                                min_finish_time = min(min_finish_time, int(sol[2]))
+                                print(sol)
+                mistaken_formulas.append(formula + [min_finish_time])
     split_ope[depth] = mistaken_formulas + split_ope[depth]
     return pre_sche_result, split_ope
 
@@ -203,6 +210,8 @@ def make_pyschedule(
             f_write.write("\t" + line[0] + " += alt(INV)\n\n")
         else:
             raise Exception("ERROR: invalid operand: " + line[1])
+        if len(line) == 5:
+            f_write.write("\tS += {}<{}\n\n".format(line[0], line[4]))
         make_mem_task_definition(f_write, input_value, pre_sche_result, formulas, mem_table, line[0], [line[2], line[3]], MULnum, ADDnum)
         if line[0] in output_value:
             f_write.write("\t{0}_w = S.Task('{0}_w', length=1, delay_cost=1)\n".format(line[0]))

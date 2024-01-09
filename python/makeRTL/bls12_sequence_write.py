@@ -1,6 +1,8 @@
 import os
 import copy
 import sys
+import argparse
+import traceback
 
 
 def inputvalue2num(value):
@@ -40,8 +42,7 @@ class schedulingData:
         self.output_seq_filename = output_seq_filename
         self.input = input
         self.output = output
-        self.consts = ['PX3', 'PY_', 'B20', 'B21', 'PX_', 'PX', 'PY', 'QX0', 'QX1', 'QY0', 'QY1', 'QY_0', 'QY_1', 'TX0', 'TX1',
-                       'TY0', 'TY1', 'TZ0', 'TZ1', 'XI10', 'XI11', 'XI20', 'XI21', 'XI30', 'XI31', 'XI40', 'XI41', 'XI50', 'XI51', 'ZERO', 'ONE']
+        self.consts = ['b_t0', 'b_t1', 'yp', 'yp_', 'xp', 'xp_', 'xq0', 'xq1', 'yq0', 'yq1', 'yq_0', 'yq_1', 'xt0', 'xt1', 'yt0', 'yt1', 'zt0', 'zt1', 'XI10', 'XI11', 'XI20', 'XI21', 'XI30', 'XI31', 'XI40', 'XI41', 'XI50', 'XI51', 'ZERO', 'ONE']
 
         self.scheduling_solution = scheduling_solution
         self.formulas = formulas
@@ -192,9 +193,9 @@ class schedulingData:
             raddr = "`RAM_{0}".format(value_name)
         else:
             num = inputvalue2num(value_name)
-            if value_name[0] == 'A' or value_name[0] == 'F':
+            if value_name[0] == 'a':
                 raddr = "inst_addr_opr1 + `RAM_ADDR_SIZE'd{0}".format(num)
-            elif value_name[0] == 'B':
+            elif value_name[0] == 'b':
                 raddr = "inst_addr_opr2 + `RAM_ADDR_SIZE'd{0}".format(num)
             else:
                 print(value_name)
@@ -334,20 +335,32 @@ if __name__ == "__main__":
 
     state_sizes = {}
 
-    args = sys.argv
-    output_directory = args[1]
+    psr = argparse.ArgumentParser(
+        prog="プログラムの名前", usage="プログラムの使い方", description="プログラムの説明"
+    )
+    psr.add_argument("-c", "--curve", required=True, help="楕円曲線群")
+    psr.add_argument("-p", "--characteristic", required=True, help="楕円曲線の標数のbit幅")
+    args = psr.parse_args()
+    curve_group = args.curve
+    curve_name = args.characteristic
 
     # TODO: スケジューリング毎回実行するように修正
-    directory = "/home/mfukuda/optimal-ate-pairing/scheduling/new_split_sche/inRAM/bls12-381/result/"
-    for root, dirs, files in os.walk(directory):
+    home_dir = os.path.dirname(os.getcwd())
+    target_dir = "{}/{}-{}".format(home_dir, curve_group, curve_name)
+    os.makedirs("{}/RTL/include/ALU_mode".format(target_dir), exist_ok=True)
+
+    for root, dirs, files in os.walk("{}/scheduling/result".format(target_dir)):
         for file in files:
-            csv_file_path = os.path.join(root, file)
-            verilog_file_path = output_directory + "/include/ALU_mode/seq_{0}.v".format(file[:-4])
+            if file[-4:] != ".txt":
+                continue
+            result_file_path = os.path.join(root, file)
+            sequence_file_path = "{}/RTL/include/ALU_mode/seq_{}.v".format(target_dir, file[:-4])
             mem_table = {}
-            print(csv_file_path)
-            exec(open(csv_file_path, 'r', encoding="utf-8").read())
+            print(result_file_path)
+            # read scheduling result file
+            exec(open(result_file_path, 'r', encoding="utf-8").read())
             sche_data = schedulingData(
-                output_seq_filename=verilog_file_path,
+                output_seq_filename=sequence_file_path,
                 input=input,
                 output=output,
                 scheduling_solution=solution,
@@ -357,12 +370,15 @@ if __name__ == "__main__":
                 ADDnum=4)
             try:
                 sche_data.make_sequence()
-            except KeyError as e:
-                print(type(e), e)
+            except Exception:
+                etype, value, tb = sys.exc_info()
+                estr_list = traceback.format_exception(etype, value, tb)
+                for estr in estr_list:
+                    print(estr, end="")
             state_sizes[file[:-4].replace("_mul1_add4", "")] = sche_data.seq_finish_time + 1
 
     calc_state_size = max(state_sizes.values()).bit_length()
-    calc_param_file = output_directory + "/include/CalcCore_param.vh"
+    calc_param_file = "{}/RTL/include/CalcCore_param.vh".format(target_dir)
     f = open(calc_param_file, 'a')
     f.write("`define CALC_STATE_SIZE " + str(calc_state_size) + "\n")
     for key, value in state_sizes.items():

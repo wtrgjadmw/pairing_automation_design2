@@ -20,14 +20,14 @@ def write_parameter_vh(home_dir: str, f_param):
 
     f.write("\n\n// constants -------------------------------------------------------------------------------------------------\n")
     f.write("`define WORD_SIZE 'd{}\n".format(p_len))
-    f.write("`define CHAR {:#d}'h{:#x}\n".format(p_len, p))
-    f.write("`define CHAR_INV {:#d}'h{:#x}\n".format(p_len, p_inv))
-    f.write("`define INVERSION_INITIAL_VALUE {:#d}'h{:#x}\n".format(p_len, inv_init_val))
-    f.write("`define CHAR_3X {:#d}'h{:#x}\n\n".format(p_len, p3))  # NOTE: Div4PathUnit-aug_p のbit幅要確認
+    f.write("`define CHAR {:d}'h{:x}\n".format(p_len, p))
+    f.write("`define CHAR_INV {:d}'h{:x}\n".format(p_len, p_inv))
+    f.write("`define INVERSION_INITIAL_VALUE {:d}'h{:x}\n".format(p_len, inv_init_val))
+    f.write("`define CHAR_3X {:d}'h{:x}\n\n".format(p_len, p3))  # NOTE: Div4PathUnit-aug_p のbit幅要確認
 
     f.write("// parameters for twisted curve (Ep2)\n")
-    f.write("`define B20 {:#d}'h{:#x}\n".format(p_len, b_t[0]))
-    f.write("`define B21 {:#d}'h{:#x}\n".format(p_len, b_t[1]))
+    f.write("`define B20 {:d}'h{:x}\n".format(p_len, b_t[0]))
+    f.write("`define B21 {:d}'h{:x}\n".format(p_len, b_t[1]))
 
     one = Fp.one()
     xi = [
@@ -41,12 +41,12 @@ def write_parameter_vh(home_dir: str, f_param):
 
     f.write("// // constants independent from elliptic curve\n")
     f.write("`define ZERO {}'d0\n".format(p_len))
-    f.write("`define ONE {:#d}'h{:#x}\n\n".format(p_len, one))
+    f.write("`define ONE {:d}'h{:x}\n\n".format(p_len, one))
 
     f.write("// Frobenius pre-calculated coefficients\n")
     for i in range(1, 6):
         for j in range(2):
-            f.write("`define XI{}{} {:#d}'h{:#x}\n".format(i, j, p_len, xi[i][j]))
+            f.write("`define XI{}{} {:d}'h{:x}\n".format(i, j, p_len, xi[i][j]))
     f.close()
 
 
@@ -59,11 +59,11 @@ def write_input_vh(f_input):
     # aP = ep_mul(a, [P[0][0][0], P[1][0][0]])
     # aP = [[[aP[0][0][0], 0], [0, 0]], [[aP[1][0][0], 0], [0, 0]]]
     aP = P
-    f.write("`define PX {:#d}'h{:#x}\n".format(p_len, aP[0]))
-    f.write("`define PX_ {:#d}'h{:#x}\n".format(p_len, Fp.neg(aP[0])))
-    f.write("`define PX3 {:#d}'h{:#x}\n".format(p_len, Fp.add(aP[0], Fp.add(aP[0], aP[0]))))
-    f.write("`define PY {:#d}'h{:#x}\n".format(p_len, aP[1]))
-    f.write("`define PY_ {:#d}'h{:#x}\n".format(p_len, Fp.neg(aP[1])))
+    f.write("`define PX {:d}'h{:x}\n".format(p_len, aP[0]))
+    f.write("`define PX_ {:d}'h{:x}\n".format(p_len, Fp.neg(aP[0])))
+    f.write("`define PX3 {:d}'h{:x}\n".format(p_len, Fp.add(aP[0], Fp.add(aP[0], aP[0]))))
+    f.write("`define PY {:d}'h{:x}\n".format(p_len, aP[1]))
+    f.write("`define PY_ {:d}'h{:x}\n".format(p_len, Fp.neg(aP[1])))
 
     # b = random.randint(1, r-1)
     # print("b: " + str(b))
@@ -74,20 +74,20 @@ def write_input_vh(f_input):
     bT = T
 
     for i in range(2):
-        f.write("`define QX{} {:#d}'h{:#x}".format(i, p_len, bQ[0][i]))
+        f.write("`define QX{} {:d}'h{:x}".format(i, p_len, bQ[0][i]))
     for i in range(2):
-        f.write("`define QY{} {:#d}'h{:#x}".format(i, p_len, bQ[1][i]))
+        f.write("`define QY{} {:d}'h{:x}".format(i, p_len, bQ[1][i]))
     for i in range(2):
-        f.write("`define QY_{} {:#d}'h{:#x}".format(i, p_len, Fp.neg(bQ[1][i])))
+        f.write("`define QY_{} {:d}'h{:x}".format(i, p_len, Fp.neg(bQ[1][i])))
     for i in range(2):
-        f.write("`define TX{} {:#d}'h{:#x}".format(i, p_len, bT[0][i]))
+        f.write("`define TX{} {:d}'h{:x}".format(i, p_len, bT[0][i]))
     for i in range(2):
         if u > 0:
-            f.write("`define TY{} {:#d}'h{:#x}".format(i, p_len, bT[1][i]))
+            f.write("`define TY{} {:d}'h{:x}".format(i, p_len, bT[1][i]))
         else:
-            f.write("`define TY{} {:#d}'h{:#x}".format(i, p_len, Fp.neg(bT[1][i])))
+            f.write("`define TY{} {:d}'h{:x}".format(i, p_len, Fp.neg(bT[1][i])))
     for i in range(2):
-        f.write("`define TZ{} {:#d}'h{:#x}".format(i, p_len, bT[2][i]))
+        f.write("`define TZ{} {:d}'h{:x}".format(i, p_len, bT[2][i]))
     f.close()
 
 
@@ -229,7 +229,7 @@ def testbench_copy(home_dir, RTL_dir):
 def make_RTL():
     home_dir = os.path.dirname(os.getcwd())
     RTL_dir = "{}/{}-{}/RTL".format(home_dir, curve_group, curve_name)
-
+    shutil.copytree("{}/RTL".format(home_dir), RTL_dir, dirs_exist_ok=True)
     testbench_copy(home_dir, RTL_dir)
 
     write_parameter_vh(home_dir, f_param="{}/include/parameter.vh".format(RTL_dir))

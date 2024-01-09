@@ -38,7 +38,7 @@ def fp12_mul(opr1: str, opr2: str, ret: str):
     formulaList += fp4_add(ret + '_t0', ret + '_t7', ret + "0")
     formulaList += fp4_add(ret + '_t2', ret + '_t0', ret + "_t80")
     formulaList += fp4_sub(ret + '_t5', ret + '_t80', ret + "_t8")
-    formulaList += fp4_add(ret + '_t1', ret + '_t8', ret + "2")
+    formulaList += fp4_add(ret + '_t8', ret + '_t1', ret + "2")
     return formulaList
 
 
