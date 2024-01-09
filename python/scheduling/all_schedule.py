@@ -3,21 +3,55 @@ import os
 import time
 import argparse
 import importlib
+import shutil
+from lib.util import read_json
 from scheduling.schedule import read_formula_csv, make_pyschedule, find_mistake
 from scheduling.split_sche import make_split_scheduling
 sys.path.append("..")
 
 
-def repeat_schedule(home_dir: str, curve_group: str, curve_name: str, algo_name: str, mul_num: int, add_num: int):
-    sys.stdout = open("{}/scheduling/{}.log".format(home_dir, algo_name), "w")
+def copy_and_replace_4padd(input_file, output_file):
+    # ファイルをコピー
+    shutil.copy2(input_file, output_file)
+
+    # コピー先のファイルを読み取りモードで開く
+    with open(output_file, 'r') as file:
+        # ファイルの内容を取得
+        content = file.read()
+
+    new_content = content.replace("yq", "yq_")
+
+    # コピー先のファイルを書き込みモードで開いて新しい内容を書き込む
+    with open(output_file, 'w') as file:
+        file.write(new_content)
+
+
+def copy_and_replace_4mul(input_file, output_file, csv_file):
+    with open(input_file, 'r') as file:
+        lines = file.readlines()
+
+    if len(lines) == 5:
+        with open(output_file, 'w') as file:
+            for i in range(len(lines)):
+                if i == 3:
+                    print("formulas = ", file=file, end="")
+                    print(read_formula_csv(csv_file), file=file)
+                else:
+                    file.write(lines[i])
+    else:
+        print("inputファイルが不適切です")
+
+
+def repeat_schedule(target_dir: str, curve_group: str, curve_name: str, algo_name: str, mul_num: int, add_num: int):
+    sys.stdout = open("{}/scheduling/{}.log".format(target_dir, algo_name), "w")
     start_time = time.perf_counter()
 
     formulas = read_formula_csv(
-        "{}/csv/{}.csv".format(home_dir, algo_name)
+        "{}/csv/{}.csv".format(target_dir, algo_name)
     )
 
     # exec(open("./" + "sche_test.py", 'r', encoding="utf-8").read())
-    dir_name = "{}/scheduling/{}_mul{}_add{}".format(home_dir, algo_name, mul_num, add_num)
+    dir_name = "{}/scheduling/{}_mul{}_add{}".format(target_dir, algo_name, mul_num, add_num)
     print(dir_name)
 
     # スケジューリングの解を保存するリスト
@@ -35,7 +69,7 @@ def repeat_schedule(home_dir: str, curve_group: str, curve_name: str, algo_name:
 
     i = 0
     while i < len(split_ope):
-        pre_sche_result, split_ope = find_mistake(split_ope, i, pre_sche_result)
+        pre_sche_result, split_ope = find_mistake(formulas, split_ope, i, pre_sche_result)
         if len(split_ope[i]) == 0:
             break
         file_name = "{}_{}".format(algo_name, i)
@@ -65,7 +99,7 @@ def repeat_schedule(home_dir: str, curve_group: str, curve_name: str, algo_name:
 
     end_time = time.perf_counter()
 
-    f = open("{}/scheduling/result/{}.txt".format(home_dir, algo_name), "w")
+    f = open("{}/scheduling/result/{}.txt".format(target_dir, "SPARSE" if "SPARSE" in algo_name else algo_name), "w")
     print("input = ", file=f, end="")
     print(input_value, file=f)
     print("output = ", file=f, end="")
@@ -87,17 +121,19 @@ def repeat_schedule(home_dir: str, curve_group: str, curve_name: str, algo_name:
 
 
 def all_schedule(curve_group: str, curve_name: str, mul_num: int, add_num: int):
-    home_dir = "{}/{}-{}".format(os.path.dirname(os.getcwd()), curve_group, curve_name)
-    os.makedirs("{}/scheduling/result".format(home_dir), exist_ok=True)
+    target_dir = "{}/{}-{}".format(os.path.dirname(os.getcwd()), curve_group, curve_name)
+    # os.makedirs("{}/scheduling/result".format(target_dir), exist_ok=True)
     # repeat_schedule(curve_group, curve_name, "CONJ", mul_num, add_num)
-    # repeat_schedule(curve_group, curve_name, "FROB", mul_num, add_num)
+    # repeat_schedule(target_dir, curve_group, curve_name, "FROB", mul_num, add_num)
     # repeat_schedule(curve_group, curve_name, "MUL", mul_num, add_num)
     # repeat_schedule(curve_group, curve_name, "PADD", mul_num, add_num)
     # repeat_schedule(curve_group, curve_name, "PDBL", mul_num, add_num)
-    # repeat_schedule(curve_group, curve_name, "SPARSE_D", mul_num, add_num)
-    # repeat_schedule(curve_group, curve_name, "SPARSE_M", mul_num, add_num)
-    repeat_schedule(home_dir, curve_group, curve_name, "SQR", mul_num, add_num)
-    # repeat_schedule(curve_group, curve_name, "SQR012345", mul_num, add_num)
+    # repeat_schedule(curve_group, curve_name, "SPARSE", mul_num, add_num)
+    # repeat_schedule(target_dir, curve_group, curve_name, "SQR", mul_num, add_num)
+    repeat_schedule(target_dir, curve_group, curve_name, "SQR012345", mul_num, add_num)
+
+    # copy_and_replace_4padd("{}/scheduling/result/PADD.txt".format(target_dir), "{}/scheduling/result/PMINUS.txt".format(target_dir))
+    # copy_and_replace_4mul("{}/scheduling/result/MUL.txt".format(target_dir), "{}/scheduling/result/MUL_CONJ.txt".format(target_dir), "{}/csv/MUL_CONJ.csv".format(target_dir))
 
 
 if __name__ == "__main__":
@@ -106,10 +142,10 @@ if __name__ == "__main__":
         usage='プログラムの使い方',
         description='プログラムの説明'
     )
-    psr.add_argument('-m', '--mul', default=1, help='乗算器の個数')
-    psr.add_argument('-a', '--add', default=4, help='加減算器の個数')
     psr.add_argument("-c", "--curve", required=True, help="楕円曲線群")
     psr.add_argument("-p", "--characteristic", required=True, help="楕円曲線の標数のbit幅")
+    psr.add_argument('-m', '--mul', required=False, default=1, help='乗算器の個数')
+    psr.add_argument('-a', '--add', required=False, default=4, help='加減算器の個数')
     args = psr.parse_args()
 
     mul_num = int(args.mul)
@@ -117,4 +153,5 @@ if __name__ == "__main__":
     curve_group = args.curve
     curve_name = args.characteristic
 
+    param = read_json("{}/{}-{}/param.json".format(os.path.dirname(os.getcwd()), curve_group, curve_name))
     all_schedule(curve_group, curve_name, mul_num, add_num)
