@@ -13,11 +13,11 @@ def ep_add(Fp: Fp_t, P1, P2):
     la = Fp.mul(dy, dx_inv)
     xtQX = Fp.add(x1, x2)
     la2 = Fp.mul(la, la)
-    new_xt = Fp.sub(la2, xtQX)
-    xtnewxt = Fp.sub(x1, new_xt)
+    new_TX = Fp.sub(la2, xtQX)
+    xtnewxt = Fp.sub(x1, new_TX)
     laxtnewxt = Fp.mul(la, xtnewxt)
-    new_yt = Fp.sub(laxtnewxt, y1)
-    return [new_xt, new_yt]
+    new_TY = Fp.sub(laxtnewxt, y1)
+    return [new_TX, new_TY]
 
 
 # y^2 = x^3 + B の時
@@ -32,11 +32,11 @@ def ep_dbl(Fp: Fp_t, P1):
     la = Fp.mul(t1, t2_inv)
     t3 = Fp.add(x1, x1)
     t4 = Fp.mul(la, la)
-    new_xt = Fp.sub(t4, t3)
-    xtnewxt = Fp.sub(x1, new_xt)
+    new_TX = Fp.sub(t4, t3)
+    xtnewxt = Fp.sub(x1, new_TX)
     laxtnewxt = Fp.mul(la, xtnewxt)
-    new_yt = Fp.sub(laxtnewxt, y1)
-    return [new_xt, new_yt]
+    new_TY = Fp.sub(laxtnewxt, y1)
+    return [new_TX, new_TY]
 
 
 def scalar_mul(Fp: Fp_t, n, P):

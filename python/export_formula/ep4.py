@@ -3,7 +3,7 @@ from export_formula.fp4 import fp4_mul, fp4_sub, fp4_add, fp4_sqr, fp4_neg, fp4_
 from export_formula.transform import FormulaOrganizer
 
 
-def ep4_dbl():
+def ep4_dbl(D_twist: bool):
     formulaList = fp4_sqr("TY", "t0")
     formulaList += fp4_sqr("TZ", "t1")
     formulaList += fp4_mul("BT", "t1", "t2")
@@ -19,21 +19,28 @@ def ep4_dbl():
     formulaList += fp4_mul("t0", "t11", "t12")
     formulaList += fp4_add("t12", "t12", "t13")
     formulaList += fp4_add("t13", "t13", "new_TZ")
-    formulaList += fp4_sub("t0", "t4", "l01")
+    if D_twist:
+        formulaList += fp4_sub("t0", "t4", "c01")
+    else:
+        formulaList += fp4_sub("t0", "t4", "c00")
     formulaList += fp4_add("t4", "t4", "t14")
     formulaList += fp4_sub("l01", "t14", "t15")
-    formulaList += fp4_mul("t15", "t6", "new_xt")
+    formulaList += fp4_mul("t15", "t6", "new_TX")
     formulaList += fp4_add("t0", "l01", "t16")
     formulaList += fp4_add("t14", "t4", "b3")
     formulaList += fp4_mul("b3", "t16", "t17")
     formulaList += fp4_sqr("t0", "t18")
-    formulaList += fp4_add("t17", "t18", "new_yt")
-    formulaList += fp4_constMul("t11", "PY", "l00")
-    formulaList += fp4_constMul("t9", "xp_", "l10")
+    formulaList += fp4_add("t17", "t18", "new_TY")
+    if D_twist:
+        formulaList += fp4_constMul("t11", "PY", "c00")
+        formulaList += fp4_constMul("t9", "xp_", "c10")
+    else:
+        formulaList += fp4_constMul("t11", "PY", "c01")
+        formulaList += fp4_constMul("t9", "xp_", "c20")
     return formulaList
 
 
-def ep4_add():
+def ep4_add(D_twist: bool):
     formulaList = fp4_mul("QY", "TZ", "t0")
     formulaList += fp4_sub("TY", "t0", "t1")
     formulaList += fp4_mul("QX", "TZ", "t2")
@@ -47,17 +54,24 @@ def ep4_add():
     formulaList += fp4_add("t9", "t9", "t10")
     formulaList += fp4_sub("t8", "t10", "t11")
     formulaList += fp4_sub("t11", "t9", "t12")
-    formulaList += fp4_mul("t3", "t11", "new_xt")
+    formulaList += fp4_mul("t3", "t11", "new_TX")
     formulaList += fp4_mul("t1", "t12", "t13")
     formulaList += fp4_mul("TY", "t6", "t14")
     formulaList += fp4_add("t13", "t14", "t15")
-    formulaList += fp4_neg("t13", "new_yt")
+    formulaList += fp4_neg("t13", "new_TY")
     formulaList += fp4_mul("TZ", "t6", "new_TZ")
-    formulaList += fp4_constMul("t3", "yp_", "l00")
-    formulaList += fp4_constMul("t1", "PX", "l10")
+    if D_twist:
+        formulaList += fp4_constMul("t3", "yp_", "c00")
+        formulaList += fp4_constMul("t1", "PX", "c10")
+    else:
+        formulaList += fp4_constMul("t3", "yp_", "c01")
+        formulaList += fp4_constMul("t1", "PX", "c20")
     formulaList += fp4_mul("QY", "t3", "t16")
     formulaList += fp4_mul("QX", "t1", "t17")
-    formulaList += fp4_sub("t16", "t17", "l01")
+    if D_twist:
+        formulaList += fp4_sub("t16", "t17", "c01")
+    else:
+        formulaList += fp4_sub("t16", "t17", "c00")
     return formulaList
 
 

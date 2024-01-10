@@ -3,7 +3,7 @@ from export_formula.fp2 import fp2_mul, fp2_sub, fp2_add, fp2_sqr, fp2_neg, fp2_
 from export_formula.transform import FormulaOrganizer
 
 
-def ep2_dbl():
+def ep2_dbl(D_twist: bool):
     formulaList = fp2_sqr("TY", "t0")
     formulaList += fp2_sqr("TZ", "t1")
     formulaList += fp2_mul("BT", "t1", "t2")
@@ -19,21 +19,34 @@ def ep2_dbl():
     formulaList += fp2_mul("t0", "t11", "t12")
     formulaList += fp2_add("t12", "t12", "t13")
     formulaList += fp2_add("t13", "t13", "new_TZ")
-    formulaList += fp2_sub("t0", "t4", "l01")
+    if D_twist:
+        formulaList += fp2_sub("t0", "t4", "c01")
+    else:
+        formulaList += fp2_sub("t0", "t4", "c00")
     formulaList += fp2_add("t4", "t4", "t14")
-    formulaList += fp2_sub("l01", "t14", "t15")
-    formulaList += fp2_mul("t15", "t6", "new_xt")
-    formulaList += fp2_add("t0", "l01", "t16")
+    if D_twist:
+        formulaList += fp2_sub("c01", "t14", "t15")
+    else:
+        formulaList += fp2_sub("c00", "t14", "t15")
+    formulaList += fp2_mul("t15", "t6", "new_TX")
+    if D_twist:
+        formulaList += fp2_add("t0", "c01", "t16")
+    else:
+        formulaList += fp2_add("t0", "c00", "t16")
     formulaList += fp2_add("t14", "t4", "b3")
     formulaList += fp2_mul("b3", "t16", "t17")
     formulaList += fp2_sqr("t0", "t18")
-    formulaList += fp2_add("t17", "t18", "new_yt")
-    formulaList += fp2_constMul("t11", "PY", "l00")
-    formulaList += fp2_constMul("t9", "xp_", "l10")
+    formulaList += fp2_add("t17", "t18", "new_TY")
+    if D_twist:
+        formulaList += fp2_constMul("t11", "PY", "c00")
+        formulaList += fp2_constMul("t9", "PX_", "c10")
+    else:
+        formulaList += fp2_constMul("t11", "PY", "c01")
+        formulaList += fp2_constMul("t9", "PX_", "c20")
     return formulaList
 
 
-def ep2_add():
+def ep2_add(D_twist: bool):
     formulaList = fp2_mul("QY", "TZ", "t0")
     formulaList += fp2_sub("TY", "t0", "t1")
     formulaList += fp2_mul("QX", "TZ", "t2")
@@ -47,17 +60,24 @@ def ep2_add():
     formulaList += fp2_add("t9", "t9", "t10")
     formulaList += fp2_sub("t8", "t10", "t11")
     formulaList += fp2_sub("t11", "t9", "t12")
-    formulaList += fp2_mul("t3", "t11", "new_xt")
+    formulaList += fp2_mul("t3", "t11", "new_TX")
     formulaList += fp2_mul("t1", "t12", "t13")
     formulaList += fp2_mul("TY", "t6", "t14")
     formulaList += fp2_add("t13", "t14", "t15")
-    formulaList += fp2_neg("t13", "new_yt")
+    formulaList += fp2_neg("t13", "new_TY")
     formulaList += fp2_mul("TZ", "t6", "new_TZ")
-    formulaList += fp2_constMul("t3", "yp_", "l00")
-    formulaList += fp2_constMul("t1", "PX", "l10")
+    if D_twist:
+        formulaList += fp2_constMul("t3", "PY_", "c00")
+        formulaList += fp2_constMul("t1", "PX", "c10")
+    else:
+        formulaList += fp2_constMul("t3", "PY_", "c01")
+        formulaList += fp2_constMul("t1", "PX", "c20")
     formulaList += fp2_mul("QY", "t3", "t16")
     formulaList += fp2_mul("QX", "t1", "t17")
-    formulaList += fp2_sub("t16", "t17", "l01")
+    if D_twist:
+        formulaList += fp2_sub("t16", "t17", "c01")
+    else:
+        formulaList += fp2_sub("t16", "t17", "c00")
     return formulaList
 
 

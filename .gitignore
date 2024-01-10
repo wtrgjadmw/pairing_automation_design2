@@ -2,4 +2,7 @@
 .vscode
 *.pyc
 xcelium.d
+.simvision
+waves.shm
+xrun.*
 *.log

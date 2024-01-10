@@ -1,4 +1,5 @@
 import json
+from itertools import chain
 
 
 def read_json(filename):
@@ -37,6 +38,16 @@ class FormulaSet:
         self.opr2 = opr2
         self.ret = ret
         self.type = type
+
+
+def flatten_list(arr):
+    flat_list = []
+    for item in arr:
+        if isinstance(item, list):
+            flat_list.extend(flatten_list(item))
+        else:
+            flat_list.append(item)
+    return flat_list
 
 
 if __name__ == "__main__":
