@@ -22,7 +22,7 @@ def write_parameter_vh(home_dir: str, f_param):
     f.write("`define WORD_SIZE 'd{}\n".format(p_len))
     f.write("`define CHAR {:d}'h{:x}\n".format(p_len, p))
     f.write("`define CHAR_INV {:d}'h{:x}\n".format(p_len, p_inv))
-    f.write("`define INVERSION_INITIAL_VALUE {:d}'h{:x}\n".format(p_len, inv_init_val))
+    f.write("`define INVERSION_INITIAL_VALUE {:d}'h{:x}\n".format(p_len+2, inv_init_val))
     f.write("`define CHAR_3X {:d}'h{:x}\n\n".format(p_len, p3))  # NOTE: Div4PathUnit-aug_p のbit幅要確認
 
     f.write("// parameters for twisted curve (Ep2)\n")
