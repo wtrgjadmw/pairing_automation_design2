@@ -22,8 +22,8 @@ def write_parameter_vh(home_dir: str, f_param):
     f.write("`define WORD_SIZE 'd{}\n".format(p_len))
     f.write("`define CHAR {:d}'h{:x}\n".format(p_len, p))
     f.write("`define CHAR_INV {:d}'h{:x}\n".format(p_len, p_inv))
-    f.write("`define INVERSION_INITIAL_VALUE {:d}'h{:x}\n".format(p_len+2, inv_init_val))
-    f.write("`define CHAR_3X {:d}'h{:x}\n\n".format(p_len, p3))  # NOTE: Div4PathUnit-aug_p のbit幅要確認
+    f.write("`define INVERSION_INITIAL_VALUE {:d}'h{:x}\n".format(p_len, inv_init_val))
+    f.write("`define CHAR_3X {:d}'h{:x}\n\n".format(p_len+2, p3))  # NOTE: Div4PathUnit-aug_p のbit幅要確認
 
     f.write("// parameters for twisted curve (Ep2)\n")
     f.write("`define BT0 {:d}'h{:x}\n".format(p_len, BT[0]))
@@ -32,11 +32,11 @@ def write_parameter_vh(home_dir: str, f_param):
     one = Fp.one()
     xi = [
         [[Fp.one(), 0], [0, 0]],
-        Fp2.exp(fp4_qnr, (p - 1) // 6),
-        Fp2.exp(fp4_qnr, 2 * (p - 1) // 6),
-        Fp2.exp(fp4_qnr, 3 * (p - 1) // 6),
-        Fp2.exp(fp4_qnr, 4 * (p - 1) // 6),
-        Fp2.exp(fp4_qnr, 5 * (p - 1) // 6)
+        Fp2.exp(Fp2.MontConv(fp4_qnr), (p - 1) // 6),
+        Fp2.exp(Fp2.MontConv(fp4_qnr), 2 * (p - 1) // 6),
+        Fp2.exp(Fp2.MontConv(fp4_qnr), 3 * (p - 1) // 6),
+        Fp2.exp(Fp2.MontConv(fp4_qnr), 4 * (p - 1) // 6),
+        Fp2.exp(Fp2.MontConv(fp4_qnr), 5 * (p - 1) // 6)
     ]
 
     f.write("// // constants independent from elliptic curve\n")
@@ -229,7 +229,7 @@ def testbench_copy(home_dir, RTL_dir):
 def make_RTL():
     home_dir = os.path.dirname(os.getcwd())
     RTL_dir = "{}/{}-{}/RTL".format(home_dir, curve_group, curve_name)
-    shutil.copytree("{}/RTL".format(home_dir), RTL_dir, dirs_exist_ok=True)
+    shutil.copytree("{}/RTL".format(home_dir), RTL_dir, dirs_exist_ok=True, ignore=shutil.ignore_patterns("lib"))
     testbench_copy(home_dir, RTL_dir)
 
     write_parameter_vh(home_dir, f_param="{}/include/parameter.vh".format(RTL_dir))

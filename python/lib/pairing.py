@@ -272,16 +272,7 @@ def final_exp_hard_bls12(Fp12: Fp12_t, Fp2: Fp2_t, xi, U, f):
     t2 = Fp12.mapFromFq6(SQR012345(Fp2, xi, Fp12.mapToFq6(t2)))  # f^2u
     t4 = Fp12.frob(Fp12.frob(t4))
     t5 = Fp12.frob(t5)
-    print("FROB -----------")
-    for fx in flatten_list(Fp12.k):
-        print("{:x}".format(fx))
-    print("FROB -----------")
-    for fx in flatten_list(t5):
-        print("{:x}".format(fx))
     t5 = Fp12.frob(t5)
-    print("FROB -----------")
-    for fx in flatten_list(t5):
-        print("{:x}".format(fx))
     t2 = Fp12.mul(t2, t3)  # f^(u^4-2u^3+2u)
     t4 = Fp12.frob(t4)
     t3 = final_exp_expFq(Fp12, Fp2, xi, U, t2)  # f^(u^5-2u^4+2u^2)
@@ -297,6 +288,9 @@ def final_exp_hard_bls12(Fp12: Fp12_t, Fp2: Fp2_t, xi, U, f):
 
 def final_exp_bls12(Fp12: Fp12_t, Fp2: Fp2_t, xi, U, f):
     f = final_exp_easy_k12(Fp12, f)
+    # print("Final Exponentiation easy part ---------\nf:")
+    # for fx in flatten_list(f):
+    #     print("{:x}".format(fx))
     g = final_exp_hard_bls12(Fp12, Fp2, xi, U, f)
     return g
 

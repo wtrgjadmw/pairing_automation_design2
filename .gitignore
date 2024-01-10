@@ -6,3 +6,5 @@ xcelium.d
 waves.shm
 xrun.*
 *.log
+*.alib
+*.svf
