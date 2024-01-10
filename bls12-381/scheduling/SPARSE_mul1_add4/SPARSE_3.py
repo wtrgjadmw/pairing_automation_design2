@@ -3,7 +3,7 @@ from pyschedule import Scenario, solvers, plotters, alt
 
 def solve():
 	horizon = 139
-	S = Scenario("SPARSE_M_mul1_add4_3", horizon=horizon)
+	S = Scenario("SPARSE_3", horizon=horizon)
 
 	# resource
 	MUL = S.Resources('MUL', num=1, size=7)
@@ -2199,6 +2199,8 @@ def solve():
 	c110 = S.Task('c110', length=1, delay_cost=1)
 	c110 += alt(ADD)
 
+	S += 39<c110
+
 	c110_mem0 = S.Task('c110_mem0', length=1, delay_cost=1)
 	c110_mem0 += ADD_mem[0]
 	S += 22<c110_mem0
@@ -2218,6 +2220,8 @@ def solve():
 
 	c210 = S.Task('c210', length=1, delay_cost=1)
 	c210 += alt(ADD)
+
+	S += 32<c210
 
 	c210_mem0 = S.Task('c210_mem0', length=1, delay_cost=1)
 	c210_mem0 += alt(ADD_mem)
@@ -2242,6 +2246,8 @@ def solve():
 	c200 = S.Task('c200', length=1, delay_cost=1)
 	c200 += alt(ADD)
 
+	S += 41<c200
+
 	c200_mem0 = S.Task('c200_mem0', length=1, delay_cost=1)
 	c200_mem0 += alt(ADD_mem)
 	S += (t30*ADD[0])-1<c200_mem0*ADD_mem[0]
@@ -2264,6 +2270,8 @@ def solve():
 
 	c111 = S.Task('c111', length=1, delay_cost=1)
 	c111 += alt(ADD)
+
+	S += 39<c111
 
 	c111_mem0 = S.Task('c111_mem0', length=1, delay_cost=1)
 	c111_mem0 += alt(ADD_mem)
@@ -2288,6 +2296,8 @@ def solve():
 	c010 = S.Task('c010', length=1, delay_cost=1)
 	c010 += alt(ADD)
 
+	S += 41<c010
+
 	c010_mem0 = S.Task('c010_mem0', length=1, delay_cost=1)
 	c010_mem0 += alt(ADD_mem)
 	S += (t510*ADD[0])-1<c010_mem0*ADD_mem[0]
@@ -2310,6 +2320,8 @@ def solve():
 
 	c211 = S.Task('c211', length=1, delay_cost=1)
 	c211 += alt(ADD)
+
+	S += 33<c211
 
 	c211_mem0 = S.Task('c211_mem0', length=1, delay_cost=1)
 	c211_mem0 += alt(ADD_mem)
@@ -2334,6 +2346,8 @@ def solve():
 	c000 = S.Task('c000', length=1, delay_cost=1)
 	c000 += alt(ADD)
 
+	S += 44<c000
+
 	c000_mem0 = S.Task('c000_mem0', length=1, delay_cost=1)
 	c000_mem0 += alt(ADD_mem)
 	S += (t170*ADD[0])-1<c000_mem0*ADD_mem[0]
@@ -2356,6 +2370,8 @@ def solve():
 
 	c001 = S.Task('c001', length=1, delay_cost=1)
 	c001 += alt(ADD)
+
+	S += 47<c001
 
 	c001_mem0 = S.Task('c001_mem0', length=1, delay_cost=1)
 	c001_mem0 += alt(ADD_mem)
@@ -2380,6 +2396,8 @@ def solve():
 	c201 = S.Task('c201', length=1, delay_cost=1)
 	c201 += alt(ADD)
 
+	S += 40<c201
+
 	c201_mem0 = S.Task('c201_mem0', length=1, delay_cost=1)
 	c201_mem0 += alt(ADD_mem)
 	S += (t31*ADD[0])-1<c201_mem0*ADD_mem[0]
@@ -2402,6 +2420,8 @@ def solve():
 
 	c100 = S.Task('c100', length=1, delay_cost=1)
 	c100 += alt(ADD)
+
+	S += 42<c100
 
 	c100_mem0 = S.Task('c100_mem0', length=1, delay_cost=1)
 	c100_mem0 += alt(ADD_mem)
@@ -2426,6 +2446,8 @@ def solve():
 	c101 = S.Task('c101', length=1, delay_cost=1)
 	c101 += alt(ADD)
 
+	S += 37<c101
+
 	c101_mem0 = S.Task('c101_mem0', length=1, delay_cost=1)
 	c101_mem0 += alt(ADD_mem)
 	S += (t501*ADD[0])-1<c101_mem0*ADD_mem[0]
@@ -2448,6 +2470,8 @@ def solve():
 
 	c011 = S.Task('c011', length=1, delay_cost=1)
 	c011 += alt(ADD)
+
+	S += 40<c011
 
 	c011_mem0 = S.Task('c011_mem0', length=1, delay_cost=1)
 	c011_mem0 += alt(ADD_mem)
@@ -2479,7 +2503,7 @@ def solve():
 
 	cycles = int(solution[-1][3])
 
-	pic_file_name = "SPARSE_M_mul1_add4/SPARSE_M_mul1_add4_3.png"
+	pic_file_name = "/home/mfukuda/pairing_automation_design/bls12-381/scheduling/SPARSE_mul1_add4/SPARSE_3.png"
 	if(S.solution() != []):
 		plotters.matplotlib.plot(S,img_filename=pic_file_name, vertical_text=True, fig_size=(cycles*0.25+3, 5), show_task_labels=False)
 

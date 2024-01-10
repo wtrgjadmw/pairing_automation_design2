@@ -58,7 +58,7 @@ def ep4_add(D_twist: bool):
     formulaList += fp4_mul("t1", "t12", "t13")
     formulaList += fp4_mul("TY", "t6", "t14")
     formulaList += fp4_add("t13", "t14", "t15")
-    formulaList += fp4_neg("t13", "new_TY")
+    formulaList += fp4_neg("t15", "new_TY")
     formulaList += fp4_mul("TZ", "t6", "new_TZ")
     if D_twist:
         formulaList += fp4_constMul("t3", "yp_", "c00")

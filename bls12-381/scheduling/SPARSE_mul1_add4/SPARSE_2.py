@@ -3,7 +3,7 @@ from pyschedule import Scenario, solvers, plotters, alt
 
 def solve():
 	horizon = 133
-	S = Scenario("SPARSE_D_mul1_add4_2", horizon=horizon)
+	S = Scenario("SPARSE_2", horizon=horizon)
 
 	# resource
 	MUL = S.Resources('MUL', num=1, size=7)
@@ -16,17 +16,17 @@ def solve():
 	INPUT_mem_r = S.Resource('INPUT_mem_r', size=2)
 
 	# result of previous scheduling
-	t4_t8_t1_in = S.Task('t4_t8_t1_in', length=1, delay_cost=1)
-	S += t4_t8_t1_in >= 0
-	t4_t8_t1_in += MUL_in[0]
+	t4_t2_t1_in = S.Task('t4_t2_t1_in', length=1, delay_cost=1)
+	S += t4_t2_t1_in >= 0
+	t4_t2_t1_in += MUL_in[0]
 
-	t4_t8_t1_mem0 = S.Task('t4_t8_t1_mem0', length=1, delay_cost=1)
-	S += t4_t8_t1_mem0 >= 0
-	t4_t8_t1_mem0 += INPUT_mem_r
+	t4_t2_t1_mem0 = S.Task('t4_t2_t1_mem0', length=1, delay_cost=1)
+	S += t4_t2_t1_mem0 >= 0
+	t4_t2_t1_mem0 += INPUT_mem_r
 
-	t4_t8_t1_mem1 = S.Task('t4_t8_t1_mem1', length=1, delay_cost=1)
-	S += t4_t8_t1_mem1 >= 0
-	t4_t8_t1_mem1 += INPUT_mem_r
+	t4_t2_t1_mem1 = S.Task('t4_t2_t1_mem1', length=1, delay_cost=1)
+	S += t4_t2_t1_mem1 >= 0
+	t4_t2_t1_mem1 += INPUT_mem_r
 
 	t4_t1_t0_in = S.Task('t4_t1_t0_in', length=1, delay_cost=1)
 	S += t4_t1_t0_in >= 1
@@ -40,89 +40,89 @@ def solve():
 	S += t4_t1_t0_mem1 >= 1
 	t4_t1_t0_mem1 += INPUT_mem_r
 
-	t4_t8_t1 = S.Task('t4_t8_t1', length=7, delay_cost=1)
-	S += t4_t8_t1 >= 1
-	t4_t8_t1 += MUL[0]
+	t4_t2_t1 = S.Task('t4_t2_t1', length=7, delay_cost=1)
+	S += t4_t2_t1 >= 1
+	t4_t2_t1 += MUL[0]
 
-	t4_t0_t0_in = S.Task('t4_t0_t0_in', length=1, delay_cost=1)
-	S += t4_t0_t0_in >= 2
-	t4_t0_t0_in += MUL_in[0]
+	t4_t0_t1_in = S.Task('t4_t0_t1_in', length=1, delay_cost=1)
+	S += t4_t0_t1_in >= 2
+	t4_t0_t1_in += MUL_in[0]
 
-	t4_t0_t0_mem0 = S.Task('t4_t0_t0_mem0', length=1, delay_cost=1)
-	S += t4_t0_t0_mem0 >= 2
-	t4_t0_t0_mem0 += INPUT_mem_r
+	t4_t0_t1_mem0 = S.Task('t4_t0_t1_mem0', length=1, delay_cost=1)
+	S += t4_t0_t1_mem0 >= 2
+	t4_t0_t1_mem0 += INPUT_mem_r
 
-	t4_t0_t0_mem1 = S.Task('t4_t0_t0_mem1', length=1, delay_cost=1)
-	S += t4_t0_t0_mem1 >= 2
-	t4_t0_t0_mem1 += INPUT_mem_r
+	t4_t0_t1_mem1 = S.Task('t4_t0_t1_mem1', length=1, delay_cost=1)
+	S += t4_t0_t1_mem1 >= 2
+	t4_t0_t1_mem1 += INPUT_mem_r
 
 	t4_t1_t0 = S.Task('t4_t1_t0', length=7, delay_cost=1)
 	S += t4_t1_t0 >= 2
 	t4_t1_t0 += MUL[0]
 
+	t4_t0_t0_in = S.Task('t4_t0_t0_in', length=1, delay_cost=1)
+	S += t4_t0_t0_in >= 3
+	t4_t0_t0_in += MUL_in[0]
+
+	t4_t0_t0_mem0 = S.Task('t4_t0_t0_mem0', length=1, delay_cost=1)
+	S += t4_t0_t0_mem0 >= 3
+	t4_t0_t0_mem0 += INPUT_mem_r
+
+	t4_t0_t0_mem1 = S.Task('t4_t0_t0_mem1', length=1, delay_cost=1)
+	S += t4_t0_t0_mem1 >= 3
+	t4_t0_t0_mem1 += INPUT_mem_r
+
+	t4_t0_t1 = S.Task('t4_t0_t1', length=7, delay_cost=1)
+	S += t4_t0_t1 >= 3
+	t4_t0_t1 += MUL[0]
+
+	t4_t0_t0 = S.Task('t4_t0_t0', length=7, delay_cost=1)
+	S += t4_t0_t0 >= 4
+	t4_t0_t0 += MUL[0]
+
+	t4_t8_t0_in = S.Task('t4_t8_t0_in', length=1, delay_cost=1)
+	S += t4_t8_t0_in >= 4
+	t4_t8_t0_in += MUL_in[0]
+
+	t4_t8_t0_mem0 = S.Task('t4_t8_t0_mem0', length=1, delay_cost=1)
+	S += t4_t8_t0_mem0 >= 4
+	t4_t8_t0_mem0 += INPUT_mem_r
+
+	t4_t8_t0_mem1 = S.Task('t4_t8_t0_mem1', length=1, delay_cost=1)
+	S += t4_t8_t0_mem1 >= 4
+	t4_t8_t0_mem1 += INPUT_mem_r
+
 	t2_t1_in = S.Task('t2_t1_in', length=1, delay_cost=1)
-	S += t2_t1_in >= 3
+	S += t2_t1_in >= 5
 	t2_t1_in += MUL_in[0]
 
 	t2_t1_mem0 = S.Task('t2_t1_mem0', length=1, delay_cost=1)
-	S += t2_t1_mem0 >= 3
+	S += t2_t1_mem0 >= 5
 	t2_t1_mem0 += INPUT_mem_r
 
 	t2_t1_mem1 = S.Task('t2_t1_mem1', length=1, delay_cost=1)
-	S += t2_t1_mem1 >= 3
+	S += t2_t1_mem1 >= 5
 	t2_t1_mem1 += INPUT_mem_r
 
-	t4_t0_t0 = S.Task('t4_t0_t0', length=7, delay_cost=1)
-	S += t4_t0_t0 >= 3
-	t4_t0_t0 += MUL[0]
-
-	t2_t1 = S.Task('t2_t1', length=7, delay_cost=1)
-	S += t2_t1 >= 4
-	t2_t1 += MUL[0]
-
-	t4_t0_t1_in = S.Task('t4_t0_t1_in', length=1, delay_cost=1)
-	S += t4_t0_t1_in >= 4
-	t4_t0_t1_in += MUL_in[0]
-
-	t4_t0_t1_mem0 = S.Task('t4_t0_t1_mem0', length=1, delay_cost=1)
-	S += t4_t0_t1_mem0 >= 4
-	t4_t0_t1_mem0 += INPUT_mem_r
-
-	t4_t0_t1_mem1 = S.Task('t4_t0_t1_mem1', length=1, delay_cost=1)
-	S += t4_t0_t1_mem1 >= 4
-	t4_t0_t1_mem1 += INPUT_mem_r
+	t4_t8_t0 = S.Task('t4_t8_t0', length=7, delay_cost=1)
+	S += t4_t8_t0 >= 5
+	t4_t8_t0 += MUL[0]
 
 	t2_t0_in = S.Task('t2_t0_in', length=1, delay_cost=1)
-	S += t2_t0_in >= 5
+	S += t2_t0_in >= 6
 	t2_t0_in += MUL_in[0]
 
 	t2_t0_mem0 = S.Task('t2_t0_mem0', length=1, delay_cost=1)
-	S += t2_t0_mem0 >= 5
+	S += t2_t0_mem0 >= 6
 	t2_t0_mem0 += INPUT_mem_r
 
 	t2_t0_mem1 = S.Task('t2_t0_mem1', length=1, delay_cost=1)
-	S += t2_t0_mem1 >= 5
+	S += t2_t0_mem1 >= 6
 	t2_t0_mem1 += INPUT_mem_r
 
-	t4_t0_t1 = S.Task('t4_t0_t1', length=7, delay_cost=1)
-	S += t4_t0_t1 >= 5
-	t4_t0_t1 += MUL[0]
-
-	t2_t0 = S.Task('t2_t0', length=7, delay_cost=1)
-	S += t2_t0 >= 6
-	t2_t0 += MUL[0]
-
-	t4_t2_t1_in = S.Task('t4_t2_t1_in', length=1, delay_cost=1)
-	S += t4_t2_t1_in >= 6
-	t4_t2_t1_in += MUL_in[0]
-
-	t4_t2_t1_mem0 = S.Task('t4_t2_t1_mem0', length=1, delay_cost=1)
-	S += t4_t2_t1_mem0 >= 6
-	t4_t2_t1_mem0 += INPUT_mem_r
-
-	t4_t2_t1_mem1 = S.Task('t4_t2_t1_mem1', length=1, delay_cost=1)
-	S += t4_t2_t1_mem1 >= 6
-	t4_t2_t1_mem1 += INPUT_mem_r
+	t2_t1 = S.Task('t2_t1', length=7, delay_cost=1)
+	S += t2_t1 >= 6
+	t2_t1 += MUL[0]
 
 	t1_t0_in = S.Task('t1_t0_in', length=1, delay_cost=1)
 	S += t1_t0_in >= 7
@@ -136,9 +136,9 @@ def solve():
 	S += t1_t0_mem1 >= 7
 	t1_t0_mem1 += INPUT_mem_r
 
-	t4_t2_t1 = S.Task('t4_t2_t1', length=7, delay_cost=1)
-	S += t4_t2_t1 >= 7
-	t4_t2_t1 += MUL[0]
+	t2_t0 = S.Task('t2_t0', length=7, delay_cost=1)
+	S += t2_t0 >= 7
+	t2_t0 += MUL[0]
 
 	t0_t1_in = S.Task('t0_t1_in', length=1, delay_cost=1)
 	S += t0_t1_in >= 8
@@ -160,17 +160,17 @@ def solve():
 	S += t0_t1 >= 9
 	t0_t1 += MUL[0]
 
-	t4_t8_t0_in = S.Task('t4_t8_t0_in', length=1, delay_cost=1)
-	S += t4_t8_t0_in >= 9
-	t4_t8_t0_in += MUL_in[0]
+	t4_t8_t1_in = S.Task('t4_t8_t1_in', length=1, delay_cost=1)
+	S += t4_t8_t1_in >= 9
+	t4_t8_t1_in += MUL_in[0]
 
-	t4_t8_t0_mem0 = S.Task('t4_t8_t0_mem0', length=1, delay_cost=1)
-	S += t4_t8_t0_mem0 >= 9
-	t4_t8_t0_mem0 += INPUT_mem_r
+	t4_t8_t1_mem0 = S.Task('t4_t8_t1_mem0', length=1, delay_cost=1)
+	S += t4_t8_t1_mem0 >= 9
+	t4_t8_t1_mem0 += INPUT_mem_r
 
-	t4_t8_t0_mem1 = S.Task('t4_t8_t0_mem1', length=1, delay_cost=1)
-	S += t4_t8_t0_mem1 >= 9
-	t4_t8_t0_mem1 += INPUT_mem_r
+	t4_t8_t1_mem1 = S.Task('t4_t8_t1_mem1', length=1, delay_cost=1)
+	S += t4_t8_t1_mem1 >= 9
+	t4_t8_t1_mem1 += INPUT_mem_r
 
 	t4_t2_t0_in = S.Task('t4_t2_t0_in', length=1, delay_cost=1)
 	S += t4_t2_t0_in >= 10
@@ -184,9 +184,9 @@ def solve():
 	S += t4_t2_t0_mem1 >= 10
 	t4_t2_t0_mem1 += INPUT_mem_r
 
-	t4_t8_t0 = S.Task('t4_t8_t0', length=7, delay_cost=1)
-	S += t4_t8_t0 >= 10
-	t4_t8_t0 += MUL[0]
+	t4_t8_t1 = S.Task('t4_t8_t1', length=7, delay_cost=1)
+	S += t4_t8_t1 >= 10
+	t4_t8_t1 += MUL[0]
 
 	t4_t1_t1_in = S.Task('t4_t1_t1_in', length=1, delay_cost=1)
 	S += t4_t1_t1_in >= 11
@@ -240,161 +240,161 @@ def solve():
 	S += t0_t0 >= 14
 	t0_t0 += MUL[0]
 
-	t2_t3_mem0 = S.Task('t2_t3_mem0', length=1, delay_cost=1)
-	S += t2_t3_mem0 >= 14
-	t2_t3_mem0 += INPUT_mem_r
-
-	t2_t3_mem1 = S.Task('t2_t3_mem1', length=1, delay_cost=1)
-	S += t2_t3_mem1 >= 14
-	t2_t3_mem1 += INPUT_mem_r
-
-	t2_t3 = S.Task('t2_t3', length=1, delay_cost=1)
-	S += t2_t3 >= 15
-	t2_t3 += ADD[1]
-
 	t4_t51_mem0 = S.Task('t4_t51_mem0', length=1, delay_cost=1)
-	S += t4_t51_mem0 >= 15
+	S += t4_t51_mem0 >= 14
 	t4_t51_mem0 += INPUT_mem_r
 
 	t4_t51_mem1 = S.Task('t4_t51_mem1', length=1, delay_cost=1)
-	S += t4_t51_mem1 >= 15
+	S += t4_t51_mem1 >= 14
 	t4_t51_mem1 += INPUT_mem_r
 
-	t4_t0_t3_mem0 = S.Task('t4_t0_t3_mem0', length=1, delay_cost=1)
-	S += t4_t0_t3_mem0 >= 16
-	t4_t0_t3_mem0 += INPUT_mem_r
-
-	t4_t0_t3_mem1 = S.Task('t4_t0_t3_mem1', length=1, delay_cost=1)
-	S += t4_t0_t3_mem1 >= 16
-	t4_t0_t3_mem1 += INPUT_mem_r
-
-	t4_t51 = S.Task('t4_t51', length=1, delay_cost=1)
-	S += t4_t51 >= 16
-	t4_t51 += ADD[1]
-
-	t4_t0_t3 = S.Task('t4_t0_t3', length=1, delay_cost=1)
-	S += t4_t0_t3 >= 17
-	t4_t0_t3 += ADD[0]
-
-	t4_t1_t3_mem0 = S.Task('t4_t1_t3_mem0', length=1, delay_cost=1)
-	S += t4_t1_t3_mem0 >= 17
-	t4_t1_t3_mem0 += INPUT_mem_r
-
-	t4_t1_t3_mem1 = S.Task('t4_t1_t3_mem1', length=1, delay_cost=1)
-	S += t4_t1_t3_mem1 >= 17
-	t4_t1_t3_mem1 += INPUT_mem_r
-
 	t4_t1_t2_mem0 = S.Task('t4_t1_t2_mem0', length=1, delay_cost=1)
-	S += t4_t1_t2_mem0 >= 18
+	S += t4_t1_t2_mem0 >= 15
 	t4_t1_t2_mem0 += INPUT_mem_r
 
 	t4_t1_t2_mem1 = S.Task('t4_t1_t2_mem1', length=1, delay_cost=1)
-	S += t4_t1_t2_mem1 >= 18
+	S += t4_t1_t2_mem1 >= 15
 	t4_t1_t2_mem1 += INPUT_mem_r
 
-	t4_t1_t3 = S.Task('t4_t1_t3', length=1, delay_cost=1)
-	S += t4_t1_t3 >= 18
-	t4_t1_t3 += ADD[0]
-
-	t1_t3_mem0 = S.Task('t1_t3_mem0', length=1, delay_cost=1)
-	S += t1_t3_mem0 >= 19
-	t1_t3_mem0 += INPUT_mem_r
-
-	t1_t3_mem1 = S.Task('t1_t3_mem1', length=1, delay_cost=1)
-	S += t1_t3_mem1 >= 19
-	t1_t3_mem1 += INPUT_mem_r
-
-	t4_t1_t2 = S.Task('t4_t1_t2', length=1, delay_cost=1)
-	S += t4_t1_t2 >= 19
-	t4_t1_t2 += ADD[0]
-
-	t1_t3 = S.Task('t1_t3', length=1, delay_cost=1)
-	S += t1_t3 >= 20
-	t1_t3 += ADD[0]
-
-	t4_t0_t2_mem0 = S.Task('t4_t0_t2_mem0', length=1, delay_cost=1)
-	S += t4_t0_t2_mem0 >= 20
-	t4_t0_t2_mem0 += INPUT_mem_r
-
-	t4_t0_t2_mem1 = S.Task('t4_t0_t2_mem1', length=1, delay_cost=1)
-	S += t4_t0_t2_mem1 >= 20
-	t4_t0_t2_mem1 += INPUT_mem_r
+	t4_t51 = S.Task('t4_t51', length=1, delay_cost=1)
+	S += t4_t51 >= 15
+	t4_t51 += ADD[3]
 
 	t2_t2_mem0 = S.Task('t2_t2_mem0', length=1, delay_cost=1)
-	S += t2_t2_mem0 >= 21
+	S += t2_t2_mem0 >= 16
 	t2_t2_mem0 += INPUT_mem_r
 
 	t2_t2_mem1 = S.Task('t2_t2_mem1', length=1, delay_cost=1)
-	S += t2_t2_mem1 >= 21
+	S += t2_t2_mem1 >= 16
 	t2_t2_mem1 += INPUT_mem_r
 
-	t4_t0_t2 = S.Task('t4_t0_t2', length=1, delay_cost=1)
-	S += t4_t0_t2 >= 21
-	t4_t0_t2 += ADD[0]
-
-	t2_t2 = S.Task('t2_t2', length=1, delay_cost=1)
-	S += t2_t2 >= 22
-	t2_t2 += ADD[0]
-
-	t4_t50_mem0 = S.Task('t4_t50_mem0', length=1, delay_cost=1)
-	S += t4_t50_mem0 >= 22
-	t4_t50_mem0 += INPUT_mem_r
-
-	t4_t50_mem1 = S.Task('t4_t50_mem1', length=1, delay_cost=1)
-	S += t4_t50_mem1 >= 22
-	t4_t50_mem1 += INPUT_mem_r
-
-	t1_t2_mem0 = S.Task('t1_t2_mem0', length=1, delay_cost=1)
-	S += t1_t2_mem0 >= 23
-	t1_t2_mem0 += INPUT_mem_r
-
-	t1_t2_mem1 = S.Task('t1_t2_mem1', length=1, delay_cost=1)
-	S += t1_t2_mem1 >= 23
-	t1_t2_mem1 += INPUT_mem_r
-
-	t4_t50 = S.Task('t4_t50', length=1, delay_cost=1)
-	S += t4_t50 >= 23
-	t4_t50 += ADD[3]
-
-	t1_t2 = S.Task('t1_t2', length=1, delay_cost=1)
-	S += t1_t2 >= 24
-	t1_t2 += ADD[0]
-
-	t4_t41_mem0 = S.Task('t4_t41_mem0', length=1, delay_cost=1)
-	S += t4_t41_mem0 >= 24
-	t4_t41_mem0 += INPUT_mem_r
-
-	t4_t41_mem1 = S.Task('t4_t41_mem1', length=1, delay_cost=1)
-	S += t4_t41_mem1 >= 24
-	t4_t41_mem1 += INPUT_mem_r
+	t4_t1_t2 = S.Task('t4_t1_t2', length=1, delay_cost=1)
+	S += t4_t1_t2 >= 16
+	t4_t1_t2 += ADD[0]
 
 	t0_t2_mem0 = S.Task('t0_t2_mem0', length=1, delay_cost=1)
-	S += t0_t2_mem0 >= 25
+	S += t0_t2_mem0 >= 17
 	t0_t2_mem0 += INPUT_mem_r
 
 	t0_t2_mem1 = S.Task('t0_t2_mem1', length=1, delay_cost=1)
-	S += t0_t2_mem1 >= 25
+	S += t0_t2_mem1 >= 17
 	t0_t2_mem1 += INPUT_mem_r
 
-	t4_t41 = S.Task('t4_t41', length=1, delay_cost=1)
-	S += t4_t41 >= 25
-	t4_t41 += ADD[3]
+	t2_t2 = S.Task('t2_t2', length=1, delay_cost=1)
+	S += t2_t2 >= 17
+	t2_t2 += ADD[0]
 
 	t0_t2 = S.Task('t0_t2', length=1, delay_cost=1)
-	S += t0_t2 >= 26
+	S += t0_t2 >= 18
 	t0_t2 += ADD[1]
 
 	t0_t3_mem0 = S.Task('t0_t3_mem0', length=1, delay_cost=1)
-	S += t0_t3_mem0 >= 26
+	S += t0_t3_mem0 >= 18
 	t0_t3_mem0 += INPUT_mem_r
 
 	t0_t3_mem1 = S.Task('t0_t3_mem1', length=1, delay_cost=1)
-	S += t0_t3_mem1 >= 26
+	S += t0_t3_mem1 >= 18
 	t0_t3_mem1 += INPUT_mem_r
 
 	t0_t3 = S.Task('t0_t3', length=1, delay_cost=1)
-	S += t0_t3 >= 27
+	S += t0_t3 >= 19
 	t0_t3 += ADD[3]
+
+	t4_t0_t2_mem0 = S.Task('t4_t0_t2_mem0', length=1, delay_cost=1)
+	S += t4_t0_t2_mem0 >= 19
+	t4_t0_t2_mem0 += INPUT_mem_r
+
+	t4_t0_t2_mem1 = S.Task('t4_t0_t2_mem1', length=1, delay_cost=1)
+	S += t4_t0_t2_mem1 >= 19
+	t4_t0_t2_mem1 += INPUT_mem_r
+
+	t4_t0_t2 = S.Task('t4_t0_t2', length=1, delay_cost=1)
+	S += t4_t0_t2 >= 20
+	t4_t0_t2 += ADD[3]
+
+	t4_t0_t3_mem0 = S.Task('t4_t0_t3_mem0', length=1, delay_cost=1)
+	S += t4_t0_t3_mem0 >= 20
+	t4_t0_t3_mem0 += INPUT_mem_r
+
+	t4_t0_t3_mem1 = S.Task('t4_t0_t3_mem1', length=1, delay_cost=1)
+	S += t4_t0_t3_mem1 >= 20
+	t4_t0_t3_mem1 += INPUT_mem_r
+
+	t1_t2_mem0 = S.Task('t1_t2_mem0', length=1, delay_cost=1)
+	S += t1_t2_mem0 >= 21
+	t1_t2_mem0 += INPUT_mem_r
+
+	t1_t2_mem1 = S.Task('t1_t2_mem1', length=1, delay_cost=1)
+	S += t1_t2_mem1 >= 21
+	t1_t2_mem1 += INPUT_mem_r
+
+	t4_t0_t3 = S.Task('t4_t0_t3', length=1, delay_cost=1)
+	S += t4_t0_t3 >= 21
+	t4_t0_t3 += ADD[2]
+
+	t1_t2 = S.Task('t1_t2', length=1, delay_cost=1)
+	S += t1_t2 >= 22
+	t1_t2 += ADD[1]
+
+	t2_t3_mem0 = S.Task('t2_t3_mem0', length=1, delay_cost=1)
+	S += t2_t3_mem0 >= 22
+	t2_t3_mem0 += INPUT_mem_r
+
+	t2_t3_mem1 = S.Task('t2_t3_mem1', length=1, delay_cost=1)
+	S += t2_t3_mem1 >= 22
+	t2_t3_mem1 += INPUT_mem_r
+
+	t2_t3 = S.Task('t2_t3', length=1, delay_cost=1)
+	S += t2_t3 >= 23
+	t2_t3 += ADD[1]
+
+	t4_t1_t3_mem0 = S.Task('t4_t1_t3_mem0', length=1, delay_cost=1)
+	S += t4_t1_t3_mem0 >= 23
+	t4_t1_t3_mem0 += INPUT_mem_r
+
+	t4_t1_t3_mem1 = S.Task('t4_t1_t3_mem1', length=1, delay_cost=1)
+	S += t4_t1_t3_mem1 >= 23
+	t4_t1_t3_mem1 += INPUT_mem_r
+
+	t4_t1_t3 = S.Task('t4_t1_t3', length=1, delay_cost=1)
+	S += t4_t1_t3 >= 24
+	t4_t1_t3 += ADD[0]
+
+	t4_t50_mem0 = S.Task('t4_t50_mem0', length=1, delay_cost=1)
+	S += t4_t50_mem0 >= 24
+	t4_t50_mem0 += INPUT_mem_r
+
+	t4_t50_mem1 = S.Task('t4_t50_mem1', length=1, delay_cost=1)
+	S += t4_t50_mem1 >= 24
+	t4_t50_mem1 += INPUT_mem_r
+
+	t4_t41_mem0 = S.Task('t4_t41_mem0', length=1, delay_cost=1)
+	S += t4_t41_mem0 >= 25
+	t4_t41_mem0 += INPUT_mem_r
+
+	t4_t41_mem1 = S.Task('t4_t41_mem1', length=1, delay_cost=1)
+	S += t4_t41_mem1 >= 25
+	t4_t41_mem1 += INPUT_mem_r
+
+	t4_t50 = S.Task('t4_t50', length=1, delay_cost=1)
+	S += t4_t50 >= 25
+	t4_t50 += ADD[0]
+
+	t1_t3_mem0 = S.Task('t1_t3_mem0', length=1, delay_cost=1)
+	S += t1_t3_mem0 >= 26
+	t1_t3_mem0 += INPUT_mem_r
+
+	t1_t3_mem1 = S.Task('t1_t3_mem1', length=1, delay_cost=1)
+	S += t1_t3_mem1 >= 26
+	t1_t3_mem1 += INPUT_mem_r
+
+	t4_t41 = S.Task('t4_t41', length=1, delay_cost=1)
+	S += t4_t41 >= 26
+	t4_t41 += ADD[3]
+
+	t1_t3 = S.Task('t1_t3', length=1, delay_cost=1)
+	S += t1_t3 >= 27
+	t1_t3 += ADD[1]
 
 	t4_t40_mem0 = S.Task('t4_t40_mem0', length=1, delay_cost=1)
 	S += t4_t40_mem0 >= 27
@@ -414,7 +414,7 @@ def solve():
 
 	t4_t40 = S.Task('t4_t40', length=1, delay_cost=1)
 	S += t4_t40 >= 28
-	t4_t40 += ADD[0]
+	t4_t40 += ADD[2]
 
 	t4_t2_t2_mem0 = S.Task('t4_t2_t2_mem0', length=1, delay_cost=1)
 	S += t4_t2_t2_mem0 >= 29
@@ -430,7 +430,7 @@ def solve():
 
 	t4_t2_t2 = S.Task('t4_t2_t2', length=1, delay_cost=1)
 	S += t4_t2_t2 >= 30
-	t4_t2_t2 += ADD[2]
+	t4_t2_t2 += ADD[3]
 
 	t91_mem0 = S.Task('t91_mem0', length=1, delay_cost=1)
 	S += t91_mem0 >= 30
@@ -468,13 +468,13 @@ def solve():
 	S += t101 >= 33
 	t101 += ADD[1]
 
-	t5_t1_t2_mem0 = S.Task('t5_t1_t2_mem0', length=1, delay_cost=1)
-	S += t5_t1_t2_mem0 >= 33
-	t5_t1_t2_mem0 += INPUT_mem_r
+	t5_t0_t2_mem0 = S.Task('t5_t0_t2_mem0', length=1, delay_cost=1)
+	S += t5_t0_t2_mem0 >= 33
+	t5_t0_t2_mem0 += INPUT_mem_r
 
-	t5_t1_t2_mem1 = S.Task('t5_t1_t2_mem1', length=1, delay_cost=1)
-	S += t5_t1_t2_mem1 >= 33
-	t5_t1_t2_mem1 += INPUT_mem_r
+	t5_t0_t2_mem1 = S.Task('t5_t0_t2_mem1', length=1, delay_cost=1)
+	S += t5_t0_t2_mem1 >= 33
+	t5_t0_t2_mem1 += INPUT_mem_r
 
 	t4_t8_t2_mem0 = S.Task('t4_t8_t2_mem0', length=1, delay_cost=1)
 	S += t4_t8_t2_mem0 >= 34
@@ -484,25 +484,25 @@ def solve():
 	S += t4_t8_t2_mem1 >= 34
 	t4_t8_t2_mem1 += INPUT_mem_r
 
-	t5_t1_t2 = S.Task('t5_t1_t2', length=1, delay_cost=1)
-	S += t5_t1_t2 >= 34
-	t5_t1_t2 += ADD[0]
+	t5_t0_t2 = S.Task('t5_t0_t2', length=1, delay_cost=1)
+	S += t5_t0_t2 >= 34
+	t5_t0_t2 += ADD[0]
 
 	t4_t8_t2 = S.Task('t4_t8_t2', length=1, delay_cost=1)
 	S += t4_t8_t2 >= 35
 	t4_t8_t2 += ADD[1]
 
-	t5_t2_t2_mem0 = S.Task('t5_t2_t2_mem0', length=1, delay_cost=1)
-	S += t5_t2_t2_mem0 >= 35
-	t5_t2_t2_mem0 += INPUT_mem_r
+	t5_t8_t2_mem0 = S.Task('t5_t8_t2_mem0', length=1, delay_cost=1)
+	S += t5_t8_t2_mem0 >= 35
+	t5_t8_t2_mem0 += INPUT_mem_r
 
-	t5_t2_t2_mem1 = S.Task('t5_t2_t2_mem1', length=1, delay_cost=1)
-	S += t5_t2_t2_mem1 >= 35
-	t5_t2_t2_mem1 += INPUT_mem_r
+	t5_t8_t2_mem1 = S.Task('t5_t8_t2_mem1', length=1, delay_cost=1)
+	S += t5_t8_t2_mem1 >= 35
+	t5_t8_t2_mem1 += INPUT_mem_r
 
-	t5_t2_t2 = S.Task('t5_t2_t2', length=1, delay_cost=1)
-	S += t5_t2_t2 >= 36
-	t5_t2_t2 += ADD[0]
+	t5_t8_t2 = S.Task('t5_t8_t2', length=1, delay_cost=1)
+	S += t5_t8_t2 >= 36
+	t5_t8_t2 += ADD[0]
 
 	t81_mem0 = S.Task('t81_mem0', length=1, delay_cost=1)
 	S += t81_mem0 >= 36
@@ -578,48 +578,6 @@ def solve():
 
 
 	# new tasks
-	t0_t4_in = S.Task('t0_t4_in', length=1, delay_cost=1)
-	t0_t4_in += alt(MUL_in)
-	t0_t4 = S.Task('t0_t4', length=7, delay_cost=1)
-	t0_t4 += alt(MUL)
-	S += t0_t4>=t0_t4_in
-
-	t0_t4_mem0 = S.Task('t0_t4_mem0', length=1, delay_cost=1)
-	t0_t4_mem0 += ADD_mem[1]
-	S += 26<t0_t4_mem0
-	S += t0_t4_mem0<=t0_t4
-
-	t0_t4_mem1 = S.Task('t0_t4_mem1', length=1, delay_cost=1)
-	t0_t4_mem1 += ADD_mem[3]
-	S += 27<t0_t4_mem1
-	S += t0_t4_mem1<=t0_t4
-
-	t00 = S.Task('t00', length=1, delay_cost=1)
-	t00 += alt(ADD)
-
-	t00_mem0 = S.Task('t00_mem0', length=1, delay_cost=1)
-	t00_mem0 += MUL_mem[0]
-	S += 20<t00_mem0
-	S += t00_mem0<=t00
-
-	t00_mem1 = S.Task('t00_mem1', length=1, delay_cost=1)
-	t00_mem1 += MUL_mem[0]
-	S += 15<t00_mem1
-	S += t00_mem1<=t00
-
-	t0_t5 = S.Task('t0_t5', length=1, delay_cost=1)
-	t0_t5 += alt(ADD)
-
-	t0_t5_mem0 = S.Task('t0_t5_mem0', length=1, delay_cost=1)
-	t0_t5_mem0 += MUL_mem[0]
-	S += 20<t0_t5_mem0
-	S += t0_t5_mem0<=t0_t5
-
-	t0_t5_mem1 = S.Task('t0_t5_mem1', length=1, delay_cost=1)
-	t0_t5_mem1 += MUL_mem[0]
-	S += 15<t0_t5_mem1
-	S += t0_t5_mem1<=t0_t5
-
 	t1_t4_in = S.Task('t1_t4_in', length=1, delay_cost=1)
 	t1_t4_in += alt(MUL_in)
 	t1_t4 = S.Task('t1_t4', length=7, delay_cost=1)
@@ -627,13 +585,13 @@ def solve():
 	S += t1_t4>=t1_t4_in
 
 	t1_t4_mem0 = S.Task('t1_t4_mem0', length=1, delay_cost=1)
-	t1_t4_mem0 += ADD_mem[0]
-	S += 24<t1_t4_mem0
+	t1_t4_mem0 += ADD_mem[1]
+	S += 22<t1_t4_mem0
 	S += t1_t4_mem0<=t1_t4
 
 	t1_t4_mem1 = S.Task('t1_t4_mem1', length=1, delay_cost=1)
-	t1_t4_mem1 += ADD_mem[0]
-	S += 20<t1_t4_mem1
+	t1_t4_mem1 += ADD_mem[1]
+	S += 27<t1_t4_mem1
 	S += t1_t4_mem1<=t1_t4
 
 	t10 = S.Task('t10', length=1, delay_cost=1)
@@ -670,12 +628,12 @@ def solve():
 
 	t2_t4_mem0 = S.Task('t2_t4_mem0', length=1, delay_cost=1)
 	t2_t4_mem0 += ADD_mem[0]
-	S += 22<t2_t4_mem0
+	S += 17<t2_t4_mem0
 	S += t2_t4_mem0<=t2_t4
 
 	t2_t4_mem1 = S.Task('t2_t4_mem1', length=1, delay_cost=1)
 	t2_t4_mem1 += ADD_mem[1]
-	S += 15<t2_t4_mem1
+	S += 23<t2_t4_mem1
 	S += t2_t4_mem1<=t2_t4
 
 	t20 = S.Task('t20', length=1, delay_cost=1)
@@ -683,12 +641,12 @@ def solve():
 
 	t20_mem0 = S.Task('t20_mem0', length=1, delay_cost=1)
 	t20_mem0 += MUL_mem[0]
-	S += 12<t20_mem0
+	S += 13<t20_mem0
 	S += t20_mem0<=t20
 
 	t20_mem1 = S.Task('t20_mem1', length=1, delay_cost=1)
 	t20_mem1 += MUL_mem[0]
-	S += 10<t20_mem1
+	S += 12<t20_mem1
 	S += t20_mem1<=t20
 
 	t2_t5 = S.Task('t2_t5', length=1, delay_cost=1)
@@ -696,13 +654,55 @@ def solve():
 
 	t2_t5_mem0 = S.Task('t2_t5_mem0', length=1, delay_cost=1)
 	t2_t5_mem0 += MUL_mem[0]
-	S += 12<t2_t5_mem0
+	S += 13<t2_t5_mem0
 	S += t2_t5_mem0<=t2_t5
 
 	t2_t5_mem1 = S.Task('t2_t5_mem1', length=1, delay_cost=1)
 	t2_t5_mem1 += MUL_mem[0]
-	S += 10<t2_t5_mem1
+	S += 12<t2_t5_mem1
 	S += t2_t5_mem1<=t2_t5
+
+	t0_t4_in = S.Task('t0_t4_in', length=1, delay_cost=1)
+	t0_t4_in += alt(MUL_in)
+	t0_t4 = S.Task('t0_t4', length=7, delay_cost=1)
+	t0_t4 += alt(MUL)
+	S += t0_t4>=t0_t4_in
+
+	t0_t4_mem0 = S.Task('t0_t4_mem0', length=1, delay_cost=1)
+	t0_t4_mem0 += ADD_mem[1]
+	S += 18<t0_t4_mem0
+	S += t0_t4_mem0<=t0_t4
+
+	t0_t4_mem1 = S.Task('t0_t4_mem1', length=1, delay_cost=1)
+	t0_t4_mem1 += ADD_mem[3]
+	S += 19<t0_t4_mem1
+	S += t0_t4_mem1<=t0_t4
+
+	t00 = S.Task('t00', length=1, delay_cost=1)
+	t00 += alt(ADD)
+
+	t00_mem0 = S.Task('t00_mem0', length=1, delay_cost=1)
+	t00_mem0 += MUL_mem[0]
+	S += 20<t00_mem0
+	S += t00_mem0<=t00
+
+	t00_mem1 = S.Task('t00_mem1', length=1, delay_cost=1)
+	t00_mem1 += MUL_mem[0]
+	S += 15<t00_mem1
+	S += t00_mem1<=t00
+
+	t0_t5 = S.Task('t0_t5', length=1, delay_cost=1)
+	t0_t5 += alt(ADD)
+
+	t0_t5_mem0 = S.Task('t0_t5_mem0', length=1, delay_cost=1)
+	t0_t5_mem0 += MUL_mem[0]
+	S += 20<t0_t5_mem0
+	S += t0_t5_mem0<=t0_t5
+
+	t0_t5_mem1 = S.Task('t0_t5_mem1', length=1, delay_cost=1)
+	t0_t5_mem1 += MUL_mem[0]
+	S += 15<t0_t5_mem1
+	S += t0_t5_mem1<=t0_t5
 
 	t4_t0_t4_in = S.Task('t4_t0_t4_in', length=1, delay_cost=1)
 	t4_t0_t4_in += alt(MUL_in)
@@ -711,13 +711,13 @@ def solve():
 	S += t4_t0_t4>=t4_t0_t4_in
 
 	t4_t0_t4_mem0 = S.Task('t4_t0_t4_mem0', length=1, delay_cost=1)
-	t4_t0_t4_mem0 += ADD_mem[0]
-	S += 21<t4_t0_t4_mem0
+	t4_t0_t4_mem0 += ADD_mem[3]
+	S += 20<t4_t0_t4_mem0
 	S += t4_t0_t4_mem0<=t4_t0_t4
 
 	t4_t0_t4_mem1 = S.Task('t4_t0_t4_mem1', length=1, delay_cost=1)
-	t4_t0_t4_mem1 += ADD_mem[0]
-	S += 17<t4_t0_t4_mem1
+	t4_t0_t4_mem1 += ADD_mem[2]
+	S += 21<t4_t0_t4_mem1
 	S += t4_t0_t4_mem1<=t4_t0_t4
 
 	t4_t00 = S.Task('t4_t00', length=1, delay_cost=1)
@@ -725,12 +725,12 @@ def solve():
 
 	t4_t00_mem0 = S.Task('t4_t00_mem0', length=1, delay_cost=1)
 	t4_t00_mem0 += MUL_mem[0]
-	S += 9<t4_t00_mem0
+	S += 10<t4_t00_mem0
 	S += t4_t00_mem0<=t4_t00
 
 	t4_t00_mem1 = S.Task('t4_t00_mem1', length=1, delay_cost=1)
 	t4_t00_mem1 += MUL_mem[0]
-	S += 11<t4_t00_mem1
+	S += 9<t4_t00_mem1
 	S += t4_t00_mem1<=t4_t00
 
 	t4_t0_t5 = S.Task('t4_t0_t5', length=1, delay_cost=1)
@@ -738,12 +738,12 @@ def solve():
 
 	t4_t0_t5_mem0 = S.Task('t4_t0_t5_mem0', length=1, delay_cost=1)
 	t4_t0_t5_mem0 += MUL_mem[0]
-	S += 9<t4_t0_t5_mem0
+	S += 10<t4_t0_t5_mem0
 	S += t4_t0_t5_mem0<=t4_t0_t5
 
 	t4_t0_t5_mem1 = S.Task('t4_t0_t5_mem1', length=1, delay_cost=1)
 	t4_t0_t5_mem1 += MUL_mem[0]
-	S += 11<t4_t0_t5_mem1
+	S += 9<t4_t0_t5_mem1
 	S += t4_t0_t5_mem1<=t4_t0_t5
 
 	t4_t1_t4_in = S.Task('t4_t1_t4_in', length=1, delay_cost=1)
@@ -754,12 +754,12 @@ def solve():
 
 	t4_t1_t4_mem0 = S.Task('t4_t1_t4_mem0', length=1, delay_cost=1)
 	t4_t1_t4_mem0 += ADD_mem[0]
-	S += 19<t4_t1_t4_mem0
+	S += 16<t4_t1_t4_mem0
 	S += t4_t1_t4_mem0<=t4_t1_t4
 
 	t4_t1_t4_mem1 = S.Task('t4_t1_t4_mem1', length=1, delay_cost=1)
 	t4_t1_t4_mem1 += ADD_mem[0]
-	S += 18<t4_t1_t4_mem1
+	S += 24<t4_t1_t4_mem1
 	S += t4_t1_t4_mem1<=t4_t1_t4
 
 	t4_t10 = S.Task('t4_t10', length=1, delay_cost=1)
@@ -795,7 +795,7 @@ def solve():
 	S += t4_t2_t4>=t4_t2_t4_in
 
 	t4_t2_t4_mem0 = S.Task('t4_t2_t4_mem0', length=1, delay_cost=1)
-	t4_t2_t4_mem0 += ADD_mem[2]
+	t4_t2_t4_mem0 += ADD_mem[3]
 	S += 30<t4_t2_t4_mem0
 	S += t4_t2_t4_mem0<=t4_t2_t4
 
@@ -814,7 +814,7 @@ def solve():
 
 	t4_t20_mem1 = S.Task('t4_t20_mem1', length=1, delay_cost=1)
 	t4_t20_mem1 += MUL_mem[0]
-	S += 13<t4_t20_mem1
+	S += 7<t4_t20_mem1
 	S += t4_t20_mem1<=t4_t20
 
 	t4_t2_t5 = S.Task('t4_t2_t5', length=1, delay_cost=1)
@@ -827,7 +827,7 @@ def solve():
 
 	t4_t2_t5_mem1 = S.Task('t4_t2_t5_mem1', length=1, delay_cost=1)
 	t4_t2_t5_mem1 += MUL_mem[0]
-	S += 13<t4_t2_t5_mem1
+	S += 7<t4_t2_t5_mem1
 	S += t4_t2_t5_mem1<=t4_t2_t5
 
 	t4_t6_t0_in = S.Task('t4_t6_t0_in', length=1, delay_cost=1)
@@ -837,13 +837,13 @@ def solve():
 	S += t4_t6_t0>=t4_t6_t0_in
 
 	t4_t6_t0_mem0 = S.Task('t4_t6_t0_mem0', length=1, delay_cost=1)
-	t4_t6_t0_mem0 += ADD_mem[0]
+	t4_t6_t0_mem0 += ADD_mem[2]
 	S += 28<t4_t6_t0_mem0
 	S += t4_t6_t0_mem0<=t4_t6_t0
 
 	t4_t6_t0_mem1 = S.Task('t4_t6_t0_mem1', length=1, delay_cost=1)
-	t4_t6_t0_mem1 += ADD_mem[3]
-	S += 23<t4_t6_t0_mem1
+	t4_t6_t0_mem1 += ADD_mem[0]
+	S += 25<t4_t6_t0_mem1
 	S += t4_t6_t0_mem1<=t4_t6_t0
 
 	t4_t6_t1_in = S.Task('t4_t6_t1_in', length=1, delay_cost=1)
@@ -854,38 +854,38 @@ def solve():
 
 	t4_t6_t1_mem0 = S.Task('t4_t6_t1_mem0', length=1, delay_cost=1)
 	t4_t6_t1_mem0 += ADD_mem[3]
-	S += 25<t4_t6_t1_mem0
+	S += 26<t4_t6_t1_mem0
 	S += t4_t6_t1_mem0<=t4_t6_t1
 
 	t4_t6_t1_mem1 = S.Task('t4_t6_t1_mem1', length=1, delay_cost=1)
-	t4_t6_t1_mem1 += ADD_mem[1]
-	S += 16<t4_t6_t1_mem1
+	t4_t6_t1_mem1 += ADD_mem[3]
+	S += 15<t4_t6_t1_mem1
 	S += t4_t6_t1_mem1<=t4_t6_t1
 
 	t4_t6_t2 = S.Task('t4_t6_t2', length=1, delay_cost=1)
 	t4_t6_t2 += alt(ADD)
 
 	t4_t6_t2_mem0 = S.Task('t4_t6_t2_mem0', length=1, delay_cost=1)
-	t4_t6_t2_mem0 += ADD_mem[0]
+	t4_t6_t2_mem0 += ADD_mem[2]
 	S += 28<t4_t6_t2_mem0
 	S += t4_t6_t2_mem0<=t4_t6_t2
 
 	t4_t6_t2_mem1 = S.Task('t4_t6_t2_mem1', length=1, delay_cost=1)
 	t4_t6_t2_mem1 += ADD_mem[3]
-	S += 25<t4_t6_t2_mem1
+	S += 26<t4_t6_t2_mem1
 	S += t4_t6_t2_mem1<=t4_t6_t2
 
 	t4_t6_t3 = S.Task('t4_t6_t3', length=1, delay_cost=1)
 	t4_t6_t3 += alt(ADD)
 
 	t4_t6_t3_mem0 = S.Task('t4_t6_t3_mem0', length=1, delay_cost=1)
-	t4_t6_t3_mem0 += ADD_mem[3]
-	S += 23<t4_t6_t3_mem0
+	t4_t6_t3_mem0 += ADD_mem[0]
+	S += 25<t4_t6_t3_mem0
 	S += t4_t6_t3_mem0<=t4_t6_t3
 
 	t4_t6_t3_mem1 = S.Task('t4_t6_t3_mem1', length=1, delay_cost=1)
-	t4_t6_t3_mem1 += ADD_mem[1]
-	S += 16<t4_t6_t3_mem1
+	t4_t6_t3_mem1 += ADD_mem[3]
+	S += 15<t4_t6_t3_mem1
 	S += t4_t6_t3_mem1<=t4_t6_t3
 
 	t4_t8_t4_in = S.Task('t4_t8_t4_in', length=1, delay_cost=1)
@@ -909,12 +909,12 @@ def solve():
 
 	t4_t80_mem0 = S.Task('t4_t80_mem0', length=1, delay_cost=1)
 	t4_t80_mem0 += MUL_mem[0]
-	S += 16<t4_t80_mem0
+	S += 11<t4_t80_mem0
 	S += t4_t80_mem0<=t4_t80
 
 	t4_t80_mem1 = S.Task('t4_t80_mem1', length=1, delay_cost=1)
 	t4_t80_mem1 += MUL_mem[0]
-	S += 7<t4_t80_mem1
+	S += 16<t4_t80_mem1
 	S += t4_t80_mem1<=t4_t80
 
 	t4_t8_t5 = S.Task('t4_t8_t5', length=1, delay_cost=1)
@@ -922,12 +922,12 @@ def solve():
 
 	t4_t8_t5_mem0 = S.Task('t4_t8_t5_mem0', length=1, delay_cost=1)
 	t4_t8_t5_mem0 += MUL_mem[0]
-	S += 16<t4_t8_t5_mem0
+	S += 11<t4_t8_t5_mem0
 	S += t4_t8_t5_mem0<=t4_t8_t5
 
 	t4_t8_t5_mem1 = S.Task('t4_t8_t5_mem1', length=1, delay_cost=1)
 	t4_t8_t5_mem1 += MUL_mem[0]
-	S += 7<t4_t8_t5_mem1
+	S += 16<t4_t8_t5_mem1
 	S += t4_t8_t5_mem1<=t4_t8_t5
 
 	t5_t0_t0_in = S.Task('t5_t0_t0_in', length=1, delay_cost=1)
@@ -937,8 +937,7 @@ def solve():
 	S += t5_t0_t0>=t5_t0_t0_in
 
 	t5_t0_t0_mem0 = S.Task('t5_t0_t0_mem0', length=1, delay_cost=1)
-	t5_t0_t0_mem0 += ADD_mem[0]
-	S += 38<t5_t0_t0_mem0
+	t5_t0_t0_mem0 += INPUT_mem_r
 	S += t5_t0_t0_mem0<=t5_t0_t0
 
 	t5_t0_t0_mem1 = S.Task('t5_t0_t0_mem1', length=1, delay_cost=1)
@@ -953,27 +952,13 @@ def solve():
 	S += t5_t0_t1>=t5_t0_t1_in
 
 	t5_t0_t1_mem0 = S.Task('t5_t0_t1_mem0', length=1, delay_cost=1)
-	t5_t0_t1_mem0 += ADD_mem[0]
-	S += 40<t5_t0_t1_mem0
+	t5_t0_t1_mem0 += INPUT_mem_r
 	S += t5_t0_t1_mem0<=t5_t0_t1
 
 	t5_t0_t1_mem1 = S.Task('t5_t0_t1_mem1', length=1, delay_cost=1)
 	t5_t0_t1_mem1 += ADD_mem[0]
 	S += 37<t5_t0_t1_mem1
 	S += t5_t0_t1_mem1<=t5_t0_t1
-
-	t5_t0_t2 = S.Task('t5_t0_t2', length=1, delay_cost=1)
-	t5_t0_t2 += alt(ADD)
-
-	t5_t0_t2_mem0 = S.Task('t5_t0_t2_mem0', length=1, delay_cost=1)
-	t5_t0_t2_mem0 += ADD_mem[0]
-	S += 38<t5_t0_t2_mem0
-	S += t5_t0_t2_mem0<=t5_t0_t2
-
-	t5_t0_t2_mem1 = S.Task('t5_t0_t2_mem1', length=1, delay_cost=1)
-	t5_t0_t2_mem1 += ADD_mem[0]
-	S += 40<t5_t0_t2_mem1
-	S += t5_t0_t2_mem1<=t5_t0_t2
 
 	t5_t0_t3 = S.Task('t5_t0_t3', length=1, delay_cost=1)
 	t5_t0_t3 += alt(ADD)
@@ -995,7 +980,8 @@ def solve():
 	S += t5_t1_t0>=t5_t1_t0_in
 
 	t5_t1_t0_mem0 = S.Task('t5_t1_t0_mem0', length=1, delay_cost=1)
-	t5_t1_t0_mem0 += INPUT_mem_r
+	t5_t1_t0_mem0 += ADD_mem[0]
+	S += 38<t5_t1_t0_mem0
 	S += t5_t1_t0_mem0<=t5_t1_t0
 
 	t5_t1_t0_mem1 = S.Task('t5_t1_t0_mem1', length=1, delay_cost=1)
@@ -1010,13 +996,27 @@ def solve():
 	S += t5_t1_t1>=t5_t1_t1_in
 
 	t5_t1_t1_mem0 = S.Task('t5_t1_t1_mem0', length=1, delay_cost=1)
-	t5_t1_t1_mem0 += INPUT_mem_r
+	t5_t1_t1_mem0 += ADD_mem[0]
+	S += 40<t5_t1_t1_mem0
 	S += t5_t1_t1_mem0<=t5_t1_t1
 
 	t5_t1_t1_mem1 = S.Task('t5_t1_t1_mem1', length=1, delay_cost=1)
 	t5_t1_t1_mem1 += ADD_mem[1]
 	S += 31<t5_t1_t1_mem1
 	S += t5_t1_t1_mem1<=t5_t1_t1
+
+	t5_t1_t2 = S.Task('t5_t1_t2', length=1, delay_cost=1)
+	t5_t1_t2 += alt(ADD)
+
+	t5_t1_t2_mem0 = S.Task('t5_t1_t2_mem0', length=1, delay_cost=1)
+	t5_t1_t2_mem0 += ADD_mem[0]
+	S += 38<t5_t1_t2_mem0
+	S += t5_t1_t2_mem0<=t5_t1_t2
+
+	t5_t1_t2_mem1 = S.Task('t5_t1_t2_mem1', length=1, delay_cost=1)
+	t5_t1_t2_mem1 += ADD_mem[0]
+	S += 40<t5_t1_t2_mem1
+	S += t5_t1_t2_mem1<=t5_t1_t2
 
 	t5_t1_t3 = S.Task('t5_t1_t3', length=1, delay_cost=1)
 	t5_t1_t3 += alt(ADD)
@@ -1038,7 +1038,8 @@ def solve():
 	S += t5_t2_t0>=t5_t2_t0_in
 
 	t5_t2_t0_mem0 = S.Task('t5_t2_t0_mem0', length=1, delay_cost=1)
-	t5_t2_t0_mem0 += INPUT_mem_r
+	t5_t2_t0_mem0 += ADD_mem[0]
+	S += 38<t5_t2_t0_mem0
 	S += t5_t2_t0_mem0<=t5_t2_t0
 
 	t5_t2_t0_mem1 = S.Task('t5_t2_t0_mem1', length=1, delay_cost=1)
@@ -1053,13 +1054,27 @@ def solve():
 	S += t5_t2_t1>=t5_t2_t1_in
 
 	t5_t2_t1_mem0 = S.Task('t5_t2_t1_mem0', length=1, delay_cost=1)
-	t5_t2_t1_mem0 += INPUT_mem_r
+	t5_t2_t1_mem0 += ADD_mem[0]
+	S += 40<t5_t2_t1_mem0
 	S += t5_t2_t1_mem0<=t5_t2_t1
 
 	t5_t2_t1_mem1 = S.Task('t5_t2_t1_mem1', length=1, delay_cost=1)
 	t5_t2_t1_mem1 += ADD_mem[1]
 	S += 33<t5_t2_t1_mem1
 	S += t5_t2_t1_mem1<=t5_t2_t1
+
+	t5_t2_t2 = S.Task('t5_t2_t2', length=1, delay_cost=1)
+	t5_t2_t2 += alt(ADD)
+
+	t5_t2_t2_mem0 = S.Task('t5_t2_t2_mem0', length=1, delay_cost=1)
+	t5_t2_t2_mem0 += ADD_mem[0]
+	S += 38<t5_t2_t2_mem0
+	S += t5_t2_t2_mem0<=t5_t2_t2
+
+	t5_t2_t2_mem1 = S.Task('t5_t2_t2_mem1', length=1, delay_cost=1)
+	t5_t2_t2_mem1 += ADD_mem[0]
+	S += 40<t5_t2_t2_mem1
+	S += t5_t2_t2_mem1<=t5_t2_t2
 
 	t5_t2_t3 = S.Task('t5_t2_t3', length=1, delay_cost=1)
 	t5_t2_t3 += alt(ADD)
@@ -1078,24 +1093,24 @@ def solve():
 	t5_t40 += alt(ADD)
 
 	t5_t40_mem0 = S.Task('t5_t40_mem0', length=1, delay_cost=1)
-	t5_t40_mem0 += ADD_mem[0]
-	S += 38<t5_t40_mem0
+	t5_t40_mem0 += INPUT_mem_r
 	S += t5_t40_mem0<=t5_t40
 
 	t5_t40_mem1 = S.Task('t5_t40_mem1', length=1, delay_cost=1)
-	t5_t40_mem1 += INPUT_mem_r
+	t5_t40_mem1 += ADD_mem[0]
+	S += 38<t5_t40_mem1
 	S += t5_t40_mem1<=t5_t40
 
 	t5_t41 = S.Task('t5_t41', length=1, delay_cost=1)
 	t5_t41 += alt(ADD)
 
 	t5_t41_mem0 = S.Task('t5_t41_mem0', length=1, delay_cost=1)
-	t5_t41_mem0 += ADD_mem[0]
-	S += 40<t5_t41_mem0
+	t5_t41_mem0 += INPUT_mem_r
 	S += t5_t41_mem0<=t5_t41
 
 	t5_t41_mem1 = S.Task('t5_t41_mem1', length=1, delay_cost=1)
-	t5_t41_mem1 += INPUT_mem_r
+	t5_t41_mem1 += ADD_mem[0]
+	S += 40<t5_t41_mem1
 	S += t5_t41_mem1<=t5_t41
 
 	t5_t50 = S.Task('t5_t50', length=1, delay_cost=1)
@@ -1131,8 +1146,7 @@ def solve():
 	S += t5_t8_t0>=t5_t8_t0_in
 
 	t5_t8_t0_mem0 = S.Task('t5_t8_t0_mem0', length=1, delay_cost=1)
-	t5_t8_t0_mem0 += ADD_mem[0]
-	S += 38<t5_t8_t0_mem0
+	t5_t8_t0_mem0 += INPUT_mem_r
 	S += t5_t8_t0_mem0<=t5_t8_t0
 
 	t5_t8_t0_mem1 = S.Task('t5_t8_t0_mem1', length=1, delay_cost=1)
@@ -1147,27 +1161,13 @@ def solve():
 	S += t5_t8_t1>=t5_t8_t1_in
 
 	t5_t8_t1_mem0 = S.Task('t5_t8_t1_mem0', length=1, delay_cost=1)
-	t5_t8_t1_mem0 += ADD_mem[0]
-	S += 40<t5_t8_t1_mem0
+	t5_t8_t1_mem0 += INPUT_mem_r
 	S += t5_t8_t1_mem0<=t5_t8_t1
 
 	t5_t8_t1_mem1 = S.Task('t5_t8_t1_mem1', length=1, delay_cost=1)
 	t5_t8_t1_mem1 += ADD_mem[1]
 	S += 33<t5_t8_t1_mem1
 	S += t5_t8_t1_mem1<=t5_t8_t1
-
-	t5_t8_t2 = S.Task('t5_t8_t2', length=1, delay_cost=1)
-	t5_t8_t2 += alt(ADD)
-
-	t5_t8_t2_mem0 = S.Task('t5_t8_t2_mem0', length=1, delay_cost=1)
-	t5_t8_t2_mem0 += ADD_mem[0]
-	S += 38<t5_t8_t2_mem0
-	S += t5_t8_t2_mem0<=t5_t8_t2
-
-	t5_t8_t2_mem1 = S.Task('t5_t8_t2_mem1', length=1, delay_cost=1)
-	t5_t8_t2_mem1 += ADD_mem[0]
-	S += 40<t5_t8_t2_mem1
-	S += t5_t8_t2_mem1<=t5_t8_t2
 
 	t5_t8_t3 = S.Task('t5_t8_t3', length=1, delay_cost=1)
 	t5_t8_t3 += alt(ADD)
@@ -1192,7 +1192,7 @@ def solve():
 
 	cycles = int(solution[-1][3])
 
-	pic_file_name = "SPARSE_D_mul1_add4/SPARSE_D_mul1_add4_2.png"
+	pic_file_name = "/home/mfukuda/pairing_automation_design/bls12-381/scheduling/SPARSE_mul1_add4/SPARSE_2.png"
 	if(S.solution() != []):
 		plotters.matplotlib.plot(S,img_filename=pic_file_name, vertical_text=True, fig_size=(cycles*0.25+3, 5), show_task_labels=False)
 

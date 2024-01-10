@@ -24,11 +24,24 @@ def read_formula_csv(filename):
     return formulas
 
 
+# c = a + b, e = c + d の時 e から c を探す
 def find_prev_formula(formulas, operand):
     for formula in formulas:
         if formula[0] == operand:
             return formula
     return None
+
+
+# c = a + b, e = c + d の時 c から e とスケジューリング結果を探して，最小／最大のサイクル数を返す
+def find_next_formula(value, formulas, pre_sche_result):
+    min_finish_time, max_finish_time = 1000, 0
+    for formula in formulas:
+        if (formula[2] == value) or (formula[3] == value):
+            for sol in pre_sche_result:
+                if formula[0] == sol[0]:
+                    min_finish_time = min(min_finish_time, int(sol[2]))
+                    max_finish_time = max(max_finish_time, int(sol[2]))
+    return min_finish_time, max_finish_time
 
 
 def find_prev_resource(pre_sche_result, operand):
@@ -94,7 +107,6 @@ def find_mistake(formulas, split_ope, depth, pre_sche_result):
             is_exist = False
             mem_is_exist = False
             mem_results = []
-            min_finish_time = 1000
             for sol in pre_sche_result:
                 if formula[0] == sol[0]:
                     is_exist = True
@@ -105,13 +117,7 @@ def find_mistake(formulas, split_ope, depth, pre_sche_result):
                 if mem_is_exist:
                     for mem_result in mem_results:
                         pre_sche_result.remove(mem_result)
-                for next_formula in formulas:
-                    if (next_formula[2] == formula[0]) or (next_formula[3] == formula[0]):
-                        print(next_formula[0])
-                        for sol in pre_sche_result:
-                            if next_formula[0] == sol[0]:
-                                min_finish_time = min(min_finish_time, int(sol[2]))
-                                print(sol)
+                min_finish_time, max_finish_time = find_next_formula(formula[0], formulas, pre_sche_result)
                 mistaken_formulas.append(formula + [min_finish_time])
     split_ope[depth] = mistaken_formulas + split_ope[depth]
     return pre_sche_result, split_ope
@@ -210,6 +216,14 @@ def make_pyschedule(
             f_write.write("\t" + line[0] + " += alt(INV)\n\n")
         else:
             raise Exception("ERROR: invalid operand: " + line[1])
+        if line[0] in output_value:
+            if "new_" in line[0]:
+                min_finish_time, max_finish_time = find_next_formula(line[0][4:], formulas, pre_sche_result)
+            else:
+                min_finish_time_1, max_finish_time_1 = find_next_formula("a{}".format(line[0][1:]), formulas, pre_sche_result)
+                min_finish_time_2, max_finish_time_2 = find_next_formula("b{}".format(line[0][1:]), formulas, pre_sche_result)
+                max_finish_time = max(max_finish_time_1, max_finish_time_2)
+            f_write.write("\tS += {}<{}\n\n".format(max_finish_time, line[0]))
         if len(line) == 5:
             f_write.write("\tS += {}<{}\n\n".format(line[0], line[4]))
         make_mem_task_definition(f_write, input_value, pre_sche_result, formulas, mem_table, line[0], [line[2], line[3]], MULnum, ADDnum)

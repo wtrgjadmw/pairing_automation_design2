@@ -1562,11 +1562,51 @@ def solve():
 	S += (t13_t5*ADD[3])-1<t131_mem1*ADD_mem[3]
 	S += t131_mem1<=t131
 
+	t150 = S.Task('t150', length=1, delay_cost=1)
+	t150 += alt(ADD)
+
+	t150_mem0 = S.Task('t150_mem0', length=1, delay_cost=1)
+	t150_mem0 += alt(ADD_mem)
+	S += (t130*ADD[0])-1<t150_mem0*ADD_mem[0]
+	S += (t130*ADD[1])-1<t150_mem0*ADD_mem[1]
+	S += (t130*ADD[2])-1<t150_mem0*ADD_mem[2]
+	S += (t130*ADD[3])-1<t150_mem0*ADD_mem[3]
+	S += t150_mem0<=t150
+
+	t150_mem1 = S.Task('t150_mem1', length=1, delay_cost=1)
+	t150_mem1 += alt(ADD_mem)
+	S += (t140*ADD[0])-1<t150_mem1*ADD_mem[0]
+	S += (t140*ADD[1])-1<t150_mem1*ADD_mem[1]
+	S += (t140*ADD[2])-1<t150_mem1*ADD_mem[2]
+	S += (t140*ADD[3])-1<t150_mem1*ADD_mem[3]
+	S += t150_mem1<=t150
+
+	t151 = S.Task('t151', length=1, delay_cost=1)
+	t151 += alt(ADD)
+
+	t151_mem0 = S.Task('t151_mem0', length=1, delay_cost=1)
+	t151_mem0 += alt(ADD_mem)
+	S += (t131*ADD[0])-1<t151_mem0*ADD_mem[0]
+	S += (t131*ADD[1])-1<t151_mem0*ADD_mem[1]
+	S += (t131*ADD[2])-1<t151_mem0*ADD_mem[2]
+	S += (t131*ADD[3])-1<t151_mem0*ADD_mem[3]
+	S += t151_mem0<=t151
+
+	t151_mem1 = S.Task('t151_mem1', length=1, delay_cost=1)
+	t151_mem1 += alt(ADD_mem)
+	S += (t141*ADD[0])-1<t151_mem1*ADD_mem[0]
+	S += (t141*ADD[1])-1<t151_mem1*ADD_mem[1]
+	S += (t141*ADD[2])-1<t151_mem1*ADD_mem[2]
+	S += (t141*ADD[3])-1<t151_mem1*ADD_mem[3]
+	S += t151_mem1<=t151
+
 	c010_in = S.Task('c010_in', length=1, delay_cost=1)
 	c010_in += alt(MUL_in)
 	c010 = S.Task('c010', length=7, delay_cost=1)
 	c010 += alt(MUL)
 	S += c010>=c010_in
+
+	S += 0<c010
 
 	c010_mem0 = S.Task('c010_mem0', length=1, delay_cost=1)
 	c010_mem0 += ADD_mem[2]
@@ -1587,6 +1627,8 @@ def solve():
 	c200 += alt(MUL)
 	S += c200>=c200_in
 
+	S += 0<c200
+
 	c200_mem0 = S.Task('c200_mem0', length=1, delay_cost=1)
 	c200_mem0 += ADD_mem[3]
 	S += 15<c200_mem0
@@ -1605,6 +1647,8 @@ def solve():
 	c011 = S.Task('c011', length=7, delay_cost=1)
 	c011 += alt(MUL)
 	S += c011>=c011_in
+
+	S += 0<c011
 
 	c011_mem0 = S.Task('c011_mem0', length=1, delay_cost=1)
 	c011_mem0 += ADD_mem[0]
@@ -1625,6 +1669,8 @@ def solve():
 	c201 += alt(MUL)
 	S += c201>=c201_in
 
+	S += 0<c201
+
 	c201_mem0 = S.Task('c201_mem0', length=1, delay_cost=1)
 	c201_mem0 += ADD_mem[1]
 	S += 19<c201_mem0
@@ -1640,6 +1686,8 @@ def solve():
 
 	c000 = S.Task('c000', length=1, delay_cost=1)
 	c000 += alt(ADD)
+
+	S += 0<c000
 
 	c000_mem0 = S.Task('c000_mem0', length=1, delay_cost=1)
 	c000_mem0 += ADD_mem[3]
@@ -1658,6 +1706,8 @@ def solve():
 	c001 = S.Task('c001', length=1, delay_cost=1)
 	c001 += alt(ADD)
 
+	S += 0<c001
+
 	c001_mem0 = S.Task('c001_mem0', length=1, delay_cost=1)
 	c001_mem0 += ADD_mem[0]
 	S += 35<c001_mem0
@@ -1675,6 +1725,8 @@ def solve():
 	new_TZ0 = S.Task('new_TZ0', length=1, delay_cost=1)
 	new_TZ0 += alt(ADD)
 
+	S += 41<new_TZ0
+
 	new_TZ0_mem0 = S.Task('new_TZ0_mem0', length=1, delay_cost=1)
 	new_TZ0_mem0 += MUL_mem[0]
 	S += 47<new_TZ0_mem0
@@ -1691,6 +1743,8 @@ def solve():
 
 	new_TZ1 = S.Task('new_TZ1', length=1, delay_cost=1)
 	new_TZ1 += alt(ADD)
+
+	S += 28<new_TZ1
 
 	new_TZ1_mem0 = S.Task('new_TZ1_mem0', length=1, delay_cost=1)
 	new_TZ1_mem0 += alt(MUL_mem)
@@ -1712,6 +1766,8 @@ def solve():
 	new_TX0 = S.Task('new_TX0', length=1, delay_cost=1)
 	new_TX0 += alt(ADD)
 
+	S += 34<new_TX0
+
 	new_TX0_mem0 = S.Task('new_TX0_mem0', length=1, delay_cost=1)
 	new_TX0_mem0 += alt(MUL_mem)
 	S += (new_TX_t0*MUL[0])-1<new_TX0_mem0*MUL_mem[0]
@@ -1728,6 +1784,8 @@ def solve():
 
 	new_TX1 = S.Task('new_TX1', length=1, delay_cost=1)
 	new_TX1 += alt(ADD)
+
+	S += 32<new_TX1
 
 	new_TX1_mem0 = S.Task('new_TX1_mem0', length=1, delay_cost=1)
 	new_TX1_mem0 += alt(MUL_mem)
@@ -1746,31 +1804,10 @@ def solve():
 	new_TX1_w += alt(INPUT_mem_w)
 	S += new_TX1-1 <= new_TX1_w
 
-	t150 = S.Task('t150', length=1, delay_cost=1)
-	t150 += alt(ADD)
-
-	t150_mem0 = S.Task('t150_mem0', length=1, delay_cost=1)
-	t150_mem0 += alt(ADD_mem)
-	S += (t130*ADD[0])-1<t150_mem0*ADD_mem[0]
-	S += (t130*ADD[1])-1<t150_mem0*ADD_mem[1]
-	S += (t130*ADD[2])-1<t150_mem0*ADD_mem[2]
-	S += (t130*ADD[3])-1<t150_mem0*ADD_mem[3]
-	S += t150_mem0<=t150
-
-	t150_mem1 = S.Task('t150_mem1', length=1, delay_cost=1)
-	t150_mem1 += alt(ADD_mem)
-	S += (t140*ADD[0])-1<t150_mem1*ADD_mem[0]
-	S += (t140*ADD[1])-1<t150_mem1*ADD_mem[1]
-	S += (t140*ADD[2])-1<t150_mem1*ADD_mem[2]
-	S += (t140*ADD[3])-1<t150_mem1*ADD_mem[3]
-	S += t150_mem1<=t150
-
-	t150_w = S.Task('t150_w', length=1, delay_cost=1)
-	t150_w += alt(INPUT_mem_w)
-	S += t150-1 <= t150_w
-
 	new_TY0 = S.Task('new_TY0', length=1, delay_cost=1)
 	new_TY0 += alt(ADD)
+
+	S += 42<new_TY0
 
 	new_TY0_mem0 = S.Task('new_TY0_mem0', length=1, delay_cost=1)
 	new_TY0_mem0 += INPUT_mem_r
@@ -1778,41 +1815,20 @@ def solve():
 
 	new_TY0_mem1 = S.Task('new_TY0_mem1', length=1, delay_cost=1)
 	new_TY0_mem1 += alt(ADD_mem)
-	S += (t130*ADD[0])-1<new_TY0_mem1*ADD_mem[0]
-	S += (t130*ADD[1])-1<new_TY0_mem1*ADD_mem[1]
-	S += (t130*ADD[2])-1<new_TY0_mem1*ADD_mem[2]
-	S += (t130*ADD[3])-1<new_TY0_mem1*ADD_mem[3]
+	S += (t150*ADD[0])-1<new_TY0_mem1*ADD_mem[0]
+	S += (t150*ADD[1])-1<new_TY0_mem1*ADD_mem[1]
+	S += (t150*ADD[2])-1<new_TY0_mem1*ADD_mem[2]
+	S += (t150*ADD[3])-1<new_TY0_mem1*ADD_mem[3]
 	S += new_TY0_mem1<=new_TY0
 
 	new_TY0_w = S.Task('new_TY0_w', length=1, delay_cost=1)
 	new_TY0_w += alt(INPUT_mem_w)
 	S += new_TY0-1 <= new_TY0_w
 
-	t151 = S.Task('t151', length=1, delay_cost=1)
-	t151 += alt(ADD)
-
-	t151_mem0 = S.Task('t151_mem0', length=1, delay_cost=1)
-	t151_mem0 += alt(ADD_mem)
-	S += (t131*ADD[0])-1<t151_mem0*ADD_mem[0]
-	S += (t131*ADD[1])-1<t151_mem0*ADD_mem[1]
-	S += (t131*ADD[2])-1<t151_mem0*ADD_mem[2]
-	S += (t131*ADD[3])-1<t151_mem0*ADD_mem[3]
-	S += t151_mem0<=t151
-
-	t151_mem1 = S.Task('t151_mem1', length=1, delay_cost=1)
-	t151_mem1 += alt(ADD_mem)
-	S += (t141*ADD[0])-1<t151_mem1*ADD_mem[0]
-	S += (t141*ADD[1])-1<t151_mem1*ADD_mem[1]
-	S += (t141*ADD[2])-1<t151_mem1*ADD_mem[2]
-	S += (t141*ADD[3])-1<t151_mem1*ADD_mem[3]
-	S += t151_mem1<=t151
-
-	t151_w = S.Task('t151_w', length=1, delay_cost=1)
-	t151_w += alt(INPUT_mem_w)
-	S += t151-1 <= t151_w
-
 	new_TY1 = S.Task('new_TY1', length=1, delay_cost=1)
 	new_TY1 += alt(ADD)
+
+	S += 19<new_TY1
 
 	new_TY1_mem0 = S.Task('new_TY1_mem0', length=1, delay_cost=1)
 	new_TY1_mem0 += INPUT_mem_r
@@ -1820,10 +1836,10 @@ def solve():
 
 	new_TY1_mem1 = S.Task('new_TY1_mem1', length=1, delay_cost=1)
 	new_TY1_mem1 += alt(ADD_mem)
-	S += (t131*ADD[0])-1<new_TY1_mem1*ADD_mem[0]
-	S += (t131*ADD[1])-1<new_TY1_mem1*ADD_mem[1]
-	S += (t131*ADD[2])-1<new_TY1_mem1*ADD_mem[2]
-	S += (t131*ADD[3])-1<new_TY1_mem1*ADD_mem[3]
+	S += (t151*ADD[0])-1<new_TY1_mem1*ADD_mem[0]
+	S += (t151*ADD[1])-1<new_TY1_mem1*ADD_mem[1]
+	S += (t151*ADD[2])-1<new_TY1_mem1*ADD_mem[2]
+	S += (t151*ADD[3])-1<new_TY1_mem1*ADD_mem[3]
 	S += new_TY1_mem1<=new_TY1
 
 	new_TY1_w = S.Task('new_TY1_w', length=1, delay_cost=1)

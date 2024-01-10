@@ -42,7 +42,7 @@ class schedulingData:
         self.output_seq_filename = output_seq_filename
         self.input = input
         self.output = output
-        self.consts = ['BT0', 'BT1', 'PY', 'yp_', 'PX', 'xp_', 'QX0', 'QX1', 'QY0', 'QY1', 'QY_0', 'QY_1', 'TX0', 'TX1', 'TY0',
+        self.consts = ['BT0', 'BT1', 'PY', 'PY_', 'PX', 'PX_', 'QX0', 'QX1', 'QY0', 'QY1', 'QY_0', 'QY_1', 'TX0', 'TX1', 'TY0',
                        'TY1', 'TZ0', 'TZ1', 'XI10', 'XI11', 'XI20', 'XI21', 'XI30', 'XI31', 'XI40', 'XI41', 'XI50', 'XI51', 'ZERO', 'ONE']
 
         self.scheduling_solution = scheduling_solution

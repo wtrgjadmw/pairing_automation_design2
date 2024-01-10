@@ -64,7 +64,7 @@ def ep2_add(D_twist: bool):
     formulaList += fp2_mul("t1", "t12", "t13")
     formulaList += fp2_mul("TY", "t6", "t14")
     formulaList += fp2_add("t13", "t14", "t15")
-    formulaList += fp2_neg("t13", "new_TY")
+    formulaList += fp2_neg("t15", "new_TY")
     formulaList += fp2_mul("TZ", "t6", "new_TZ")
     if D_twist:
         formulaList += fp2_constMul("t3", "PY_", "c00")
