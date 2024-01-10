@@ -1,5 +1,5 @@
 from lib.fpx import *
-
+from lib.util import flatten_list
 
 def double_line_twist6(Fq, T, P, BT, xi, D_twist):
     TX = T[0]
@@ -24,13 +24,13 @@ def double_line_twist6(Fq, T, P, BT, xi, D_twist):
     new_TZ = Fq.add(new_TZ, new_TZ)
     l01 = Fq.sub(t0, t1)
     b2 = Fq.add(t1, t1)
-    new_xt = Fq.sub(l01, b2)
-    new_xt = Fq.mul(new_xt, t2)
-    new_yt = Fq.add(t0, l01)
+    new_TX = Fq.sub(l01, b2)
+    new_TX = Fq.mul(new_TX, t2)
+    new_TY = Fq.add(t0, l01)
     b3 = Fq.add(b2, t1)
-    new_yt = Fq.mul(b3, new_yt)
+    new_TY = Fq.mul(b3, new_TY)
     t0 = Fq.sqr(t0)
-    new_yt = Fq.add(new_yt, t0)
+    new_TY = Fq.add(new_TY, t0)
     # l00 = [mul(t4[0], PY[0]), mul(t4[1], PY[0])]
     # l10 = [mul(t3[0], negFp(PX[0])), mul(t3[1], negFp(PX[0]))]
     l00 = Fq.constMul(t4, PY)
@@ -40,7 +40,7 @@ def double_line_twist6(Fq, T, P, BT, xi, D_twist):
         l = [l00, l10, zero, l01, zero, zero]
     else:
         l = [l01, zero, l10, l00, zero, zero]
-    return [new_xt, new_yt, new_TZ], l
+    return [new_TX, new_TY, new_TZ], l
 
 
 def add_line_twist6(Fq, T, P, Q, BT, xi, D_twist):
@@ -64,11 +64,11 @@ def add_line_twist6(Fq, T, P, Q, BT, xi, D_twist):
     t6 = Fq.add(t3, t3)
     t5 = Fq.sub(t5, t6)
     t7 = Fq.sub(t5, t3)
-    new_xt = Fq.mul(t1, t5)
+    new_TX = Fq.mul(t1, t5)
     t7 = Fq.mul(t0, t7)
     t8 = Fq.mul(TY, t4)
-    new_yt = Fq.add(t7, t8)
-    new_yt = Fq.neg(new_yt)
+    new_TY = Fq.add(t7, t8)
+    new_TY = Fq.neg(new_TY)
     new_TZ = Fq.mul(TZ, t4)
     l00 = Fq.constMul(t1, PY)
     l10 = Fq.constMul(t0, PX)
@@ -80,7 +80,7 @@ def add_line_twist6(Fq, T, P, Q, BT, xi, D_twist):
         l = [l00, l10, zero, l01, zero, zero]
     else:
         l = [l01, zero, l10, l00, zero, zero]
-    return [new_xt, new_yt, new_TZ], l
+    return [new_TX, new_TY, new_TZ], l
 
 
 def scalar_mul_twist6(Fq, n, T, P, BT, xi, D_twist):
@@ -168,6 +168,8 @@ def miller_function_ate(Fq6, Fq, Fp, P, Q, BT, xi, D_twist, miller_param_list):
 
     for l in miller_param_list[1:]:
         T, e = double_line_twist6(Fq, T, P_dbl, BT, xi, D_twist)
+
+
         f = Fq6.sqr(f)
         f = Fq6.mapToFq6(f)
         if D_twist:
@@ -250,9 +252,8 @@ def final_exp_expFq(Fq6, Fq, xi, U, a):
 def final_exp_easy_k12(Fp12: Fp12_t, f):
     k = Fp12.frob(Fp12.frob(f))
     k = Fp12.mul(k, f)
-    l = Fp12.conj(k)
-    k = Fp12.inv(k)
-    f = Fp12.mul(l, k)
+    l = Fp12.inv(k)
+    f = Fp12.mul(l, Fp12.conj(k))
     return f
 
 
@@ -270,7 +271,17 @@ def final_exp_hard_bls12(Fp12: Fp12_t, Fp2: Fp2_t, xi, U, f):
     t5 = Fp12.mul(t2, t5)  # f^(u^3-2u^2+u)
     t2 = Fp12.mapFromFq6(SQR012345(Fp2, xi, Fp12.mapToFq6(t2)))  # f^2u
     t4 = Fp12.frob(Fp12.frob(t4))
-    t5 = Fp12.frob(Fp12.frob(t5))
+    t5 = Fp12.frob(t5)
+    print("FROB -----------")
+    for fx in flatten_list(Fp12.k):
+        print("{:x}".format(fx))
+    print("FROB -----------")
+    for fx in flatten_list(t5):
+        print("{:x}".format(fx))
+    t5 = Fp12.frob(t5)
+    print("FROB -----------")
+    for fx in flatten_list(t5):
+        print("{:x}".format(fx))
     t2 = Fp12.mul(t2, t3)  # f^(u^4-2u^3+2u)
     t4 = Fp12.frob(t4)
     t3 = final_exp_expFq(Fp12, Fp2, xi, U, t2)  # f^(u^5-2u^4+2u^2)

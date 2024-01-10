@@ -76,7 +76,7 @@ class FormulaOrganizer:
                     formula.ret, formula.ret, isMinus=True)
                 return FormulaSet(
                     opr1=opr1_element.value,
-                    opr2=opr1_element.value,
+                    opr2=opr2_element.value,
                     ret=formula.ret,
                     type=formula.type)
         return FormulaSet(
@@ -110,4 +110,6 @@ class FormulaOrganizer:
                     resultList.append(FormulaSet(opr1="ZERO", opr2=element.value, ret=key, type="SUB"))
                 else:
                     resultList.append(FormulaSet(opr1=element.value, opr2="ZERO", ret=key, type="ADD"))
+        # for key, transform in self.transformList.items():
+        #     print("original: {}, value: {}, isMinus: {}, isUsed: {}".format(key, transform.value, transform.isMinus, transform.isUsed))
         return resultList

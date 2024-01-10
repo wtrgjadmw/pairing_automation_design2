@@ -4,9 +4,11 @@ set CLK "clk"
 set library_path "~/sotb65nm/160108_REL_VDEC/LIB/LE8U_V02.02.00/liberty/LSTP"
 lappend search_path  $library_path
 lappend search_path "./include"
+lappend search_path "."
 lappend search_path "./"
 lappend link_path  $library_path
 lappend link_path "./include"
+lappend link_path "."
 lappend link_path "./"
 
 set ULLIBRARY LE8UL_LSTP_Ptt_V0p75_T25

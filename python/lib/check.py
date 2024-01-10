@@ -1,3 +1,5 @@
+import random
+from lib.util import flatten_list
 from lib.pairing import (
     double_line_twist6,
     add_line_twist6,
@@ -6,10 +8,11 @@ from lib.pairing import (
     pairing_bls12,
     pairing_bls24,
     scalar_mul_twist6,
+    miller_function_ate,
+    final_exp_bls12,
     final_exp_bls24,
 )
 from lib.ep import scalar_mul
-import random
 from lib.parameters import p, curve_group, Fp, Fq, Fq6, P, Q, T, BT, xi, D_twist, U
 
 
@@ -128,16 +131,37 @@ def check_bilinear(curve_group, Fq6, Fq, Fp, P, Q, BT, xi, D_twist, U):
         print("e(aP, bQ) != e(P, Q)^ab")
 
 
-if __name__ == "__main__":
-    check_bilinear(
-        curve_group,
-        Fq6,
-        Fq,
-        Fp,
-        P,
-        Q,
-        BT,
-        xi,
-        D_twist,
-        U,
+def check_output(curve_group, Fq6, Fq, Fp, P, Q, BT, xi, D_twist, U):
+    T, f = miller_function_ate(
+        Fq6, Fq, Fp, P, Q, BT, xi, D_twist, miller_param_list=U[::-1]
     )
+    # print("Miller Loop ------------------\nT:")
+    # for t in flatten_list(T):
+    #     print("{:x}".format(t))
+    # print("f:")
+    # for fx in flatten_list(f):
+    #     print("{:x}".format(fx))
+
+    if curve_group == "bls12":
+        f = final_exp_bls12(Fq6, Fq, xi, U, f)
+    elif curve_group == "bls24":
+        f = final_exp_bls24(Fq6, Fq, xi, U, f)
+    print("Final Exponentiation ---------\nf:")
+    for fx in flatten_list(f):
+        print("{:x}".format(fx))
+
+
+if __name__ == "__main__":
+    # check_bilinear(
+    #     curve_group,
+    #     Fq6,
+    #     Fq,
+    #     Fp,
+    #     P,
+    #     Q,
+    #     BT,
+    #     xi,
+    #     D_twist,
+    #     U,
+    # )
+    check_output(curve_group, Fq6, Fq, Fp, P, Q, BT, xi, D_twist, U)
