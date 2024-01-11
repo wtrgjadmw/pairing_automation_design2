@@ -88,10 +88,10 @@ def fp24_frob(opr1: str, ret: str):
     formulaList += fp4_frob(opr1+"12", ret+"_f12")
     formulaList += fp4_frob(opr1+"00", ret+"00")
     formulaList += fp4_mul(ret+"_f10", "XI1", ret+"10")
-    formulaList += fp4_mul(ret+"_f01", "XI1", ret+"01")
-    formulaList += fp4_mul(ret+"_f11", "XI1", ret+"11")
-    formulaList += fp4_mul(ret+"_f02", "XI1", ret+"02")
-    formulaList += fp4_mul(ret+"_f12", "XI1", ret+"12")
+    formulaList += fp4_mul(ret+"_f01", "XI2", ret+"01")
+    formulaList += fp4_mul(ret+"_f11", "XI3", ret+"11")
+    formulaList += fp4_mul(ret+"_f02", "XI4", ret+"02")
+    formulaList += fp4_mul(ret+"_f12", "XI5", ret+"12")
     return formulaList
 
 

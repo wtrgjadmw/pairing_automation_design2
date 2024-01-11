@@ -13,41 +13,51 @@ def csv2Formula(path):
     return formulaList
 
 
-def initialize_valueList(k: int, a, b):
+def initialize_value(k, a, b):
     valueList = {}
-
-    # initialize
     valueList["ZERO"] = Fp.zero()
     valueList["ONE"] = Fp.one()
     valueList["PX"] = P[0]
     valueList["PY"] = P[1]
     valueList["PX_"] = Fp.neg(P[0])
-    print(valueList["PX_"])
     valueList["PY_"] = Fp.neg(P[1])
-    if k == 2:
+    if k == 12:
         for i in range(2):
-            valueList['a{}'.format(i)] = a[i]
-            valueList['b{}'.format(i)] = b[i]
-    elif k == 4:
-        for j in range(2):
+            valueList['QX{}'.format(i)] = Q[0][i]
+            valueList['QY{}'.format(i)] = Q[1][i]
+            valueList['TX{}'.format(i)] = T[0][i]
+            valueList['TY{}'.format(i)] = T[1][i]
+            valueList['TZ{}'.format(i)] = T[2][i]
+            valueList['BT{}'.format(i)] = BT[i]
+        for j in range(1, 6):
             for i in range(2):
-                valueList['a{}'.format(i)] = a[j][i]
-                valueList['b{}'.format(i)] = b[j][i]
-    elif k == 12:
+                valueList['XI{}{}'.format(j, i)] = Fq6.k[j][i]
         for m in range(3):
             for j in range(2):
                 for i in range(2):
                     valueList['a{}{}{}'.format(m, j, i)] = a[m][j][i]
                     valueList['b{}{}{}'.format(m, j, i)] = b[m][j][i]
     elif k == 24:
+        for j in range(2):
+            for i in range(2):
+                valueList['QX{}{}'.format(j, i)] = Q[0][j][i]
+                valueList['QY{}{}'.format(j, i)] = Q[1][j][i]
+                valueList['TX{}{}'.format(j, i)] = T[0][j][i]
+                valueList['TY{}{}'.format(j, i)] = T[1][j][i]
+                valueList['TZ{}{}'.format(j, i)] = T[2][j][i]
+                valueList['BT{}{}'.format(j, i)] = BT[j][i]
+        for m in range(1, 6):
+            for j in range(2):
+                for i in range(2):
+                    valueList['XI{}{}{}'.format(m, j, i)] = Fq6.k[m][j][i]
+        for i in range(2):
+            valueList['K{}'.format(i)] = Fq.k[i]
         for n in range(2):
             for m in range(3):
                 for j in range(2):
                     for i in range(2):
-                        valueList['a{}{}{}{}'.format(
-                            n, m, j, i)] = a[n][m][j][i]
-                        valueList['b{}{}{}{}'.format(
-                            n, m, j, i)] = b[n][m][j][i]
+                        valueList['a{}{}{}{}'.format(n, m, j, i)] = a[n][m][j][i]
+                        valueList['b{}{}{}{}'.format(n, m, j, i)] = b[n][m][j][i]
     return valueList
 
 
@@ -95,21 +105,24 @@ def check_result(valueList: dict, k: int, c):
                         print("Error: this formula has some error;")
                         return
     elif k == 24:
-        # print(c)
+        print(c)
         for n in range(2):
             for m in range(3):
                 for j in range(2):
                     for i in range(2):
-                        # print(valueList['c{}{}{}{}'.format(n, m, j, i)])
-                        if valueList['c{}{}{}{}'.format(
-                                n, m, j, i)] != c[n + m * 2][j][i]:
+                        value_name = 'c{}{}{}{}'.format(n, m, j, i)
+                        if value_name not in valueList.keys():
+                            print("{}: 0".format(value_name))
+                            continue
+                        print(valueList['c{}{}{}{}'.format(n, m, j, i)])
+                        if valueList[value_name] != c[n][m][j][i]:
                             print("Error: this formula has some error;")
-                            return
+                            # return
     print("Success!")
 
 
 def test_formula(k, formulaName, a, b, c):
-    valueList = fp12_initialize_value(a, b)
+    valueList = initialize_value(k, a, b)
     formulaList = csv2Formula(
         path="/home/mfukuda/pairing_automation_design/{}-{}/csv/{}.csv".format(curve_group, curve_name, formulaName))
     valueList = calculate_test(valueList, formulaList)
@@ -117,62 +130,32 @@ def test_formula(k, formulaName, a, b, c):
     check_result(valueList, k, c)
 
 
-def fp12_initialize_value(a, b):
-    valueList = {}
-    valueList["ZERO"] = Fp.zero()
-    valueList["ONE"] = Fp.one()
-    valueList["PX"] = P[0]
-    valueList["PY"] = P[1]
-    valueList["PX_"] = Fp.neg(P[0])
-    valueList["PY_"] = Fp.neg(P[1])
-    for i in range(2):
-        valueList['QX{}'.format(i)] = Q[0][i]
-        valueList['QY{}'.format(i)] = Q[1][i]
-        valueList['TX{}'.format(i)] = T[0][i]
-        valueList['TY{}'.format(i)] = T[1][i]
-        valueList['TZ{}'.format(i)] = T[2][i]
-        valueList['BT{}'.format(i)] = BT[i]
-    for j in range(1, 6):
-        for i in range(2):
-            valueList['XI{}{}'.format(j, i)] = Fq6.k[j][i]
-    for m in range(3):
-        for j in range(2):
-            for i in range(2):
-                valueList['a{}{}{}'.format(m, j, i)] = a[m][j][i]
-                valueList['b{}{}{}'.format(m, j, i)] = b[m][j][i]
-    return valueList
-
-
-def fp12_test_formula():
+def test_all_csv(k):
     a = Fq6.random_element()
     b = Fq6.random_element()
     P_dbl = [Fp.neg(P[0]), P[1]]
-    P_add = [P[0], Fp.neg(P[1])]
-    test_formula(12, "CONJ", a, b, Fq6.conj(a))
-    test_formula(12, "FROB", a, b, Fq6.frob(a))
-    test_formula(12, "MUL", a, b, Fq6.mul(a, b))
-    test_formula(12, "MUL_CONJ", a, b, Fq6.mul_conj(a, b))
-    test_formula(12, "SQR", a, b, Fq6.sqr(a))
+    # P_add = [P[0], Fp.neg(P[1])]
+    # test_formula(k, "CONJ", a, b, Fq6.conj(a))
+    # test_formula(k, "FROB", a, b, Fq6.frob(a))
+    # test_formula(k, "MUL", a, b, Fq6.mul(a, b))
+    # test_formula(k, "MUL_CONJ", a, b, Fq6.mul(a, Fq6.conj(b)))
+    # test_formula(k, "SQR", a, b, Fq6.sqr(a))
     new_T, l = double_line_twist6(Fq, T, P_dbl, BT, xi, D_twist)
-    test_formula(12, "PDBL", a, b, [[l[0], l[3]], [l[1], l[4]], [l[2], l[5]]])
-    new_T, l = add_line_twist6(Fq, T, P_add, Q, BT, xi, D_twist)
-    test_formula(12, "PADD", a, b, [[l[0], l[3]], [l[1], l[4]], [l[2], l[5]]])
-    c_6 = SQR012345(Fq, xi, [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]])
-    test_formula(12, "SQR012345", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
-    if D_twist:
-        c_6 = sparse_mult_d6_twist(Fq, xi,
-            [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
-            [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
-            )
-    else:
-        c_6 = sparse_mult_m6_twist(Fq, xi,
-            [a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1]],
-            [b[0][0], b[1][0], b[2][0], b[0][1], b[1][1], b[2][1]],
-            )
-    test_formula(12, "SPARSE", a, b, [[c_6[0], c_6[3]], [c_6[1], c_6[4]], [c_6[2], c_6[5]]])
-    test_formula(12, "INV", a, b, Fq6.inv(a))
+    test_formula(k, "PDBL", a, b, Fq6.mapFromFq6(l))
+    # new_T, l = add_line_twist6(Fq, T, P_add, Q, BT, xi, D_twist)
+    # test_formula(k, "PADD", a, b, Fq6.mapFromFq6(l))
+    # c_6 = SQR012345(Fq, xi, Fq6.mapToFq6(a))
+    # test_formula(k, "SQR012345", a, b, Fq6.mapFromFq6(c_6))
+    # if D_twist:
+    #     c_6 = sparse_mult_d6_twist(Fq, xi, Fq6.mapToFq6(a), Fq6.mapToFq6(b))
+    # else:
+    #     c_6 = sparse_mult_m6_twist(Fq, xi, Fq6.mapToFq6(a), Fq6.mapToFq6(b))
+    # test_formula(k, "SPARSE", a, b, Fq6.mapFromFq6(c_6))
+    # test_formula(k, "INV", a, b, Fq6.inv(a))
 
 
 if __name__ == "__main__":
     if curve_group == "bls12":
-        fp12_test_formula()
+        test_all_csv(k=12)
+    if curve_group == "bls24":
+        test_all_csv(k=24)

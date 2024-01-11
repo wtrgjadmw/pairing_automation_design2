@@ -40,8 +40,8 @@ def fp24_makeCsv(directory: str):
     printCsv(directory+"MUL.csv", fp24_mul("a", "b", "c"))
     printCsv(directory+"MUL_CONJ.csv", fp24_mul_conj("a", "b", "c"))
     printCsv(directory+"SQR.csv", fp24_sqr("a", "c"))
-    printCsv(directory+"PDBL.csv", ep4_dbl())
-    printCsv(directory+"PADD.csv", ep4_add())
+    printCsv(directory+"PDBL.csv", ep4_dbl(D_twist))
+    printCsv(directory+"PADD.csv", ep4_add(D_twist))
     printCsv(directory+"SQR012345.csv", fp24_SQR012345("a", "c"))
     printCsv(directory+"INV.csv", fp24_inv("a", "c"))
     if D_twist:

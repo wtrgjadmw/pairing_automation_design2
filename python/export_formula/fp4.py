@@ -124,7 +124,7 @@ def fp4_exp(opr1: str, x: int, ret: str):
 def fp4_frob(opr1: str, ret: str):
     formulaList = fp2_conj(opr1 + "0", ret + "0")
     formulaList += fp2_conj(opr1 + "1", ret + "1_")
-    formulaList += fp2_conj(ret + "1_", ret + "1")
+    formulaList += fp2_mul(ret + "1_", "K", ret + "1")
     return formulaList
 
 
