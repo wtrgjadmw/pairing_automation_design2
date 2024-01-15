@@ -135,12 +135,12 @@ def check_output(curve_group, Fq6, Fq, Fp, P, Q, BT, xi, D_twist, U):
     T, f = miller_function_ate(
         Fq6, Fq, Fp, P, Q, BT, xi, D_twist, miller_param_list=U[::-1]
     )
-    # print("Miller Loop ------------------\nT:")
-    # for t in flatten_list(T):
-    #     print("{:x}".format(t))
-    # print("f:")
-    # for fx in flatten_list(f):
-    #     print("{:x}".format(fx))
+    print("Miller Loop ------------------\nT:")
+    for t in flatten_list(T):
+        print("{:x}".format(t))
+    print("f:")
+    for fx in flatten_list(f):
+        print("{:x}".format(fx))
 
     if curve_group == "bls12":
         f = final_exp_bls12(Fq6, Fq, xi, U, f)

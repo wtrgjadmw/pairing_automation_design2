@@ -345,7 +345,6 @@ if __name__ == "__main__":
     curve_group = args.curve
     curve_name = args.characteristic
 
-    # TODO: スケジューリング毎回実行するように修正
     home_dir = os.path.dirname(os.getcwd())
     target_dir = "{}/{}-{}".format(home_dir, curve_group, curve_name)
     os.makedirs("{}/RTL/include/ALU_mode".format(target_dir), exist_ok=True)

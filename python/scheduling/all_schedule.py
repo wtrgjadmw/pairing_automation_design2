@@ -88,7 +88,7 @@ def repeat_schedule(target_dir: str, curve_group: str, curve_name: str, algo_nam
             input_num)
         print(i)
         scheduling_i = importlib.import_module("{}-{}.scheduling.{}_mul{}_add{}.{}".format(curve_group,
-                                               curve_name, algo_name, mul_num, add_num, file_name))
+            curve_name, algo_name, mul_num, add_num, file_name))
         # print(split_ope[i])
         # make_pyschedule(file_name, formulas, mem_table, split_ope, pre_sche_result, i, write_file, input_value, mul_num, add_num, mul_num_list, add_num_list, input_num)
         # exec(open(write_file).read())
@@ -123,18 +123,19 @@ def repeat_schedule(target_dir: str, curve_group: str, curve_name: str, algo_nam
 
 def all_schedule(curve_group: str, curve_name: str, mul_num: int, add_num: int):
     target_dir = "{}/{}-{}".format(os.path.dirname(os.getcwd()), curve_group, curve_name)
-    # os.makedirs("{}/scheduling/result".format(target_dir), exist_ok=True)
-    # repeat_schedule(curve_group, curve_name, "CONJ", mul_num, add_num)
-    # repeat_schedule(target_dir, curve_group, curve_name, "FROB", mul_num, add_num)
-    # repeat_schedule(curve_group, curve_name, "MUL", mul_num, add_num)
-    # repeat_schedule(curve_group, curve_name, "PADD", mul_num, add_num)
-    # repeat_schedule(curve_group, curve_name, "PDBL", mul_num, add_num)
-    # repeat_schedule(curve_group, curve_name, "SPARSE", mul_num, add_num)
-    # repeat_schedule(target_dir, curve_group, curve_name, "SQR", mul_num, add_num)
+    os.makedirs("{}/scheduling/result".format(target_dir), exist_ok=True)
+    #repeat_schedule(target_dir, curve_group, curve_name, "CONJ", mul_num, add_num)
+    #repeat_schedule(target_dir, curve_group, curve_name, "FROB", mul_num, add_num)
+    #repeat_schedule(target_dir, curve_group, curve_name, "MUL", mul_num, add_num)
+    #repeat_schedule(target_dir, curve_group, curve_name, "PADD", mul_num, add_num)
+    #repeat_schedule(target_dir, curve_group, curve_name, "PDBL", mul_num, add_num)
+    #repeat_schedule(target_dir, curve_group, curve_name, "SPARSE", mul_num, add_num)
+    #repeat_schedule(target_dir, curve_group, curve_name, "SQR", mul_num, add_num)
     repeat_schedule(target_dir, curve_group, curve_name, "SQR012345", mul_num, add_num)
+    repeat_schedule(target_dir, curve_group, curve_name, "INV", mul_num, add_num)
 
-    # copy_and_replace_4padd("{}/scheduling/result/PADD.txt".format(target_dir), "{}/scheduling/result/PMINUS.txt".format(target_dir))
-    # copy_and_replace_4mul("{}/scheduling/result/MUL.txt".format(target_dir), "{}/scheduling/result/MUL_CONJ.txt".format(target_dir), "{}/csv/MUL_CONJ.csv".format(target_dir))
+    copy_and_replace_4padd("{}/scheduling/result/PADD.txt".format(target_dir), "{}/scheduling/result/PMINUS.txt".format(target_dir))
+    copy_and_replace_4mul("{}/scheduling/result/MUL.txt".format(target_dir), "{}/scheduling/result/MUL_CONJ.txt".format(target_dir), "{}/csv/MUL_CONJ.csv".format(target_dir))
 
 
 if __name__ == "__main__":

@@ -2,11 +2,7 @@ import shutil
 from io import TextIOWrapper
 import os
 
-from lib.parameters import Fp, Fp2, Fp4, fp4_qnr, fp12_cnr, u, U, p, P, Q, T, BT, curve_group, curve_name
-
-
-def int2hexstr(x):
-    return str(hex(x))[2:]
+from lib.parameters import Fp, Fp4, fp4_qnr, fp12_cnr, u, U, p, P, Q, T, BT, curve_group, curve_name
 
 
 def write_parameter_vh(home_dir: str, f_param):
@@ -24,39 +20,38 @@ def write_parameter_vh(home_dir: str, f_param):
 
     f.write("\n\n// constants --------------------------------------------------------\n")
     f.write("`define WORD_SIZE 'd{}\n".format(p_len))
-    f.write("`define CHAR {:#d}'h{:#x}\n".format(p_len, p))
-    f.write("`define CHAR_INV {:#d}'h{:#x}\n".format(p_len, p_inv))
-    f.write("`define INVERSION_INITIAL_VALUE {:#d}'h{:#x}\n".format(p_len, inv_init_val))
-    f.write("`define CHAR_3X {:#d}'h{:#x}\n\n".format(p_len, p3))  # NOTE: Div4PathUnit-aug_p のbit幅要確認
+    f.write("`define CHAR {:d}'h{:x}\n".format(p_len, p))
+    f.write("`define CHAR_INV {:d}'h{:x}\n".format(p_len, p_inv))
+    f.write("`define INVERSION_INITIAL_VALUE {:d}'h{:x}\n".format(p_len, inv_init_val))
+    f.write("`define CHAR_3X {:d}'h{:x}\n\n".format(p_len + 2, p3))  # NOTE: Div4PathUnit-aug_p のbit幅要確認
 
-    f.write("// parameters for twisted curve (Ep4)\n")
+    f.write("// parameters for twisted curve (Ep2)\n")
     for i in range(2):
         for j in range(2):
-            f.write("`define BT{}{} {:#d}'h{:#x}\n".format(i, j, p_len, BT[i][j]))
+            f.write("`define BT{}{} {:d}'h{:x}\n".format(i, j, p_len, BT[i][j]))
 
     one = Fp.one()
-    k = Fp2.exp(fp4_qnr, (p - 1) // 2)
+    k = Fp4.Fp2.exp(Fp4.Fp2.exp(fp4_qnr), (p - 1) // 2)
     xi = [
-        [[one, 0], [0, 0]],
-        Fp4.exp(fp12_cnr, (p - 1) // 6),
-        Fp4.exp(fp12_cnr, 2 * (p - 1) // 6),
-        Fp4.exp(fp12_cnr, 3 * (p - 1) // 6),
-        Fp4.exp(fp12_cnr, 4 * (p - 1) // 6),
-        Fp4.exp(fp12_cnr, 5 * (p - 1) // 6)
+        [[Fp.one(), 0], [0, 0]],
+        Fp4.exp(Fp4.MontConv(fp12_cnr), (p - 1) // 6),
+        Fp4.exp(Fp4.MontConv(fp12_cnr), 2 * (p - 1) // 6),
+        Fp4.exp(Fp4.MontConv(fp12_cnr), 3 * (p - 1) // 6),
+        Fp4.exp(Fp4.MontConv(fp12_cnr), 4 * (p - 1) // 6),
+        Fp4.exp(Fp4.MontConv(fp12_cnr), 5 * (p - 1) // 6)
     ]
 
     f.write("// // constants independent from elliptic curve\n")
     f.write("`define ZERO {}'d0\n".format(p_len))
-    f.write("`define ONE {:#d}'h{:#x}\n\n".format(p_len, one))
+    f.write("`define ONE {:d}'h{:x}\n\n".format(p_len, one))
 
-    f.write("\n// Frobenius pre-calculated coefficients\n")
+    f.write("// Frobenius pre-calculated coefficients\n")
     for i in range(2):
-        f.write("`define K{}{} {:#d}'h{:#x}\n".format(i, j, p_len, k[i]))
-
-    for l in range(1, 6):
-        for i in range(2):
-            for j in range(2):
-                f.write("`define XI{}{}{} {:#d}'h{:#x}\n".format(l, i, j, p_len, xi[l][i][j]))
+        f.write("`define K{} {:d}'h{:x}\n".format(i, p_len, k[i]))
+    for i in range(1, 6):
+        for j in range(2):
+            for n in range(2):
+                f.write("`define XI{}{} {:d}'h{:x}\n".format(i, j, p_len, xi[i][j][n]))
     f.close()
 
 
@@ -69,40 +64,40 @@ def write_input_vh(f_input):
     # aP = ep_mul(a, [P[0][0][0], P[1][0][0]])
     # aP = [[[aP[0][0][0], 0], [0, 0]], [[aP[1][0][0], 0], [0, 0]]]
     aP = P
-    f.write("`define PX {:#d}'h{:#x}\n".format(p_len, aP[0]))
-    f.write("`define PX_ {:#d}'h{:#x}\n".format(p_len, Fp.neg(aP[0])))
-    f.write("`define PX3 {:#d}'h{:#x}\n".format(p_len, Fp.add(aP[0], Fp.add(aP[0], aP[0]))))
-    f.write("`define PY {:#d}'h{:#x}\n".format(p_len, aP[1]))
-    f.write("`define PY_ {:#d}'h{:#x}\n".format(p_len, Fp.neg(aP[1])))
+    f.write("`define PX {:d}'h{:x}\n".format(p_len, aP[0]))
+    f.write("`define PX_ {:d}'h{:x}\n".format(p_len, Fp.neg(aP[0])))
+    f.write("`define PY {:d}'h{:x}\n".format(p_len, aP[1]))
+    f.write("`define PY_ {:d}'h{:x}\n".format(p_len, Fp.neg(aP[1])))
 
     # b = random.randint(1, r-1)
     # print("b: " + str(b))
     # bT = ep4_mul(b, T)
     # bT = change_to_affine(bT)
     # bQ = bT[: 2]
-    bQ = T[:2]
+    bQ = Q
     bT = T
+
     for i in range(2):
         for j in range(2):
-            f.write("`define QX{}{} {:#d}'h{:#x}".format(i, j, p_len, bQ[0][i][j]))
+            f.write("`define QX{}{} {:d}'h{:x}".format(i, j, p_len, bQ[0][i][j]))
     for i in range(2):
         for j in range(2):
-            f.write("`define QY{}{} {:#d}'h{:#x}".format(i, j, p_len, bQ[1][i][j]))
+            f.write("`define QY{}{} {:d}'h{:x}".format(i, j, p_len, bQ[1][i][j]))
     for i in range(2):
         for j in range(2):
-            f.write("`define QY_{}{} {:#d}'h{:#x}".format(i, j, p_len, Fp.neg(bQ[1][i][j])))
+            f.write("`define QY_{}{} {:d}'h{:x}".format(i, j, p_len, Fp.neg(bQ[1][i][j])))
     for i in range(2):
         for j in range(2):
-            f.write("`define TX{}{} {:#d}'h{:#x}".format(i, j, p_len, Fp.neg(bT[0][i][j])))
+            f.write("`define TX{}{} {:d}'h{:x}".format(i, j, p_len, bT[0][i][j]))
     for i in range(2):
         for j in range(2):
             if u > 0:
-                f.write("`define TY{}{} {:#d}'h{:#x}".format(i, j, p_len, bT[1][i][j]))
+                f.write("`define TY{}{} {:d}'h{:x}".format(i, j, p_len, bT[1][i][j]))
             else:
-                f.write("`define TY{}{} {:#d}'h{:#x}".format(i, j, p_len, Fp.neg(bT[1][i][j])))
+                f.write("`define TY{}{} {:d}'h{:x}".format(i, j, p_len, Fp.neg(bT[1][i][j])))
     for i in range(2):
         for j in range(2):
-            f.write("`define TZ{}{} {:#d}'h{:#x}".format(i, j, p_len, bT[2][i][j]))
+            f.write("`define TZ{}{} {:d}'h{:x}".format(i, j, p_len, bT[2][i][j]))
     f.close()
 
 
@@ -247,7 +242,7 @@ def testbench_copy(home_dir, RTL_dir):
 def make_RTL():
     home_dir = os.path.dirname(os.getcwd())
     RTL_dir = "{}/{}-{}/RTL".format(home_dir, curve_group, curve_name)
-
+    shutil.copytree("{}/RTL".format(home_dir), RTL_dir, dirs_exist_ok=True, ignore=shutil.ignore_patterns("lib"))
     testbench_copy(home_dir, RTL_dir)
 
     write_parameter_vh(home_dir, f_param="{}/include/parameter.vh".format(RTL_dir))

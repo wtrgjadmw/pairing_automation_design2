@@ -502,7 +502,7 @@ class Fp24_t:
         self.Fp4 = Fp12.Fp4
         self.Fp12 = Fp12
         self.qnr = qnr
-        self.k = self.k = [
+        self.k = [
             Fp12.Fp4.one(),
             self.Fp12.Fp4.exp(
                 Fp12.Fp4.MontConv(Fp12.cnr), (Fp12.Fp4.Fp2.Fp.p - 1) // 6
