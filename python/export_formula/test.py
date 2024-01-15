@@ -1,4 +1,5 @@
 import csv
+import os
 from lib.pairing import add_line_twist6, double_line_twist6, sparse_mult_m6_twist, sparse_mult_d6_twist, SQR012345
 from lib.util import FormulaSet
 from lib.parameters import Fp, Fq, Fq6, P, Q, T, BT, D_twist, xi, curve_group, curve_name
@@ -105,26 +106,27 @@ def check_result(valueList: dict, k: int, c):
                         print("Error: this formula has some error;")
                         return
     elif k == 24:
-        print(c)
+        # print(c)
         for n in range(2):
             for m in range(3):
                 for j in range(2):
                     for i in range(2):
                         value_name = 'c{}{}{}{}'.format(n, m, j, i)
                         if value_name not in valueList.keys():
-                            print("{}: 0".format(value_name))
+                            # print("{}: 0".format(value_name))
                             continue
-                        print(valueList['c{}{}{}{}'.format(n, m, j, i)])
+                        # print(valueList['c{}{}{}{}'.format(n, m, j, i)])
                         if valueList[value_name] != c[n][m][j][i]:
                             print("Error: this formula has some error;")
-                            # return
+                            return
     print("Success!")
 
 
 def test_formula(k, formulaName, a, b, c):
+    home_dir = os.path.dirname(os.getcwd())
     valueList = initialize_value(k, a, b)
     formulaList = csv2Formula(
-        path="/home/mfukuda/pairing_automation_design/{}-{}/csv/{}.csv".format(curve_group, curve_name, formulaName))
+        path="{}/{}-{}/csv/{}.csv".format(home_dir, curve_group, curve_name, formulaName))
     valueList = calculate_test(valueList, formulaList)
     print(formulaName, end=": ")
     check_result(valueList, k, c)
@@ -134,24 +136,24 @@ def test_all_csv(k):
     a = Fq6.random_element()
     b = Fq6.random_element()
     P_dbl = [Fp.neg(P[0]), P[1]]
-    # P_add = [P[0], Fp.neg(P[1])]
-    # test_formula(k, "CONJ", a, b, Fq6.conj(a))
-    # test_formula(k, "FROB", a, b, Fq6.frob(a))
-    # test_formula(k, "MUL", a, b, Fq6.mul(a, b))
-    # test_formula(k, "MUL_CONJ", a, b, Fq6.mul(a, Fq6.conj(b)))
-    # test_formula(k, "SQR", a, b, Fq6.sqr(a))
+    P_add = [P[0], Fp.neg(P[1])]
+    test_formula(k, "CONJ", a, b, Fq6.conj(a))
+    test_formula(k, "FROB", a, b, Fq6.frob(a))
+    test_formula(k, "MUL", a, b, Fq6.mul(a, b))
+    test_formula(k, "MUL_CONJ", a, b, Fq6.mul(a, Fq6.conj(b)))
+    test_formula(k, "SQR", a, b, Fq6.sqr(a))
     new_T, l = double_line_twist6(Fq, T, P_dbl, BT, xi, D_twist)
     test_formula(k, "PDBL", a, b, Fq6.mapFromFq6(l))
-    # new_T, l = add_line_twist6(Fq, T, P_add, Q, BT, xi, D_twist)
-    # test_formula(k, "PADD", a, b, Fq6.mapFromFq6(l))
-    # c_6 = SQR012345(Fq, xi, Fq6.mapToFq6(a))
-    # test_formula(k, "SQR012345", a, b, Fq6.mapFromFq6(c_6))
-    # if D_twist:
-    #     c_6 = sparse_mult_d6_twist(Fq, xi, Fq6.mapToFq6(a), Fq6.mapToFq6(b))
-    # else:
-    #     c_6 = sparse_mult_m6_twist(Fq, xi, Fq6.mapToFq6(a), Fq6.mapToFq6(b))
-    # test_formula(k, "SPARSE", a, b, Fq6.mapFromFq6(c_6))
-    # test_formula(k, "INV", a, b, Fq6.inv(a))
+    new_T, l = add_line_twist6(Fq, T, P_add, Q, BT, xi, D_twist)
+    test_formula(k, "PADD", a, b, Fq6.mapFromFq6(l))
+    c_6 = SQR012345(Fq, xi, Fq6.mapToFq6(a))
+    test_formula(k, "SQR012345", a, b, Fq6.mapFromFq6(c_6))
+    if D_twist:
+        c_6 = sparse_mult_d6_twist(Fq, xi, Fq6.mapToFq6(a), Fq6.mapToFq6(b))
+    else:
+        c_6 = sparse_mult_m6_twist(Fq, xi, Fq6.mapToFq6(a), Fq6.mapToFq6(b))
+    test_formula(k, "SPARSE", a, b, Fq6.mapFromFq6(c_6))
+    test_formula(k, "INV", a, b, Fq6.inv(a))
 
 
 if __name__ == "__main__":
