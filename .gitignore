@@ -8,3 +8,7 @@ xrun.*
 *.log
 *.alib
 *.svf
+crte_*
+Synopsys_*
+*.lp
+*.sol

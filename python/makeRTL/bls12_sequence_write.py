@@ -337,10 +337,11 @@ if __name__ == "__main__":
     state_sizes = {}
 
     psr = argparse.ArgumentParser(
-        prog="プログラムの名前", usage="プログラムの使い方", description="プログラムの説明"
+        usage='schedule.py -c <curve_group> -p <p[bit]>',
+        description='Generate RTLs of sequencer based on scheduling results'
     )
-    psr.add_argument("-c", "--curve", required=True, help="楕円曲線群")
-    psr.add_argument("-p", "--characteristic", required=True, help="楕円曲線の標数のbit幅")
+    psr.add_argument("-c", "--curve", required=True, help="curve group")
+    psr.add_argument("-p", "--characteristic", required=True, help="bit width of characteristic number p")
     args = psr.parse_args()
     curve_group = args.curve
     curve_name = args.characteristic
