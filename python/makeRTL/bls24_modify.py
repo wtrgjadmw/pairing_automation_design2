@@ -31,7 +31,7 @@ def write_parameter_vh(home_dir: str, f_param):
             f.write("`define BT{}{} {:d}'h{:x}\n".format(i, j, p_len, BT[i][j]))
 
     one = Fp.one()
-    k = Fp4.Fp2.exp(Fp4.Fp2.exp(fp4_qnr), (p - 1) // 2)
+    k = Fp4.Fp2.exp(Fp4.Fp2.MontConv(fp4_qnr), (p - 1) // 2)
     xi = [
         [[Fp.one(), 0], [0, 0]],
         Fp4.exp(Fp4.MontConv(fp12_cnr), (p - 1) // 6),

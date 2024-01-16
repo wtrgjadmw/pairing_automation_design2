@@ -7,7 +7,8 @@ This is an automatic design tool for optimized pairing hardware accelerator of A
 # How to use
 
 ## Prerequisite
-python version >= 3.10
+- python version >= 3.10
+- scheduler: [CPLEX](https://www.ibm.com/jp-ja/products/ilog-cplex-optimization-studio)
 
 ## Steps
 1. Calculate necessary parameters for pairing (p, r, b, BT, Tower Extension, twist type, P, Q) from the integer u
@@ -41,7 +42,6 @@ The command generates text file like `padd_mul1_add4.txt` which contains the inf
 4. Convert the scheduling result to RTL of sequencer & modify other parts as needed
 
 ```bash
-$ rsync -a ./RTL/ /BLS12-$(P_BIT)/RTL/
-$ python makeRTL/bls12_modify.py python3 makeRTL/bls12_modify.py -c bls12 -p 381
-$ python makeRTL/bls12_sequence_write.py $(DIRNAME)/BLS12-$(P_BIT)
+$ python3 makeRTL/<curve_group>_modify.py -c <curve_group> -p <p[bit]>
+$ python makeRTL/write_sequence.py -c <curve_group> -p <p[bit]>
 ```

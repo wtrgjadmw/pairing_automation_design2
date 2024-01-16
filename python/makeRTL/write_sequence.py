@@ -1,21 +1,18 @@
-import csv
 import os
 import copy
-import re
 import sys
 import argparse
+import traceback
 
 
-def read_const_value_csv(filename):
-    f_read = open(filename, "r")
-    consts = []
-    cnt = 48
-    for line in csv.reader(f_read):
-        consts.append(line[1].strip())
-        consts.append(line[2].strip())
-        cnt += 2
-    f_read.close()
-    return consts
+def value2num(value):
+    if len(value) == 4:
+        num = int(value[1]) * 4 + int(value[2]) * 2 + int(value[3])
+    elif len(value) == 5:
+        num = int(value[1]) * 12 + int(value[2]) * 4 + int(value[3]) * 2 + int(value[4])
+    else:
+        raise Exception("the length of value: {0} is {1}".format(value, len(value)))
+    return num
 
 
 class schedulingData:
@@ -24,6 +21,7 @@ class schedulingData:
             output_seq_filename: str,
             input: list,
             output: list,
+            consts: list,
             scheduling_solution: list,
             formulas: list,
             mem_table: dict,
@@ -35,62 +33,7 @@ class schedulingData:
         self.output_seq_filename = output_seq_filename
         self.input = input
         self.output = output
-        self.consts = [
-            'PY_',
-            'BT00',
-            'BT01',
-            'BT10',
-            'BT11',
-            'PX_',
-            'PY',
-            'QX00',
-            'QX01',
-            'QX10',
-            'QX11',
-            'QY00',
-            'QY01',
-            'QY10',
-            'QY11',
-            'QY_00',
-            'QY_01',
-            'QY_10',
-            'QY_11',
-            'TX00',
-            'TX01',
-            'TX10',
-            'TX11',
-            'TY00',
-            'TY01',
-            'TY10',
-            'TY11',
-            'TZ00',
-            'TZ01',
-            'TZ10',
-            'TZ11',
-            'XI100',
-            'XI101',
-            'XI110',
-            'XI111',
-            'XI200',
-            'XI201',
-            'XI210',
-            'XI211',
-            'XI300',
-            'XI301',
-            'XI310',
-            'XI311',
-            'XI400',
-            'XI401',
-            'XI410',
-            'XI411',
-            'XI500',
-            'XI501',
-            'XI510',
-            'XI511',
-            'K0',
-            'K1',
-            'ZERO',
-            'ONE']
+        self.consts = consts
 
         self.scheduling_solution = scheduling_solution
         self.formulas = formulas
@@ -102,7 +45,6 @@ class schedulingData:
         self.ram_num_list = {}
         self.mem_ctrl_seq = [[]]
         self.operator_init_seq = [[]]
-        # self.input_mem_list = [[] for i in range(24)]
 
         self.mem_addr_list = {}
         for i in range(MULnum):
@@ -142,9 +84,9 @@ class schedulingData:
     # self.solution_data["c"] = ["a", "b", "ADD", "add0", start_time, end_time]
     def set_solution_data(self):
         for sol in self.scheduling_solution:
-            if "_in" in sol[0]:
+            if sol[0][-3:] == "_in":
                 continue
-            if "_w" in sol[0]:
+            if sol[0][-2:] == "_w":
                 continue
             value_name = sol[0]
             operator_name = sol[1]
@@ -240,11 +182,13 @@ class schedulingData:
         if value_name in self.consts:
             raddr = "`RAM_{0}".format(value_name)
         else:
-            num = int(value_name[1]) * 12 + int(value_name[2]) * 4 + int(value_name[3]) * 2 + int(value_name[4])
-            if value_name[0] == 'A':
+            num = value2num(value_name)
+            if value_name[0] == 'a':
                 raddr = "inst_addr_opr1 + `RAM_ADDR_SIZE'd{0}".format(num)
-            elif value_name[0] == 'B':
+            elif value_name[0] == 'b':
                 raddr = "inst_addr_opr2 + `RAM_ADDR_SIZE'd{0}".format(num)
+            else:
+                print(value_name)
         ram_num = self.ram_num_list[mem_value_name]
         self.ram_rctrl(operator="input", read_t=time - 1, ram_num=ram_num, addr=raddr)
         return 1, "ram_input_out{ram_num}".format(ram_num=ram_num)
@@ -318,11 +262,14 @@ class schedulingData:
                 self.mem_ctrl_seq[write_t][index] = "w{ram_num}_n_reg <= 0;\n".format(ram_num=ram_num)
             else:
                 self.mem_ctrl_seq[write_t].append("w{ram_num}_n_reg <= 0;\n".format(ram_num=ram_num))
-            out = re.sub("_\\d", "", re.sub("_new", "", out))
-            if out in self.consts:
-                waddr = "`RAM_{0}".format(out)
-            else:
-                num = int(out[1]) * 12 + int(out[2]) * 4 + int(out[3]) * 2 + int(out[4])
+            is_const = False
+            out = out.replace("NEW_", "").replace("_", "")
+            for const in self.consts:
+                if const in out:
+                    waddr = "`RAM_{0}".format(const)
+                    is_const = True
+            if not is_const:
+                num = value2num(out)
                 waddr = "ret_addr + `RAM_ADDR_SIZE'd{0}".format(num)
             self.mem_ctrl_seq[write_t].append("waddr{ram_num}_reg <= {waddr};\n".format(ram_num=ram_num, waddr=waddr))
             self.mem_ctrl_seq[write_t].append("wdata_s{ram_num} <= `{operator};\n".format(ram_num=ram_num, operator=operator))
@@ -388,21 +335,30 @@ if __name__ == "__main__":
     curve_group = args.curve
     curve_name = args.characteristic
 
+    if curve_group == "bls12":
+        consts = ['BT0', 'BT1', 'PY', 'PY_', 'PX', 'PX_', 'QX0', 'QX1', 'QY0', 'QY1', 'QY_0', 'QY_1', 'TX0', 'TX1', 'TY0','TY1', 'TZ0', 'TZ1', 'XI10', 'XI11', 'XI20', 'XI21', 'XI30', 'XI31', 'XI40', 'XI41', 'XI50', 'XI51', 'ZERO', 'ONE']
+    elif curve_group == "bls24":
+        consts = ['BT00', 'BT01', 'BT10', 'BT11', 'PX', 'PX_', 'PY', 'PY_', 'QX00', 'QX01', 'QX10', 'QX11', 'QY00', 'QY01', 'QY10', 'QY11', 'QY_00', 'QY_01', 'QY_10', 'QY_11', 'TX00', 'TX01', 'TX10', 'TX11', 'TY00', 'TY01', 'TY10', 'TY11', 'TZ00', 'TZ01', 'TZ10', 'TZ11', 'XI100', 'XI101', 'XI110', 'XI111', 'XI200', 'XI201', 'XI210', 'XI211', 'XI300', 'XI301', 'XI310', 'XI311', 'XI400', 'XI401', 'XI410', 'XI411', 'XI500', 'XI501', 'XI510', 'XI511', 'K0', 'K1', 'ZERO', 'ONE']
+
     home_dir = os.path.dirname(os.getcwd())
     target_dir = "{}/{}-{}".format(home_dir, curve_group, curve_name)
     os.makedirs("{}/RTL/include/ALU_mode".format(target_dir), exist_ok=True)
 
     for root, dirs, files in os.walk("{}/scheduling/result".format(target_dir)):
         for file in files:
-            csv_file_path = os.path.join(root, file)
-            verilog_file_path = output_directory + "/include/ALU_mode/seq_{0}.v".format(file[:-4])
+            if file[-4:] != ".txt":
+                continue
+            result_file_path = os.path.join(root, file)
+            sequence_file_path = "{}/RTL/include/ALU_mode/seq_{}.v".format(target_dir, file[:-4])
             mem_table = {}
-            print(csv_file_path)
-            exec(open(csv_file_path, 'r', encoding="utf-8").read())
+            print(result_file_path)
+            # read scheduling result file
+            exec(open(result_file_path, 'r', encoding="utf-8").read())
             sche_data = schedulingData(
-                output_seq_filename=verilog_file_path,
+                output_seq_filename=sequence_file_path,
                 input=input,
                 output=output,
+                consts=consts,
                 scheduling_solution=solution,
                 formulas=formulas,
                 mem_table=mem_table,
@@ -410,12 +366,15 @@ if __name__ == "__main__":
                 ADDnum=4)
             try:
                 sche_data.make_sequence()
-            except KeyError as e:
-                print(type(e), e)
+            except Exception:
+                etype, value, tb = sys.exc_info()
+                estr_list = traceback.format_exception(etype, value, tb)
+                for estr in estr_list:
+                    print(estr, end="")
             state_sizes[file[:-4].replace("_mul1_add4", "")] = sche_data.seq_finish_time + 1
 
     calc_state_size = max(state_sizes.values()).bit_length()
-    calc_param_file = output_directory + "/include/CalcCore_param.vh"
+    calc_param_file = "{}/RTL/include/CalcCore_param.vh".format(target_dir)
     f = open(calc_param_file, 'a')
     f.write("`define CALC_STATE_SIZE " + str(calc_state_size) + "\n")
     for key, value in state_sizes.items():
