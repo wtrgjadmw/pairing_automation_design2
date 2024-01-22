@@ -13,6 +13,7 @@ from sage.structure.proof.all import arithmetic
 from parameter import find_curve_parameter_b, find_twist_curve_parameter_xi_ab
 from test_pairing import test_order, test_ate_pairing_bls12_aklgl
 import json
+import argparse
 
 
 def get_parameters(u0):
@@ -24,8 +25,16 @@ def get_parameters(u0):
     tx = x + 1
     cx = (x - 1) ** 2 / 3
     yx = (x - 1) * (2 * x**2 - 1) / 3
-    c2x = (x**8 - 4 * x**7 + 5 * x**6 - 4 * x**4 + 6 * x **
-           3 - 4 * x**2 - 4 * x + 13) / 9  # cofactor for G2
+    c2x = (
+        x**8
+        - 4 * x**7
+        + 5 * x**6
+        - 4 * x**4
+        + 6 * x**3
+        - 4 * x**2
+        - 4 * x
+        + 13
+    ) / 9  # cofactor for G2
     p = ZZ(px(u0))
     r = ZZ(rx(u0))
     c = ZZ(cx(u0))
@@ -64,9 +73,17 @@ def get_parameters(u0):
     (s,) = Fp2s._first_ngens(1)
     E2, xi, btw, D_twist = find_twist_curve_parameter_xi_ab(b, Fp2, r, d=6)
     if D_twist:
-        print("BLS{}-{} E'(Fp4): y^2 = x^3 {:+d}/({}): D-twist".format(k, p.nbits(), b, xi))
+        print(
+            "BLS{}-{} E'(Fp4): y^2 = x^3 {:+d}/({}): D-twist".format(
+                k, p.nbits(), b, xi
+            )
+        )
     else:
-        print("BLS{}-{} E'(Fp4): y^2 = x^3 {:+d}*({}): M-twist".format(k, p.nbits(), b, xi))
+        print(
+            "BLS{}-{} E'(Fp4): y^2 = x^3 {:+d}*({}): M-twist".format(
+                k, p.nbits(), b, xi
+            )
+        )
 
     P = c * E.random_element()
     while P == E(0) or r * P != E(0):
@@ -85,7 +102,10 @@ def get_parameters(u0):
         "xi": [int(x) for x in xi.polynomial().list()],
         "D_twist": D_twist,
         "P": [int(P[0]), int(P[1])],
-        "Q": [[int(x) for x in Q[0].polynomial().list()], [int(x) for x in Q[1].polynomial().list()]]
+        "Q": [
+            [int(x) for x in Q[0].polynomial().list()],
+            [int(x) for x in Q[1].polynomial().list()],
+        ],
     }
 
     return params
@@ -101,8 +121,16 @@ def test_curve(u0):
     tx = x + 1
     cx = (x - 1) ** 2 / 3
     yx = (x - 1) * (2 * x**2 - 1) / 3
-    c2x = (x**8 - 4 * x**7 + 5 * x**6 - 4 * x**4 + 6 * x **
-           3 - 4 * x**2 - 4 * x + 13) / 9  # cofactor for G2
+    c2x = (
+        x**8
+        - 4 * x**7
+        + 5 * x**6
+        - 4 * x**4
+        + 6 * x**3
+        - 4 * x**2
+        - 4 * x
+        + 13
+    ) / 9  # cofactor for G2
     p = ZZ(px(u0))
     r = ZZ(rx(u0))
     c = ZZ(cx(u0))
@@ -192,30 +220,42 @@ def test_curve(u0):
             ]
         )
 
-    test_ate_pairing_bls12_aklgl(
-        E, E2, r, c, c2, u0, Fq6, map_Fq6_Fp12, D_twist)
+    test_ate_pairing_bls12_aklgl(E, E2, r, c, c2, u0, Fq6, map_Fq6_Fp12, D_twist)
 
 
 if __name__ == "__main__":
-    args = sys.argv
-    param_file = args[1]
-    size = os.path.getsize(param_file)
-    if size == 0:
-        json_load = dict()
-    else:
-        with open(param_file, "r") as file:
-            json_load = json.load(file)
+    psr = argparse.ArgumentParser(
+        usage="parameters.py -c <curve_group> -p <p[bit]>",
+        description="calculate required parameter for pairing operation",
+    )
+    psr.add_argument("-c", "--curve", required=True, help="curve group")
+    psr.add_argument(
+        "-p",
+        "--characteristic",
+        required=True,
+        help="bit width of characteristic number p",
+    )
+    # psr.add_argument("-f", "--filename", required=True, help="読み込むJSONファイル")
+    args = psr.parse_args()
+    curve_group = args.curve
+    curve_name = args.characteristic
+    os.chdir('..')
+    target_dir = "{}/{}-{}".format(
+        os.path.dirname(os.getcwd()), curve_group, curve_name
+    )
+    os.makedirs(target_dir, exist_ok=True)
+    param_file = "{}/param.json".format(target_dir)
 
-    json_load["bls12"] = dict()
-    # bls12-381
-    u0 = ZZ(-(2**63 + 2**62 + 2**60 + 2**57 + 2**48 + 2**16))
-    json_load["bls12"]["P381"] = get_parameters(u0)
-    # test_curve(u0)
+    # # bls12-381
+    # u0 = ZZ(-(2**63 + 2**62 + 2**60 + 2**57 + 2**48 + 2**16))
+    # # test_curve(u0)
 
-    # # bls12-446
-    u0 = ZZ(-(2**75 - 2**73 + 2**63 + 2**57 + 2**50 + 2**17 + 1))
-    json_load["bls12"]["P446"] = get_parameters(u0)
-    # test_curve(u0)
+    # # # bls12-446
+    # u0 = ZZ(-(2**75 - 2**73 + 2**63 + 2**57 + 2**50 + 2**17 + 1))
+    # # test_curve(u0)
+
+    # bls12-638
+    u0 = ZZ(-(2**107) + 2**105 + 2**93 + 2**5)
 
     with open(param_file, "w") as file:
-        json.dump(json_load, file, indent=4)
+        json.dump(get_parameters(u0), file, indent=4)
