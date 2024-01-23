@@ -25,7 +25,7 @@ def write_parameter_vh(home_dir: str, f_param):
     f.write("`define INVERSION_INITIAL_VALUE {:d}'h{:x}\n".format(p_len, inv_init_val))
     f.write("`define CHAR_3X {:d}'h{:x}\n\n".format(p_len + 2, p3))  # NOTE: Div4PathUnit-aug_p のbit幅要確認
 
-    f.write("// parameters for twisted curve (Ep2)\n")
+    f.write("// parameters for twisted curve (Ep4)\n")
     for i in range(2):
         for j in range(2):
             f.write("`define BT{}{} {:d}'h{:x}\n".format(i, j, p_len, BT[i][j]))
@@ -51,7 +51,7 @@ def write_parameter_vh(home_dir: str, f_param):
     for i in range(1, 6):
         for j in range(2):
             for n in range(2):
-                f.write("`define XI{}{} {:d}'h{:x}\n".format(i, j, p_len, xi[i][j][n]))
+                f.write("`define XI{}{}{} {:d}'h{:x}\n".format(i, j, n, p_len, xi[i][j][n]))
     f.close()
 
 
@@ -79,25 +79,25 @@ def write_input_vh(f_input):
 
     for i in range(2):
         for j in range(2):
-            f.write("`define QX{}{} {:d}'h{:x}".format(i, j, p_len, bQ[0][i][j]))
+            f.write("`define QX{}{} {:d}'h{:x}\n".format(i, j, p_len, bQ[0][i][j]))
     for i in range(2):
         for j in range(2):
-            f.write("`define QY{}{} {:d}'h{:x}".format(i, j, p_len, bQ[1][i][j]))
+            f.write("`define QY{}{} {:d}'h{:x}\n".format(i, j, p_len, bQ[1][i][j]))
     for i in range(2):
         for j in range(2):
-            f.write("`define QY_{}{} {:d}'h{:x}".format(i, j, p_len, Fp.neg(bQ[1][i][j])))
+            f.write("`define QY_{}{} {:d}'h{:x}\n".format(i, j, p_len, Fp.neg(bQ[1][i][j])))
     for i in range(2):
         for j in range(2):
-            f.write("`define TX{}{} {:d}'h{:x}".format(i, j, p_len, bT[0][i][j]))
+            f.write("`define TX{}{} {:d}'h{:x}\n".format(i, j, p_len, bT[0][i][j]))
     for i in range(2):
         for j in range(2):
             if u > 0:
-                f.write("`define TY{}{} {:d}'h{:x}".format(i, j, p_len, bT[1][i][j]))
+                f.write("`define TY{}{} {:d}'h{:x}\n".format(i, j, p_len, bT[1][i][j]))
             else:
-                f.write("`define TY{}{} {:d}'h{:x}".format(i, j, p_len, Fp.neg(bT[1][i][j])))
+                f.write("`define TY{}{} {:d}'h{:x}\n".format(i, j, p_len, Fp.neg(bT[1][i][j])))
     for i in range(2):
         for j in range(2):
-            f.write("`define TZ{}{} {:d}'h{:x}".format(i, j, p_len, bT[2][i][j]))
+            f.write("`define TZ{}{} {:d}'h{:x}\n".format(i, j, p_len, bT[2][i][j]))
     f.close()
 
 
