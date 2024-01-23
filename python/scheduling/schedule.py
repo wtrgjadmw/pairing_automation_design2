@@ -59,10 +59,15 @@ def make_mem_task_definition(
         pre_sche_result,
         formulas,
         mem_table,
-        value,
-        operands: list,
+        current_formula: list,
         MULnum: int,
         ADDnum: int):
+    value = current_formula[0]
+    if current_formula[2] == current_formula[3]:
+        operands = [current_formula[2]]
+    else:
+        operands = [current_formula[2], current_formula[2]]
+    
     for i in range(len(operands)):
         operand = operands[i]
         mem_value_name = "{0}_mem{1}".format(value, i)
@@ -71,11 +76,11 @@ def make_mem_task_definition(
             f_write.write("\t{0} = S.Task('{0}', length=1, delay_cost=1)\n".format(mem_value_name))
             f_write.write("\t{0} += INPUT_mem_r\n".format(mem_value_name))
         else:
-            formula = find_prev_formula(formulas, operand)
+            prev_formula = find_prev_formula(formulas, operand)
             pre_resource, pre_resource_num, pre_end_time = find_prev_resource(pre_sche_result, operand)
-            if formula is None:
+            if prev_formula is None:
                 raise Exception("can't find previous formula")
-            opcode = formula[1]
+            opcode = prev_formula[1]
             if opcode == "INV":
                 f_write.write("\tS += {0} < {1}\n".format(operand, value))
                 continue
@@ -99,26 +104,14 @@ def make_mem_task_definition(
         f_write.write("\tS += {1} <= {0}\n\n".format(value, mem_value_name))
 
 
-def find_mistake(formulas, output_value, split_ope, depth, pre_sche_result):
+def find_mistake(formulas, mem_table_list, output_value, split_ope, depth, pre_sche_result):
     mistaken_formulas = []
     inv_val = ""
     for formula in split_ope[depth]:
         is_exist = False
         sub_value_results = []
         task = formula[0]
-        if formula[1] == "MUL":
-            sub_values = {"{}_mem0".format(task): False, "{}_mem1".format(task): False, "{}_in".format(task): False}
-        elif formula[1] == "ADD" or formula[1] == "SUB":
-            sub_values = {"{}_mem0".format(task): False, "{}_mem1".format(task): False}
-        elif formula[1] == "INV":
-            sub_values = {}
-            inv_val = task
-        if task in output_value:
-            sub_values["{}_w".format(task)] = False
-        if formula[2] == inv_val:
-            sub_values["{}_mem0".format(task)] = True
-        if formula[3] == inv_val:
-            sub_values["{}_mem1".format(task)] = True
+        sub_values = {key: False for key, value in mem_table_list[depth].items() if task in key}
 
         for sol in pre_sche_result:
             if task == sol[0]:
@@ -150,7 +143,7 @@ def make_pyschedule(
         dir_name,
         file_name,
         formulas,
-        mem_table,
+        mem_table_list,
         split_ope,
         pre_sche_result,
         depth,
@@ -159,21 +152,21 @@ def make_pyschedule(
         MULnum,
         ADDnum,
         input_num):
-    # def make_pyschedule(file_name, formulas, mem_table, split_ope,
-    # pre_sche_result, depth, filename_write, input_value, MULnum, ADDnum,
-    # mul_num_list, add_num_list, input_num):
 
     f_write = open("{}/{}.py".format(dir_name, file_name), "w")
     f_write.write("from pyschedule import Scenario, solvers, plotters, alt\n\n\n")
     f_write.write("def solve():\n")
 
+
+    # mul_cycle = mul_num_list[depth]
+    # add_cycle = (add_num_list[depth] // ADDnum)
+    
     # mul_cycle = mul_num_list[depth]
     # add_cycle = (add_num_list[depth] // ADDnum)
     pre_cycle = 0
     if pre_sche_result != []:
         pre_cycle = int(pre_sche_result[-1][3])
     f_write.write("\thorizon = {0}\n".format(max(pre_cycle + 90, input_num // 2 + 50)))
-    # f_write.write("\thorizon = {0}\n".format(max(mul_cycle+70, add_cycle+70, pre_cycle+90, input_num//2+50)))
 
     f_write.write("\tS = Scenario(\"" + file_name + "\", horizon=horizon)\n")
 
@@ -211,7 +204,7 @@ def make_pyschedule(
             f_write.write("\t{0} += {1}[{2}]\n\n".format(task, resource, resource_num))
 
     f_write.write("\n\t# new tasks\n")
-
+    tmp_mem_table = {}
     for line in split_ope[depth]:
         if line[1] == "MUL":
             f_write.write("\t{0}_in = S.Task('{0}_in', length=1, delay_cost=1)\n".format(line[0]))
@@ -237,11 +230,12 @@ def make_pyschedule(
             f_write.write("\tS += {}<{}\n\n".format(max_finish_time, line[0]))
         if len(line) == 5:
             f_write.write("\tS += {}<{}\n\n".format(line[0], line[4]))
-        make_mem_task_definition(f_write, input_value, pre_sche_result, formulas, mem_table, line[0], [line[2], line[3]], MULnum, ADDnum)
+        make_mem_task_definition(f_write, input_value, pre_sche_result, formulas, tmp_mem_table, line, MULnum, ADDnum)
         if line[0] in output_value:
             f_write.write("\t{0}_w = S.Task('{0}_w', length=1, delay_cost=1)\n".format(line[0]))
             f_write.write("\t{0}_w += alt(INPUT_mem_w)\n".format(line[0]))
             f_write.write("\tS += {0}-1 <= {0}_w\n\n".format(line[0]))
+    mem_table_list.append(tmp_mem_table)
 
     f_write.write("\tsolvers.mip.solve(S,msg=1,kind='CPLEX',ratio_gap=1.01)\n\n")
     f_write.write("\tsolution = [['hoge']*len(S.solution()[1]) for i in range(len(S.solution()))]\n")
