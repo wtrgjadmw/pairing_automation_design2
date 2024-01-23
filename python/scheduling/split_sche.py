@@ -1,4 +1,4 @@
-import copy
+import copy, re
 # 大規模スケジューリングの分割
 
 

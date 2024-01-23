@@ -168,9 +168,14 @@ def miller_function_ate(Fq6, Fq, Fp, P, Q, BT, xi, D_twist, miller_param_list):
 
     for l in miller_param_list[1:]:
         T, e = double_line_twist6(Fq, T, P_dbl, BT, xi, D_twist)
-
+        # print("point doubling T:")
+        # for t in flatten_list(T):
+        #     print("{:x}".format(t))
 
         f = Fq6.sqr(f)
+        # print("square:")
+        # for fx in flatten_list(f):
+        #     print("{:x}".format(fx))
         f = Fq6.mapToFq6(f)
         if D_twist:
             f = sparse_mult_d6_twist(Fq, xi, e, f)

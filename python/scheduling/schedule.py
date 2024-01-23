@@ -3,7 +3,6 @@ from io import TextIOWrapper
 import sys
 import csv
 import time
-import re
 import os
 import argparse
 args = sys.argv
@@ -78,48 +77,72 @@ def make_mem_task_definition(
                 raise Exception("can't find previous formula")
             opcode = formula[1]
             if opcode == "INV":
-                f_write.write("\tS += {0}<{1}\n".format(operand, value))
+                f_write.write("\tS += {0} < {1}\n".format(operand, value))
                 continue
             f_write.write("\t{0} = S.Task('{0}', length=1, delay_cost=1)\n".format(mem_value_name))
             if opcode == "MUL":
                 if pre_resource is None:
                     f_write.write("\t{0} += alt(MUL_mem)\n".format(mem_value_name))
                     for j in range(MULnum):
-                        f_write.write("\tS += ({0}*MUL[{3}])-1<{1}_mem{2}*MUL_mem[{3}]\n".format(operand, value, i, j))
+                        f_write.write("\tS += ({0}*MUL[{3}])-1 < {1}_mem{2}*MUL_mem[{3}]\n".format(operand, value, i, j))
                 else:
                     f_write.write("\t{0} += MUL_mem[{1}]\n".format(mem_value_name, pre_resource_num))
-                    f_write.write("\tS += {1}<{0}\n".format(mem_value_name, pre_end_time - 1))
+                    f_write.write("\tS += {1} < {0}\n".format(mem_value_name, pre_end_time - 1))
             elif opcode == "ADD" or opcode == "SUB":
                 if pre_resource is None:
                     f_write.write("\t{0} += alt(ADD_mem)\n".format(mem_value_name))
                     for j in range(ADDnum):
-                        f_write.write("\tS += ({0}*ADD[{3}])-1<{1}_mem{2}*ADD_mem[{3}]\n".format(operand, value, i, j))
+                        f_write.write("\tS += ({0}*ADD[{3}])-1 < {1}_mem{2}*ADD_mem[{3}]\n".format(operand, value, i, j))
                 else:
                     f_write.write("\t{0} += ADD_mem[{1}]\n".format(mem_value_name, pre_resource_num))
-                    f_write.write("\tS += {1}<{0}\n".format(mem_value_name, pre_end_time - 1))
-        f_write.write("\tS += {1}<={0}\n\n".format(value, mem_value_name))
+                    f_write.write("\tS += {1} < {0}\n".format(mem_value_name, pre_end_time - 1))
+        f_write.write("\tS += {1} <= {0}\n\n".format(value, mem_value_name))
 
 
-def find_mistake(formulas, split_ope, depth, pre_sche_result):
+def find_mistake(formulas, output_value, split_ope, depth, pre_sche_result):
     mistaken_formulas = []
-    for i in range(0, depth):
-        for formula in split_ope[i]:
-            is_exist = False
-            mem_is_exist = False
-            mem_results = []
-            for sol in pre_sche_result:
-                if formula[0] == sol[0]:
-                    is_exist = True
-                elif formula[0] in sol[0]:
-                    mem_is_exist = True
-                    mem_results.append(sol)
-            if not is_exist:
-                if mem_is_exist:
-                    for mem_result in mem_results:
-                        pre_sche_result.remove(mem_result)
-                min_finish_time, max_finish_time = find_next_formula(formula[0], formulas, pre_sche_result)
-                mistaken_formulas.append(formula + [min_finish_time])
-    split_ope[depth] = mistaken_formulas + split_ope[depth]
+    inv_val = ""
+    for formula in split_ope[depth]:
+        is_exist = False
+        sub_value_results = []
+        task = formula[0]
+        if formula[1] == "MUL":
+            sub_values = {"{}_mem0".format(task): False, "{}_mem1".format(task): False, "{}_in".format(task): False}
+        elif formula[1] == "ADD" or formula[1] == "SUB":
+            sub_values = {"{}_mem0".format(task): False, "{}_mem1".format(task): False}
+        elif formula[1] == "INV":
+            sub_values = {}
+            inv_val = task
+        if task in output_value:
+            sub_values["{}_w".format(task)] = False
+        if formula[2] == inv_val:
+            sub_values["{}_mem0".format(task)] = True
+        if formula[3] == inv_val:
+            sub_values["{}_mem1".format(task)] = True
+
+        for sol in pre_sche_result:
+            if task == sol[0]:
+                is_exist = True
+                task_result = sol
+            elif sol[0] in sub_values.keys():
+                sub_values[sol[0]] = True
+                sub_value_results.append(sol)
+        if not is_exist:
+            for sub_value_result in sub_value_results:
+                pre_sche_result.remove(sub_value_result)
+            min_finish_time, max_finish_time = find_next_formula(task, formulas, pre_sche_result)
+            mistaken_formulas.append(formula + [min_finish_time])
+        elif False in sub_values.values():
+            pre_sche_result.remove(task_result)
+            for sub_value_result in sub_value_results:
+                pre_sche_result.remove(sub_value_result)
+            min_finish_time, max_finish_time = find_next_formula(task, formulas, pre_sche_result)
+            mistaken_formulas.append(formula + [min_finish_time])
+    print(mistaken_formulas)
+    if depth+1 >= len(split_ope):
+        split_ope.append(mistaken_formulas)
+    else:
+        split_ope[depth+1] = mistaken_formulas + split_ope[depth+1]
     return pre_sche_result, split_ope
 
 
@@ -173,13 +196,8 @@ def make_pyschedule(
 
     f_write.write("\n\t# result of previous scheduling\n")
 
-    # pre_tasks = [[]] if depth == 0 else split_ope[depth-1]
-    output_limit = {}
     for pre in pre_sche_result:
         task = pre[0]
-        # for pre_task in pre_tasks:
-        #     if pre_task[0] == task:
-        #         pre_tasks.remove(pre_task)
         start_time = int(pre[2])
         end_time = int(pre[3])
         length = end_time - start_time
@@ -191,13 +209,6 @@ def make_pyschedule(
             resource = pre[1][:-1]
             resource_num = pre[1][-1]
             f_write.write("\t{0} += {1}[{2}]\n\n".format(task, resource, resource_num))
-        for i in range(2):
-            mem_name = "{0}_mem{1}".format(task, i)
-            if mem_name in mem_table.keys() and re.match(r"[A-B][0-2]+", mem_table[mem_name]):
-                if mem_table[mem_name][1:] in output_limit.keys():
-                    output_limit[mem_table[mem_name][1:]] = max(output_limit[mem_table[mem_name][1:]], end_time)
-                else:
-                    output_limit[mem_table[mem_name][1:]] = end_time
 
     f_write.write("\n\t# new tasks\n")
 
@@ -230,8 +241,6 @@ def make_pyschedule(
         if line[0] in output_value:
             f_write.write("\t{0}_w = S.Task('{0}_w', length=1, delay_cost=1)\n".format(line[0]))
             f_write.write("\t{0}_w += alt(INPUT_mem_w)\n".format(line[0]))
-            if re.match(r"C[0-2]+", line[0]) and line[0][1:] in output_limit.keys():
-                f_write.write("\tS += {0} < {1}_w\n".format(output_limit[line[0][1:]], line[0]))
             f_write.write("\tS += {0}-1 <= {0}_w\n\n".format(line[0]))
 
     f_write.write("\tsolvers.mip.solve(S,msg=1,kind='CPLEX',ratio_gap=1.01)\n\n")
@@ -250,14 +259,13 @@ def make_pyschedule(
 if __name__ == "__main__":
     start_time = time.perf_counter()
     psr = argparse.ArgumentParser(
-        prog='プログラムの名前',
-        usage='プログラムの使い方',
-        description='プログラムの説明'
+        usage='schedule.py -c <curve_group> -p <p[bit]>',
+        description='Execute scheduling with a 7-stage pipelined Fp montgomery multiplier, four Fp adders/subtractors, an Fp inversion operator'
     )
-    psr.add_argument('-m', '--mul', default=1, help='乗算器の個数')
-    psr.add_argument('-a', '--add', default=4, help='加減算器の個数')
-    psr.add_argument("-c", "--curve", required=True, help="楕円曲線群")
-    psr.add_argument("-p", "--characteristic", required=True, help="楕円曲線の標数のbit幅")
+    psr.add_argument('-m', '--mul', default=1, help='number of Fp montgomery multipliers (default is 1)')
+    psr.add_argument('-a', '--add', default=4, help='number of Fp adders/subtractors (default is 4)')
+    psr.add_argument("-c", "--curve", required=True, help="curve group")
+    psr.add_argument("-p", "--characteristic", required=True, help="bit width of characteristic number p")
     psr.add_argument('-n', '--name', required=True, help='スケジューリング対象の名前')
     args = psr.parse_args()
 
