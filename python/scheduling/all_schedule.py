@@ -97,9 +97,9 @@ def repeat_schedule(target_dir: str, curve_group: str, curve_name: str, algo_nam
         scheduling_i = importlib.import_module("{}-{}.scheduling.{}_mul{}_add{}.{}".format(curve_group, curve_name, algo_name, mul_num, add_num, file_name))
         solution = scheduling_i.solve()
         if solution == []:
-            raise Exception("no solution found in schedule_{0}".format(i))
+            raise Exception("no solution found in schedule_{}".format(i))
         pre_sche_result = solution
-        pre_sche_result, split_ope = find_mistake(formulas, output_value, split_ope, i, solution)
+        pre_sche_result, split_ope = find_mistake(formulas, mem_table_list, output_value, split_ope, i, solution)
         i += 1
 
     end_time = time.perf_counter()

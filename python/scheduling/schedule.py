@@ -66,12 +66,11 @@ def make_mem_task_definition(
     if current_formula[2] == current_formula[3]:
         operands = [current_formula[2]]
     else:
-        operands = [current_formula[2], current_formula[2]]
+        operands = [current_formula[2], current_formula[3]]
     
     for i in range(len(operands)):
         operand = operands[i]
         mem_value_name = "{0}_mem{1}".format(value, i)
-        mem_table[mem_value_name] = operand
         if operand in input_value:
             f_write.write("\t{0} = S.Task('{0}', length=1, delay_cost=1)\n".format(mem_value_name))
             f_write.write("\t{0} += INPUT_mem_r\n".format(mem_value_name))
@@ -102,6 +101,7 @@ def make_mem_task_definition(
                     f_write.write("\t{0} += ADD_mem[{1}]\n".format(mem_value_name, pre_resource_num))
                     f_write.write("\tS += {1} < {0}\n".format(mem_value_name, pre_end_time - 1))
         f_write.write("\tS += {1} <= {0}\n\n".format(value, mem_value_name))
+        mem_table[mem_value_name] = operand
 
 
 def find_mistake(formulas, mem_table_list, output_value, split_ope, depth, pre_sche_result):
