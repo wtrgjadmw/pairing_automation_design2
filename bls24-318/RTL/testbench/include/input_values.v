@@ -11,9 +11,9 @@ writeValues(`RAM_XI510, `RAM_XI511, `XI510, `XI511);
 writeValues(`RAM_K0, `RAM_K1, `K0, `K1);
 writeValues(`RAM_ZERO, `RAM_ONE, `ZERO, `ONE);
 
-writeValues(`RAM_PX3, `RAM_PY_, `PX3, `PY_);
-writeValues(`RAM_B400, `RAM_B401, `B400, `B401);
-writeValues(`RAM_B410, `RAM_B411, `B410, `B411);
+writeValues(`RAM_PX, `RAM_PY_, `PX, `PY_);
+writeValues(`RAM_BT00, `RAM_BT01, `BT00, `BT01);
+writeValues(`RAM_BT10, `RAM_BT11, `BT10, `BT11);
 writeValues(`RAM_PX_, `RAM_PY, `PX_, `PY);
 writeValues(`RAM_QX00, `RAM_QX01, `QX00, `QX01);
 writeValues(`RAM_QX10, `RAM_QX11, `QX10, `QX11);
