@@ -4,12 +4,12 @@
 `define RAM_ADDR_SIZE 8
 
 
-`define RAM_PX3	    `RAM_ADDR_SIZE'd0
+`define RAM_PX	    `RAM_ADDR_SIZE'd0
 `define RAM_PY_	    `RAM_ADDR_SIZE'd1
-`define RAM_B400	`RAM_ADDR_SIZE'd2
-`define RAM_B401	`RAM_ADDR_SIZE'd3
-`define RAM_B410	`RAM_ADDR_SIZE'd4
-`define RAM_B411	`RAM_ADDR_SIZE'd5
+`define RAM_BT00	`RAM_ADDR_SIZE'd2
+`define RAM_BT01	`RAM_ADDR_SIZE'd3
+`define RAM_BT10	`RAM_ADDR_SIZE'd4
+`define RAM_BT11	`RAM_ADDR_SIZE'd5
 `define RAM_PX_	    `RAM_ADDR_SIZE'd6
 `define RAM_PY      `RAM_ADDR_SIZE'd7
 `define RAM_QX00	`RAM_ADDR_SIZE'd8
