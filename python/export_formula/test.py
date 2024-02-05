@@ -1,3 +1,5 @@
+import sys
+sys.path.append('./')
 import csv
 import os
 from lib.pairing import add_line_twist6, double_line_twist6, sparse_mult_m6_twist, sparse_mult_d6_twist, SQR012345

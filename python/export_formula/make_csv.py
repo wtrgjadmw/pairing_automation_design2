@@ -1,3 +1,5 @@
+import sys
+sys.path.append('./')
 from export_formula.fp12 import fp12_mul, fp12_conj, fp12_frob, fp12_sqr, fp12_mul_conj, fp12_inv
 from export_formula.ep2 import ep2_add, ep2_dbl, fp12_sparse_d6, fp12_sparse_m6, fp12_SQR012345
 from export_formula.fp24 import fp24_mul, fp24_conj, fp24_frob, fp24_sqr, fp24_mul_conj, fp24_inv

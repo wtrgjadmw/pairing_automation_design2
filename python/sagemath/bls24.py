@@ -6,6 +6,7 @@ from sage.misc.functional import cyclotomic_polynomial
 from sage.rings.finite_rings.finite_field_constructor import FiniteField, GF
 from sage.schemes.elliptic_curves.constructor import EllipticCurve
 import json
+import argparse
 
 from parameter import (
     find_curve_parameter_b,
@@ -46,8 +47,41 @@ def get_parameters(u0):
     tx = x + 1
     cx = (x - 1) ** 2 / 3
     yx = (x - 1) * (2 * x**4 - 1) / 3
-    c2x = (x**32 - 8 * x**31 + 28 * x**30 - 56 * x**29 + 67 * x**28 - 32 * x**27 - 56 * x**26 + 160 * x**25 - 203 * x**24 + 132 * x**23 + 12 * x**22 - 132 * x**21 + 170 * x**20 - 124 * x**19 + 44 * x**18 - 4 * x**17 + 2 * x **
-           16 + 20 * x**15 - 46 * x**14 + 20 * x**13 + 5 * x**12 + 24 * x**11 - 42 * x**10 + 48 * x**9 - 101 * x**8 + 100 * x**7 + 70 * x**6 - 128 * x**5 + 70 * x**4 - 56 * x**3 - 44 * x**2 + 40 * x + 100) / 81  # cofactor for G2
+    c2x = (
+        x**32
+        - 8 * x**31
+        + 28 * x**30
+        - 56 * x**29
+        + 67 * x**28
+        - 32 * x**27
+        - 56 * x**26
+        + 160 * x**25
+        - 203 * x**24
+        + 132 * x**23
+        + 12 * x**22
+        - 132 * x**21
+        + 170 * x**20
+        - 124 * x**19
+        + 44 * x**18
+        - 4 * x**17
+        + 2 * x**16
+        + 20 * x**15
+        - 46 * x**14
+        + 20 * x**13
+        + 5 * x**12
+        + 24 * x**11
+        - 42 * x**10
+        + 48 * x**9
+        - 101 * x**8
+        + 100 * x**7
+        + 70 * x**6
+        - 128 * x**5
+        + 70 * x**4
+        - 56 * x**3
+        - 44 * x**2
+        + 40 * x
+        + 100
+    ) / 81  # cofactor for G2
     D = 3  # discriminant (-D = -3)
     k = 24
 
@@ -155,7 +189,10 @@ def get_parameters(u0):
         "xi": [int(x) for x in xi.polynomial().list()],
         "D_twist": D_twist,
         "P": [int(P[0]), int(P[1])],
-        "Q": [Fp4ToFp22([int(x) for x in Q[0].polynomial().list()], p, a2), Fp4ToFp22([int(x) for x in Q[1].polynomial().list()], p, a2)]
+        "Q": [
+            Fp4ToFp22([int(x) for x in Q[0].polynomial().list()], p, a2),
+            Fp4ToFp22([int(x) for x in Q[1].polynomial().list()], p, a2),
+        ],
     }
 
     return params
@@ -173,8 +210,41 @@ def test_curve(u0):
     tx = x + 1
     cx = (x - 1) ** 2 / 3
     yx = (x - 1) * (2 * x**4 - 1) / 3
-    c2x = (x**32 - 8 * x**31 + 28 * x**30 - 56 * x**29 + 67 * x**28 - 32 * x**27 - 56 * x**26 + 160 * x**25 - 203 * x**24 + 132 * x**23 + 12 * x**22 - 132 * x**21 + 170 * x**20 - 124 * x**19 + 44 * x**18 - 4 * x**17 + 2 * x **
-           16 + 20 * x**15 - 46 * x**14 + 20 * x**13 + 5 * x**12 + 24 * x**11 - 42 * x**10 + 48 * x**9 - 101 * x**8 + 100 * x**7 + 70 * x**6 - 128 * x**5 + 70 * x**4 - 56 * x**3 - 44 * x**2 + 40 * x + 100) / 81  # cofactor for G2
+    c2x = (
+        x**32
+        - 8 * x**31
+        + 28 * x**30
+        - 56 * x**29
+        + 67 * x**28
+        - 32 * x**27
+        - 56 * x**26
+        + 160 * x**25
+        - 203 * x**24
+        + 132 * x**23
+        + 12 * x**22
+        - 132 * x**21
+        + 170 * x**20
+        - 124 * x**19
+        + 44 * x**18
+        - 4 * x**17
+        + 2 * x**16
+        + 20 * x**15
+        - 46 * x**14
+        + 20 * x**13
+        + 5 * x**12
+        + 24 * x**11
+        - 42 * x**10
+        + 48 * x**9
+        - 101 * x**8
+        + 100 * x**7
+        + 70 * x**6
+        - 128 * x**5
+        + 70 * x**4
+        - 56 * x**3
+        - 44 * x**2
+        + 40 * x
+        + 100
+    ) / 81  # cofactor for G2
     D = 3  # discriminant (-D = -3)
     k = 24
 
@@ -293,40 +363,50 @@ def test_curve(u0):
             ]
         )
 
-    test_ate_pairing_bls24_aklgl(
-        E, E2, r, c, c2, u0, Fq6, map_Fq6_Fp24, D_twist)
+    test_ate_pairing_bls24_aklgl(E, E2, r, c, c2, u0, Fq6, map_Fq6_Fp24, D_twist)
 
 
 if __name__ == "__main__":
-    args = sys.argv
-    param_file = args[1]
-    size = os.path.getsize(param_file)
-    if size == 0:
-        json_load = dict()
-    else:
-        with open(param_file, "r") as file:
-            json_load = json.load(file)
+    psr = argparse.ArgumentParser(
+        usage="parameters.py -c <curve_group> -p <p[bit]>",
+        description="calculate required parameter for pairing operation",
+    )
+    psr.add_argument("-c", "--curve", required=True, help="curve group")
+    psr.add_argument(
+        "-p",
+        "--characteristic",
+        required=True,
+        help="bit width of characteristic number p",
+    )
+    # psr.add_argument("-f", "--filename", required=True, help="読み込むJSONファイル")
+    args = psr.parse_args()
+    curve_group = args.curve
+    curve_name = args.characteristic
+    os.chdir("..")
+    target_dir = "{}/{}-{}".format(
+        os.path.dirname(os.getcwd()), curve_group, curve_name
+    )
+    os.makedirs(target_dir, exist_ok=True)
+    param_file = "{}/param.json".format(target_dir)
 
-    json_load["bls24"] = dict()
-    # BLS24-315
-    u0 = ZZ(-(2**32) + 2**30 + 2**21 + 2**20 + 1)
-    json_load["bls24"]["P315"] = get_parameters(u0)
-    # test_curve(u0)
+    # # BLS24-315
+    # u0 = ZZ(-(2**32) + 2**30 + 2**21 + 2**20 + 1)
+    # # test_curve(u0)
 
-    # BLS24-317
-    u0 = ZZ(2**31 + 2**30 + 2**28 + 2**27 + 2**24 + 2**16 + 2**15)
-    json_load["bls24"]["P317"] = get_parameters(u0)
-    # test_curve(u0)
+    # # BLS24-317
+    # u0 = ZZ(2**31 + 2**30 + 2**28 + 2**27 + 2**24 + 2**16 + 2**15)
+    # # test_curve(u0)
 
-    # BLS24-318
-    u0 = ZZ(-(2**32) + 2**28 + 2**12)
-    json_load["bls24"]["P318"] = get_parameters(u0)
-    # test_curve(u0)
+    # # BLS24-318
+    # u0 = ZZ(-(2**32) + 2**28 + 2**12)
+    # # test_curve(u0)
 
-    # BLS24-509
-    u0 = ZZ(-(2**51) - 2**28 + 2**11 - 1)
-    json_load["bls24"]["P509"] = get_parameters(u0)
-    # test_curve(u0)
+    # # BLS24-509
+    # u0 = ZZ(-(2**51) - 2**28 + 2**11 - 1)
+    # # test_curve(u0)
+
+    # BLS24-1032
+    u0 = ZZ(-(2**103) - 2**101 + 2**68 + 2**50)
 
     with open(param_file, "w") as file:
-        json.dump(json_load, file, indent=4)
+        json.dump(get_parameters(u0), file, indent=4)
