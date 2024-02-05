@@ -24,9 +24,9 @@ def make_split_scheduling(formulas):
         elif s[3] not in d:
             inputs.append(s[3])
             input_num += 1
-        if s[2] in outputs:
+        if (s[2] in outputs) and (re.fullmatch(r"c[0-2]*", s[2]) is None):
             outputs.remove(s[2])
-        if s[3] in outputs:
+        if (s[3] in outputs) and (re.fullmatch(r"c[0-2]*", s[3]) is None):
             outputs.remove(s[3])
     input_first = copy.deepcopy(inputs)
     knows = inputs
@@ -50,14 +50,11 @@ def make_split_scheduling(formulas):
             if (s[2] in knows) and (s[3] in knows):
                 if (s[0] not in knows):
                     knows_tmp.append(s[0])
-                    if s[0] in outputs:
-                        output_formulas.append(s)
-                    else:
-                        split_tmp.append(s)
-                        if s[1] == "MUL":
-                            mul_num += 1
-                        elif s[1] == "ADD" or s[1] == "SUB":
-                            add_num += 1
+                    split_tmp.append(s)
+                    if s[1] == "MUL":
+                        mul_num += 1
+                    elif s[1] == "ADD" or s[1] == "SUB":
+                        add_num += 1
 
         if len(split_ope[split_index]) + len(split_tmp) > DIVIDE_NUM:
             divided_split_tmp = split_list(split_tmp, DIVIDE_NUM)
@@ -81,8 +78,4 @@ def make_split_scheduling(formulas):
     for s in split_ope:
         if s != []:
             split_ope_c.append(s)
-    if len(split_ope_c) == 0:
-        split_ope_c = [output_formulas]
-    else:
-        split_ope_c[-1] += output_formulas
     return split_ope_c, input_first, outputs, input_num

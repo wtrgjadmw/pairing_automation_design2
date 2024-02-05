@@ -106,12 +106,15 @@ def make_mem_task_definition(
 
 def find_mistake(formulas, mem_table_list, output_value, split_ope, depth, pre_sche_result):
     mistaken_formulas = []
-    inv_val = ""
     for formula in split_ope[depth]:
         is_exist = False
         sub_value_results = []
         task = formula[0]
         sub_values = {key: False for key, value in mem_table_list[depth].items() if task in key}
+        if task in output_value:
+            sub_values["{}_w".format(task)] = False
+        if formula[1] == "MUL":
+            sub_values["{}_in".format(task)] = False
 
         for sol in pre_sche_result:
             if task == sol[0]:
@@ -228,8 +231,8 @@ def make_pyschedule(
                 min_finish_time_2, max_finish_time_2 = find_next_formula("b{}".format(line[0][1:]), formulas, pre_sche_result)
                 max_finish_time = max(max_finish_time_1, max_finish_time_2)
             f_write.write("\tS += {}<{}\n\n".format(max_finish_time, line[0]))
-        if len(line) == 5:
-            f_write.write("\tS += {}<{}\n\n".format(line[0], line[4]))
+        if len(line) >= 5:
+            f_write.write("\tS += {}<{}\n\n".format(line[0], line[-1]))
         make_mem_task_definition(f_write, input_value, pre_sche_result, formulas, tmp_mem_table, line, MULnum, ADDnum)
         if line[0] in output_value:
             f_write.write("\t{0}_w = S.Task('{0}_w', length=1, delay_cost=1)\n".format(line[0]))
