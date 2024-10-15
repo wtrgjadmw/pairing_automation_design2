@@ -9,8 +9,10 @@ psr = argparse.ArgumentParser(
     description='Run 5 logic synthesis in parallel by changing the clock constraint like 4.0, 4.2, 4.4, 4.6, 4.8.'
 )
 psr.add_argument('-c', '--clock_period', required=True, help='clock constraint')
+psr.add_argument('-t', '--times', required=True, help='times of parallel synthesis')
 args = psr.parse_args()
 clock_period = int(args.clock_period)
+times = int(args.times)
 
 with open("syn_top.tcl", mode="r") as f:
     template = f.read()
@@ -67,7 +69,7 @@ def syn_bit(clk):
 
 
 with ProcessPoolExecutor() as executor:
-    results = executor.map(syn_bit, [clock_period + 0.2 * x for x in range(5)])
+    results = executor.map(syn_bit, [clock_period + 0.2 * x for x in range(times)])
 
 with open("result.csv", 'a') as f:
     writer = csv.writer(f, lineterminator="\n")

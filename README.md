@@ -8,6 +8,7 @@ This is an automatic design tool for optimized pairing hardware accelerator of A
 
 ## Prerequisite
 - python version >= 3.10
+- [sagemath](https://doc.sagemath.org/html/en/index.html) version >= 10.4 
 - scheduler: [CPLEX](https://www.ibm.com/jp-ja/products/ilog-cplex-optimization-studio)
 
 ## Steps

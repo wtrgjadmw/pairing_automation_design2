@@ -12,3 +12,5 @@ crte_*
 Synopsys_*
 *.lp
 *.sol
+dc_result
+result.csv
