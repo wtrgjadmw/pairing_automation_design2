@@ -43,6 +43,6 @@ The command generates text file like `padd_mul1_add4.txt` which contains the inf
 4. Convert the scheduling result to RTL of sequencer & modify other parts as needed
 
 ```bash
-$ python3 makeRTL/<curve_group>_modify.py -c <curve_group> -p <p[bit]>
+$ python makeRTL/<curve_group>_modify.py -c <curve_group> -p <p[bit]>
 $ python makeRTL/write_sequence.py -c <curve_group> -p <p[bit]>
 ```
