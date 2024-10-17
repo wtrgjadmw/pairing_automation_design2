@@ -94,6 +94,7 @@ def get_parameters(u0):
 
     params = {
         "u": int(u0),
+        "p_bit": int(p.nbits()),
         "p": int(p),
         "r": int(r),
         "b": int(b),
@@ -225,26 +226,19 @@ def test_curve(u0):
 
 if __name__ == "__main__":
     psr = argparse.ArgumentParser(
-        usage="parameters.py -c <curve_group> -p <p[bit]>",
+        usage="bls12.py -u <unique_parameter>",
         description="calculate required parameter for pairing operation",
     )
-    psr.add_argument("-c", "--curve", required=True, help="curve group")
     psr.add_argument(
-        "-p",
-        "--characteristic",
+        "-u",
+        "--unique_parameter",
         required=True,
-        help="bit width of characteristic number p",
+        help="curve unique parameter u",
     )
     # psr.add_argument("-f", "--filename", required=True, help="読み込むJSONファイル")
     args = psr.parse_args()
-    curve_group = args.curve
-    curve_name = args.characteristic
-    os.chdir('..')
-    target_dir = "{}/{}-{}".format(
-        os.path.dirname(os.getcwd()), curve_group, curve_name
-    )
-    os.makedirs(target_dir, exist_ok=True)
-    param_file = "{}/param.json".format(target_dir)
+    u0 = args.unique_parameter
+    
 
     # # bls12-381
     # u0 = ZZ(-(2**63 + 2**62 + 2**60 + 2**57 + 2**48 + 2**16))
@@ -258,7 +252,19 @@ if __name__ == "__main__":
     # u0 = ZZ(-(2**107) + 2**105 + 2**93 + 2**5)
     
     # bls12-1150
-    u0 = ZZ(-(2**192) + 2**188 -(2**115) -(2**110) -(2**44) - 1)
+    # u0 = ZZ(-(2**192) + 2**188 -(2**115) -(2**110) -(2**44) - 1)
 
-    with open(param_file, "w") as file:
-        json.dump(get_parameters(u0), file, indent=4)
+    u0 = ZZ(u0)
+    try:
+        parameters = get_parameters(u0)
+        os.chdir('..')
+        target_dir = "{}/bls12-{}".format(
+            os.path.dirname(os.getcwd()), parameters["p_bit"]
+        )
+        os.makedirs(target_dir, exist_ok=True)
+        param_file = "{}/param.json".format(target_dir)
+        with open(param_file, "w") as file:
+            json.dump(parameters, file, indent=4)
+        print("\nThe result is saved in {}".format(param_file))
+    except Exception as e:
+        print(e)

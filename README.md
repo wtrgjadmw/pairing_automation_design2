@@ -16,7 +16,7 @@ This is an automatic design tool for optimized pairing hardware accelerator of A
 
 ```bash
 $ cd ./python/sagemath
-$ path/to/sage-python bls12.py (or bls24.py)
+$ path/to/sage-python bls12.py (or bls24.py) -u <unique_parameter> 
 ```
 
 2. Create CSV file to list necessary Fp operations and its operand for scheduling
