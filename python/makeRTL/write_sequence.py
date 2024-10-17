@@ -234,8 +234,7 @@ class schedulingData:
                 init_seq = "{operator}_opr1 <= {save1}; {operator}_opr2 <= {save2}; ".format(
                     operator=data["operator"], save1=opr1_save_place, save2=opr2_save_place)
             if "add" in data["operator"]:
-                init_seq += "issub{operator_num} <= {issub};".format(operator_num=data["operator"]
-                                                                     [-1], issub=('1' if data["ope_type"] == "SUB" else '0'))
+                init_seq += "issub{operator_num} <= {issub};".format(operator_num=data["operator"][-1], issub=('1' if data["ope_type"] == "SUB" else '0'))
             self.operator_init_seq[data["start_time"]].append(init_seq + "\n")
             # if value_name in self.output:
             #     self.operator_init_seq[data["end_time"]].append("{output_name}_reg <= {operator}_out;\n".format(output_name=value_name, operator=data["operator"]))

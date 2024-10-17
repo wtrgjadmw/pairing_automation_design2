@@ -273,8 +273,8 @@ if __name__ == "__main__":
     algo_name = args.name
 
     func_name = "{2}_mul{0}_add{1}".format(mul_num, add_num, algo_name)
-    formulas, add_formula_num, mul_formula_num = read_formula_csv(
-        "/home/mfukuda/pairing_automation_design/{}-{}/csv/{}.csv".format(curve_group, curve_name, algo_name)
+    formulas = read_formula_csv(
+        "{}/{}-{}/csv/{}.csv".format(os.path.abspath(os.path.join(os.getcwd(), os.pardir)), curve_group, curve_name, algo_name)
     )
 
     # exec(open("./" + "sche_test.py", 'r', encoding="utf-8").read())
@@ -291,52 +291,52 @@ if __name__ == "__main__":
     for i in range(len(split_ope)):
         print(i, len(split_ope[i]), split_ope[i])
 
-    pre_sche_result = solution
+    # pre_sche_result = solution
 
-    for i in range(len(split_ope)):
-        # pre_sche_result, split_ope = find_mistake(split_ope, i, pre_sche_result)
-        if len(split_ope[i]) == 0:
-            continue
-        write_file = "{0}/{0}_{1}.py".format(file_name, i)
-        make_pyschedule(
-            file_name,
-            formulas,
-            mem_table,
-            split_ope,
-            pre_sche_result,
-            i,
-            write_file,
-            input_value,
-            output_value,
-            mul_num,
-            add_num,
-            input_num)
-        print(i)
-        # print(split_ope[i])
-        # make_pyschedule(file_name, formulas, mem_table, split_ope, pre_sche_result, i, write_file, input_value, mul_num, add_num, mul_num_list, add_num_list, input_num)
-        exec(open(write_file).read())
-        if solution == []:
-            raise Exception("no solution found in schedule_{0}".format(i))
-        pre_sche_result = solution
+    # for i in range(len(split_ope)):
+    #     # pre_sche_result, split_ope = find_mistake(split_ope, i, pre_sche_result)
+    #     if len(split_ope[i]) == 0:
+    #         continue
+    #     write_file = "{0}/{0}_{1}.py".format(file_name, i)
+    #     make_pyschedule(
+    #         file_name,
+    #         formulas,
+    #         mem_table,
+    #         split_ope,
+    #         pre_sche_result,
+    #         i,
+    #         write_file,
+    #         input_value,
+    #         output_value,
+    #         mul_num,
+    #         add_num,
+    #         input_num)
+    #     print(i)
+    #     # print(split_ope[i])
+    #     # make_pyschedule(file_name, formulas, mem_table, split_ope, pre_sche_result, i, write_file, input_value, mul_num, add_num, mul_num_list, add_num_list, input_num)
+    #     exec(open(write_file).read())
+    #     if solution == []:
+    #         raise Exception("no solution found in schedule_{0}".format(i))
+    #     pre_sche_result = solution
 
-    end_time = time.perf_counter()
+    # end_time = time.perf_counter()
 
     f = open(file_name + ".txt", "w")
     print("input = ", file=f, end="")
     print(input_value, file=f)
     print("output = ", file=f, end="")
     print(output_value, file=f)
-    print("solution = ", file=f, end="")
-    print(solution, file=f)
-    print("formulas = ", file=f, end="")
-    print(formulas, file=f)
-    print("mem_table = ", file=f, end="")
-    print(mem_table, file=f)
-    print("time = ", end_time - start_time)
+    # print("solution = ", file=f, end="")
+    # print(solution, file=f)
+    # print("formulas = ", file=f, end="")
+    # print(formulas, file=f)
+    # print("mem_table = ", file=f, end="")
+    # print(mem_table, file=f)
+    # print("time = ", end_time - start_time)
 
-    for filename in os.listdir("./"):
-        if filename.endswith(".log") and "clone" in filename:
-            file_path = os.path.join("./", filename)
-            os.remove(file_path)
-    os.remove("./Integer_Program-pulp.lp")
-    os.remove("./Integer_Program-pulp.sol")
+    # for filename in os.listdir("./"):
+    #     if filename.endswith(".log") and "clone" in filename:
+    #         file_path = os.path.join("./", filename)
+    #         os.remove(file_path)
+    # os.remove("./Integer_Program-pulp.lp")
+    # os.remove("./Integer_Program-pulp.sol")
