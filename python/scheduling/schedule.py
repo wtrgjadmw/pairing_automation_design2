@@ -88,7 +88,7 @@ def make_mem_task_definition(
                 if pre_resource is None:
                     f_write.write("\t{0} += alt(MUL_mem)\n".format(mem_value_name))
                     for j in range(MULnum):
-                        f_write.write("\tS += ({0}*MUL[{3}])-1 < {1}_mem{2}*MUL_mem[{3}]\n".format(operand, value, i, j))
+                        f_write.write("\tS += ({0}*MUL[{3}]) < {1}_mem{2}*MUL_mem[{3}]\n".format(operand, value, i, j))
                 else:
                     f_write.write("\t{0} += MUL_mem[{1}]\n".format(mem_value_name, pre_resource_num))
                     f_write.write("\tS += {1} < {0}\n".format(mem_value_name, pre_end_time - 1))
@@ -96,7 +96,7 @@ def make_mem_task_definition(
                 if pre_resource is None:
                     f_write.write("\t{0} += alt(ADD_mem)\n".format(mem_value_name))
                     for j in range(ADDnum):
-                        f_write.write("\tS += ({0}*ADD[{3}])-1 < {1}_mem{2}*ADD_mem[{3}]\n".format(operand, value, i, j))
+                        f_write.write("\tS += ({0}*ADD[{3}]) < {1}_mem{2}*ADD_mem[{3}]\n".format(operand, value, i, j))
                 else:
                     f_write.write("\t{0} += ADD_mem[{1}]\n".format(mem_value_name, pre_resource_num))
                     f_write.write("\tS += {1} < {0}\n".format(mem_value_name, pre_end_time - 1))
