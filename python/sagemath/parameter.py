@@ -70,7 +70,8 @@ def find_twist_curve_parameter_xi_ab(ab, Fq, r, d=6):
     if m == 1:
         i = 0
     else:
-        i = Fq.gen(0)
+        # Return a generator of Fq over its prime field, which is a root of Fq.modulus()
+        i = Fq.gen(0) 
     k = m * d
     if (
         m > 1

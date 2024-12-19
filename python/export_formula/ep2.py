@@ -81,6 +81,62 @@ def ep2_add(D_twist: bool):
     return formulaList
 
 
+def ep2_ladderMul():
+    formulaList = fp2_sqr("Z1", "T1")
+    formulaList += fp2_mul("X2", "Z1", "T2")
+    formulaList += fp2_mul("Z1", "Z2", "T3")
+    formulaList += fp2_mul("X1", "Z2", "T4")
+    formulaList += fp2_sqr("X1", "T5")
+    formulaList += fp2_mul("X1", "X2", "T6")
+    formulaList += fp2_mul("X1", "Z1", "T7")
+    formulaList += fp2_mul("4B", "T1", "T8")
+    formulaList += fp2_mul("A", "T1", "T9")
+    formulaList += fp2_mul("A", "T3", "T10")
+    formulaList += fp2_mul("4B", "T3", "T11")
+    formulaList += fp2_add("T4", "T2", "T12")
+    formulaList += fp2_sub("T4", "T2", "T13")
+    formulaList += fp2_mul("T13", "T13", "T14")
+    formulaList += fp2_add("T7", "T7", "T15")
+    formulaList += fp2_mul("T1", "T8", "T16")
+    formulaList += fp2_mul("T8", "T15", "T17")
+    formulaList += fp2_add("T5", "T9", "T18")
+    formulaList += fp2_sub("T5", "T9", "T19")
+    formulaList += fp2_mul("T5", "T18", "T20")
+    formulaList += fp2_sub("T6", "T10", "T21")
+    formulaList += fp2_sqr("T21", "T22")
+    formulaList += fp2_sqr("T19", "T23")
+    formulaList += fp2_mul("T11", "T12", "T24")
+    formulaList += fp2_add("T20", "T20", "T25")
+    formulaList += fp2_mul("PX", "T14", "Z3")
+    formulaList += fp2_sub("T22", "T24", "X3")
+    formulaList += fp2_add("T16", "T25", "Z4")
+    formulaList += fp2_sub("T23", "T17", "X4")
+    return formulaList
+
+
+def ep2_yrecover():
+    formulaList = fp2_mul("Z1", "Z2", "r1")
+    formulaList += fp2_add("r1", "r1", "r2")
+    formulaList += fp2_mul("B", "Z1", "r3")
+    formulaList += fp2_mul("PX", "Z1", "r4")
+    formulaList += fp2_mul("PX", "X1", "r5")
+    formulaList += fp2_mul("A", "Z1", "r6")
+    formulaList += fp2_add("r5", "r6", "r7")
+    formulaList += fp2_add("X1", "r4", "r8")
+    formulaList += fp2_mul("Z2", "r7", "r9")
+    formulaList += fp2_sub("X1", "r4", "r10")
+    formulaList += fp2_sqr("r10", "r11")
+    formulaList += fp2_mul("PY", "X1", "r12")
+    formulaList += fp2_mul("PY", "Z1", "r13")
+    formulaList += fp2_mul("r2", "r12", "X_new")
+    formulaList += fp2_mul("r2", "r3", "r14")
+    formulaList += fp2_mul("r8", "r9", "r15")
+    formulaList += fp2_mul("r11", "X2", "r16")
+    formulaList += fp2_add("r14", "r15", "r17")
+    formulaList += fp2_sub("r17", "r16", "Y_new")
+    formulaList += fp2_mul("r2", "r13", "Z_new")
+    return formulaList
+
 def fp12_SQR012345(opr1: str, ret: str):
     formulaList = fp2_sqr(opr1 + "00", "t0")
     formulaList += fp2_add(opr1 + "00", opr1 + "11", "t1")
@@ -188,7 +244,7 @@ def fp12_sparse_d6(opr1: str, opr2: str, ret: str):  # opr1: line evaluation
 
 
 if __name__ == "__main__":
-    formulaList = fp12_SQR012345()
+    formulaList = ep2_yrecover()
     organizer = FormulaOrganizer()
     formulaList = organizer.remove_extra_formula(formulaList)
     for formula in formulaList:
