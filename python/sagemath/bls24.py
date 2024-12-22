@@ -179,6 +179,7 @@ def get_parameters(u0):
 
     params = {
         "u": int(u0),
+        "p_bit": int(p.nbits()),
         "p": int(p),
         "r": int(r),
         "b": int(b),
@@ -404,7 +405,7 @@ if __name__ == "__main__":
     try:
         parameters = get_parameters(u0)
         os.chdir('..')
-        target_dir = "{}/bls12-{}".format(
+        target_dir = "{}/bls24-{}".format(
             os.path.dirname(os.getcwd()), parameters["p_bit"]
         )
         os.makedirs(target_dir, exist_ok=True)

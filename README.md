@@ -23,13 +23,13 @@ $ path/to/sage-python bls12.py (or bls24.py) -u <unique_parameter>
 
 ```bash
 $ cd ../
-$ python export_formula/make_csv.py -c <curve_group> -p <p[bit]> -f ../parameter/param.json
+$ python export_formula/make_csv.py -c <curve_group> -p <p[bit]> 
 ```
 
 note: The test for the CSVs is following;
 
 ```bash
-$ python export_formula/test.py -c <curve_group> -p <p[bit]> -f ../parameter/param.json
+$ python export_formula/test.py -c <curve_group> -p <p[bit]> 
 ```
 
 3. Create python scripts for split scheduling & repeat scheduling

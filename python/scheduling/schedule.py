@@ -237,7 +237,7 @@ def make_pyschedule(
         if line[0] in output_value:
             f_write.write("\t{0}_w = S.Task('{0}_w', length=1, delay_cost=1)\n".format(line[0]))
             f_write.write("\t{0}_w += alt(INPUT_mem_w)\n".format(line[0]))
-            f_write.write("\tS += {0}-1 <= {0}_w\n\n".format(line[0]))
+            f_write.write("\tS += {0} <= {0}_w\n\n".format(line[0]))
     mem_table_list.append(tmp_mem_table)
 
     f_write.write("\tsolvers.mip.solve(S,msg=1,kind='CPLEX',ratio_gap=1.01)\n\n")
