@@ -81,7 +81,7 @@ def make_mem_task_definition(
                 raise Exception("can't find previous formula")
             opcode = prev_formula[1]
             if opcode == "INV":
-                f_write.write("\tS += {0} < {1}\n".format(operand, value))
+                f_write.write("\tS += {0}+1 < {1}\n".format(operand, value))
                 continue
             f_write.write("\t{0} = S.Task('{0}', length=1, delay_cost=1)\n".format(mem_value_name))
             if opcode == "MUL":
