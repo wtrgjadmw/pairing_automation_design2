@@ -119,12 +119,15 @@ def repeat_schedule(target_dir: str, curve_group: str, curve_name: str, algo_nam
     print(mem_table, file=f)
     print("time = ", end_time - start_time)
 
-    for filename in os.listdir("./"):
-        if filename.endswith(".log") and "clone" in filename:
-            file_path = os.path.join("./", filename)
-            os.remove(file_path)
-    os.remove("./Integer_Program-pulp.lp")
-    os.remove("./Integer_Program-pulp.sol")
+    try:
+        for filename in os.listdir("./"):
+            if filename.endswith(".log") and "clone" in filename:
+                file_path = os.path.join("./", filename)
+                os.remove(file_path)
+        os.remove("./Integer_Program-pulp.lp")
+        os.remove("./Integer_Program-pulp.sol")
+    except Exception as e:
+        print(e)
 
 
 def all_schedule(curve_group: str, curve_name: str, mul_num: int, add_num: int):

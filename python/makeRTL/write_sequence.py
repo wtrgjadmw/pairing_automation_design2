@@ -196,14 +196,16 @@ class schedulingData:
     def judge_save_place_ram_rctrl(self, value_name, mem_value_name, time):
         data = self.solution_data[value_name]
         operator = data["operator"]
+        if data["end_time"] < time:
+            raise Exception("the path from {}_out is exist")
         if data["end_time"] == time:
-            if operator == "inv":
-                return 1, "inv_out"
-            return 1, "{operator}_out".format(operator=operator)
-        if operator == "inv":
-            return 1, "inv_out_reg"
-        if data["end_time"] + 1 == time:
+            # if operator == "inv":
+            #     return 1, "inv_out"
             return 1, "{operator}_out_reg".format(operator=operator)
+        # if operator == "inv":
+        #     return 1, "inv_out_reg"
+        #if data["end_time"] + 1 == time:
+            #return 1, "{operator}_out_reg".format(operator=operator)
         ram_num = self.ram_num_list[mem_value_name]
         self.ram_rctrl(operator=operator, read_t=time - 1, ram_num=ram_num, addr=self.mem_data[value_name][2])
         return 1, "ram_{operator}_out{ram_num}".format(operator=operator, ram_num=ram_num)
