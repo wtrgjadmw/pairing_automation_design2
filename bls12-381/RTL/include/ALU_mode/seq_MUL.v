@@ -1337,9 +1337,6 @@ end
 	ram_mm0_raddr2 <= 2;
 	ram_add0_raddr2 <= 3;
 	ram_add1_raddr2 <= 4;
-	w1_n_reg <= 0;
-	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd6;
-	wdata_s1 <= `ADD1;
 	state <= state + 1;
 end
 90: begin
@@ -1362,7 +1359,9 @@ end
 	ram_add0_raddr1 <= 2;
 	ram_add1_raddr2 <= 2;
 	ram_add3_raddr1 <= 1;
-	w1_n_reg <= 1;
+	w1_n_reg <= 0;
+	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd6;
+	wdata_s1 <= `ADD1;
 	state <= state + 1;
 end
 91: begin
@@ -1384,6 +1383,7 @@ end
 	ram_mm0_raddr1 <= 0;
 	ram_add1_raddr2 <= 4;
 	ram_add2_raddr2 <= 14;
+	w1_n_reg <= 1;
 	state <= state + 1;
 end
 92: begin
@@ -1446,9 +1446,6 @@ end
 	ram_add0_raddr2 <= 4;
 	ram_add3_raddr2 <= 2;
 	ram_add1_raddr2 <= 2;
-	w1_n_reg <= 0;
-	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd10;
-	wdata_s1 <= `ADD1;
 	state <= state + 1;
 end
 95: begin
@@ -1467,7 +1464,9 @@ end
 	ram_add1_raddr2 <= 17;
 	ram_add3_raddr1 <= 2;
 	ram_add2_raddr2 <= 0;
-	w1_n_reg <= 1;
+	w1_n_reg <= 0;
+	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd10;
+	wdata_s1 <= `ADD1;
 	state <= state + 1;
 end
 96: begin
@@ -1485,9 +1484,7 @@ end
 	ram_add2_raddr2 <= 4;
 	ram_add1_raddr2 <= 3;
 	ram_add0_raddr1 <= 6;
-	w1_n_reg <= 0;
-	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd3;
-	wdata_s1 <= `ADD1;
+	w1_n_reg <= 1;
 	state <= state + 1;
 end
 97: begin
@@ -1503,7 +1500,7 @@ end
 	ram_add1_raddr2 <= 3;
 	ram_add2_raddr1 <= 6;
 	w1_n_reg <= 0;
-	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd5;
+	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd3;
 	wdata_s1 <= `ADD1;
 	state <= state + 1;
 end
@@ -1516,7 +1513,7 @@ end
 	ram_add1_raddr1 <= 1;
 	ram_add1_raddr2 <= 6;
 	w1_n_reg <= 0;
-	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd11;
+	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd5;
 	wdata_s1 <= `ADD1;
 	state <= state + 1;
 end
@@ -1534,8 +1531,8 @@ end
 	ram_add0_raddr2 <= 0;
 	ram_add1_raddr2 <= 2;
 	w1_n_reg <= 0;
-	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd8;
-	wdata_s1 <= `ADD2;
+	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd11;
+	wdata_s1 <= `ADD1;
 	state <= state + 1;
 end
 100: begin
@@ -1548,6 +1545,15 @@ end
 	ram_add2_raddr2 <= 14;
 	ram_add0_raddr1 <= 0;
 	w1_n_reg <= 0;
+	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd8;
+	wdata_s1 <= `ADD2;
+	state <= state + 1;
+end
+101: begin
+	add0_opr1 <= ram_add2_out1; add0_opr2 <= add0_out_reg; issub0 <= 0;
+	add1_opr1 <= ram_add2_out2; add1_opr2 <= add3_out_reg; issub1 <= 0;
+	add2_opr1 <= add1_out_reg; add2_opr2 <= ram_add0_out1; issub2 <= 1;
+	w1_n_reg <= 0;
 	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd7;
 	wdata_s1 <= `ADD3;
 	w2_n_reg <= 0;
@@ -1555,10 +1561,9 @@ end
 	wdata_s2 <= `ADD1;
 	state <= state + 1;
 end
-101: begin
-	add0_opr1 <= ram_add2_out1; add0_opr2 <= add0_out_reg; issub0 <= 0;
-	add1_opr1 <= ram_add2_out2; add1_opr2 <= add3_out_reg; issub1 <= 0;
-	add2_opr1 <= add1_out_reg; add2_opr2 <= ram_add0_out1; issub2 <= 1;
+102: begin
+	add1_opr1 <= add2_out_reg; add1_opr2 <= add0_out_reg; issub1 <= 0;
+	ram_add2_raddr1 <= 3;
 	w1_n_reg <= 0;
 	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd0;
 	wdata_s1 <= `ADD0;
@@ -1567,27 +1572,22 @@ end
 	wdata_s2 <= `ADD1;
 	state <= state + 1;
 end
-102: begin
-	add1_opr1 <= add2_out_reg; add1_opr2 <= add0_out_reg; issub1 <= 0;
-	ram_add2_raddr1 <= 3;
+103: begin
+	add0_opr1 <= ram_add2_out1; add0_opr2 <= add2_out_reg; issub0 <= 0;
 	w1_n_reg <= 0;
 	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd4;
 	wdata_s1 <= `ADD1;
 	w2_n_reg <= 1;
 	state <= state + 1;
 end
-103: begin
-	add0_opr1 <= ram_add2_out1; add0_opr2 <= add2_out_reg; issub0 <= 0;
+104: begin
 	w1_n_reg <= 0;
 	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd2;
 	wdata_s1 <= `ADD0;
 	state <= state + 1;
 end
-104: begin
-	w1_n_reg <= 1;
-	state <= state + 1;
-end
 105: begin
+	w1_n_reg <= 1;
 	state <= 0;
 end
 endcase
