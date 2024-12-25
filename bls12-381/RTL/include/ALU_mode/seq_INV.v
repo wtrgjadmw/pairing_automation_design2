@@ -2061,6 +2061,7 @@ end
 end
 155: begin
 	if (inv_comp == 1) begin
+	inv_out_reg <= inv_out;
 	ram_add3_raddr1 <= 6;
 	state <= state + 1;
 	end
