@@ -84,15 +84,15 @@ class schedulingData:
     # self.solution_data["c"] = ["a", "b", "ADD", "add0", start_time, end_time]
     def set_solution_data(self):
         for sol in self.scheduling_solution:
-            if sol[0][-3:] == "_in":
-                continue
-            if sol[0][-2:] == "_w":
-                continue
             value_name = sol[0]
             operator_name = sol[1]
             start_time = int(sol[2])
             end_time = int(sol[3])
             self.seq_finish_time = max(self.seq_finish_time, end_time)
+            if sol[0][-3:] == "_in":
+                continue
+            if sol[0][-2:] == "_w":
+                continue
             if value_name in self.input:
                 self.solution_data[value_name] = {"start_time": start_time, "end_time": end_time}
                 # self.input_mem_list[start_time].append(value_name)
@@ -196,9 +196,9 @@ class schedulingData:
     def judge_save_place_ram_rctrl(self, value_name, mem_value_name, time):
         data = self.solution_data[value_name]
         operator = data["operator"]
-        if data["end_time"] < time:
-            raise Exception("the path from {}_out is exist")
-        if data["end_time"] == time:
+        if data["end_time"] >= time:
+            raise Exception("the path from {}_out is exist: {}".format(operator, value_name))
+        if data["end_time"]+1 == time or operator == "inv":
             # if operator == "inv":
             #     return 1, "inv_out"
             return 1, "{operator}_out_reg".format(operator=operator)
@@ -256,7 +256,7 @@ class schedulingData:
     def ram_result_input(self):
         for out in self.output:
             operator = self.solution_data[out]["operator"].upper()
-            write_t = self.solution_data[out]["end_time"] - 1
+            write_t = self.solution_data[out]["end_time"]
             ram_num = self.ram_num_list[out + "_w"]
             if "w{ram_num}_n_reg <= 1;\n".format(ram_num=ram_num) in self.mem_ctrl_seq[write_t]:
                 index = self.mem_ctrl_seq[write_t].index("w{ram_num}_n_reg <= 1;\n".format(ram_num=ram_num))
@@ -292,7 +292,7 @@ class schedulingData:
             if i == self.inv_start_time:
                 state_str += "\tstart <= 1;\n"
             elif i == self.inv_start_time + 1:
-                state_str += "\tif (inv_comp == 1) begin\n"
+                state_str += "\tif (inv_comp == 1) begin\n\t\tinv_out_reg <= inv_out;"
             for operator_init in self.operator_init_seq[i]:
                 state_str += "\t{operator_init_rtl}".format(operator_init_rtl=operator_init)
             for mem_ctrl in self.mem_ctrl_seq[i]:
