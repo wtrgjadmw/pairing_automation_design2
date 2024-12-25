@@ -4786,7 +4786,7 @@ def solve():
 	S += (c_qinv_denom0*ADD[3]) < c_qinv_denom_inv0_mem0*ADD_mem[3]
 	S += c_qinv_denom_inv0_mem0 <= c_qinv_denom_inv0
 
-	S += c_qinv_denom_inv_denom_inv < c_qinv_denom_inv0
+	S += c_qinv_denom_inv_denom_inv+1 < c_qinv_denom_inv0
 	c_qinv_denom_inv1__in = S.Task('c_qinv_denom_inv1__in', length=1, delay_cost=1)
 	c_qinv_denom_inv1__in += alt(MUL_in)
 	c_qinv_denom_inv1_ = S.Task('c_qinv_denom_inv1_', length=7, delay_cost=1)
@@ -4801,7 +4801,7 @@ def solve():
 	S += (c_qinv_denom1*ADD[3]) < c_qinv_denom_inv1__mem0*ADD_mem[3]
 	S += c_qinv_denom_inv1__mem0 <= c_qinv_denom_inv1_
 
-	S += c_qinv_denom_inv_denom_inv < c_qinv_denom_inv1_
+	S += c_qinv_denom_inv_denom_inv+1 < c_qinv_denom_inv1_
 	c_qinv0_t0_in = S.Task('c_qinv0_t0_in', length=1, delay_cost=1)
 	c_qinv0_t0_in += alt(MUL_in)
 	c_qinv0_t0 = S.Task('c_qinv0_t0', length=7, delay_cost=1)
