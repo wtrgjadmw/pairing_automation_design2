@@ -274,7 +274,7 @@ def solve():
 
 	c_t210 = S.Task('c_t210', length=1, delay_cost=1)
 	S += c_t210 >= 11
-	c_t210 += ADD[0]
+	c_t210 += ADD[2]
 
 	c_t2_t3_t5 = S.Task('c_t2_t3_t5', length=1, delay_cost=1)
 	S += c_t2_t3_t5 >= 11
@@ -282,7 +282,7 @@ def solve():
 
 	c_t2_t4_x00 = S.Task('c_t2_t4_x00', length=1, delay_cost=1)
 	S += c_t2_t4_x00 >= 11
-	c_t2_t4_x00 += ADD[2]
+	c_t2_t4_x00 += ADD[0]
 
 	c_t4001 = S.Task('c_t4001', length=1, delay_cost=1)
 	S += c_t4001 >= 11
@@ -378,7 +378,7 @@ def solve():
 
 	c_s1010_mem1 = S.Task('c_s1010_mem1', length=1, delay_cost=1)
 	S += c_s1010_mem1 >= 14
-	c_s1010_mem1 += ADD_mem[0]
+	c_s1010_mem1 += ADD_mem[2]
 
 	c_t010 = S.Task('c_t010', length=1, delay_cost=1)
 	S += c_t010 >= 14
@@ -434,7 +434,7 @@ def solve():
 
 	c_s2010_mem0 = S.Task('c_s2010_mem0', length=1, delay_cost=1)
 	S += c_s2010_mem0 >= 15
-	c_s2010_mem0 += ADD_mem[0]
+	c_s2010_mem0 += ADD_mem[2]
 
 	c_s2010_mem1 = S.Task('c_s2010_mem1', length=1, delay_cost=1)
 	S += c_s2010_mem1 >= 15
@@ -484,13 +484,13 @@ def solve():
 	S += c_t0_t4_x01_mem0 >= 16
 	c_t0_t4_x01_mem0 += ADD_mem[0]
 
+	c_t1_t4_x01_mem0 = S.Task('c_t1_t4_x01_mem0', length=1, delay_cost=1)
+	S += c_t1_t4_x01_mem0 >= 16
+	c_t1_t4_x01_mem0 += ADD_mem[2]
+
 	c_t2_t11 = S.Task('c_t2_t11', length=1, delay_cost=1)
 	S += c_t2_t11 >= 16
 	c_t2_t11 += ADD[2]
-
-	c_t2_t4_x01_mem0 = S.Task('c_t2_t4_x01_mem0', length=1, delay_cost=1)
-	S += c_t2_t4_x01_mem0 >= 16
-	c_t2_t4_x01_mem0 += ADD_mem[2]
 
 	c_t3_a1__x01 = S.Task('c_t3_a1__x01', length=1, delay_cost=1)
 	S += c_t3_a1__x01 >= 16
@@ -498,7 +498,7 @@ def solve():
 
 	c_t6_y1__x00_mem0 = S.Task('c_t6_y1__x00_mem0', length=1, delay_cost=1)
 	S += c_t6_y1__x00_mem0 >= 16
-	c_t6_y1__x00_mem0 += ADD_mem[0]
+	c_t6_y1__x00_mem0 += ADD_mem[2]
 
 	c_t0_t10 = S.Task('c_t0_t10', length=1, delay_cost=1)
 	S += c_t0_t10 >= 17
@@ -508,13 +508,13 @@ def solve():
 	S += c_t0_t4_x01 >= 17
 	c_t0_t4_x01 += ADD[3]
 
-	c_t1_t4_x01_mem0 = S.Task('c_t1_t4_x01_mem0', length=1, delay_cost=1)
-	S += c_t1_t4_x01_mem0 >= 17
-	c_t1_t4_x01_mem0 += ADD_mem[2]
+	c_t1_t4_x01 = S.Task('c_t1_t4_x01', length=1, delay_cost=1)
+	S += c_t1_t4_x01 >= 17
+	c_t1_t4_x01 += ADD[0]
 
-	c_t2_t4_x01 = S.Task('c_t2_t4_x01', length=1, delay_cost=1)
-	S += c_t2_t4_x01 >= 17
-	c_t2_t4_x01 += ADD[2]
+	c_t2_t4_x01_mem0 = S.Task('c_t2_t4_x01_mem0', length=1, delay_cost=1)
+	S += c_t2_t4_x01_mem0 >= 17
+	c_t2_t4_x01_mem0 += ADD_mem[0]
 
 	c_t3000_mem0 = S.Task('c_t3000_mem0', length=1, delay_cost=1)
 	S += c_t3000_mem0 >= 17
@@ -534,7 +534,7 @@ def solve():
 
 	c_t6_y1__x00 = S.Task('c_t6_y1__x00', length=1, delay_cost=1)
 	S += c_t6_y1__x00 >= 17
-	c_t6_y1__x00 += ADD[0]
+	c_t6_y1__x00 += ADD[2]
 
 	c_t1_t3_t2_mem0 = S.Task('c_t1_t3_t2_mem0', length=1, delay_cost=1)
 	S += c_t1_t3_t2_mem0 >= 18
@@ -544,9 +544,9 @@ def solve():
 	S += c_t1_t3_t2_mem1 >= 18
 	c_t1_t3_t2_mem1 += INPUT_mem_r
 
-	c_t1_t4_x01 = S.Task('c_t1_t4_x01', length=1, delay_cost=1)
-	S += c_t1_t4_x01 >= 18
-	c_t1_t4_x01 += ADD[2]
+	c_t2_t4_x01 = S.Task('c_t2_t4_x01', length=1, delay_cost=1)
+	S += c_t2_t4_x01 >= 18
+	c_t2_t4_x01 += ADD[1]
 
 	c_t3000 = S.Task('c_t3000', length=1, delay_cost=1)
 	S += c_t3000 >= 18
@@ -940,9 +940,9 @@ def solve():
 	S += c_t5000_mem1 >= 28
 	c_t5000_mem1 += INPUT_mem_r
 
-	c_t111_mem0 = S.Task('c_t111_mem0', length=1, delay_cost=1)
-	S += c_t111_mem0 >= 29
-	c_t111_mem0 += ADD_mem[1]
+	c_t1_t4_x10_mem0 = S.Task('c_t1_t4_x10_mem0', length=1, delay_cost=1)
+	S += c_t1_t4_x10_mem0 >= 29
+	c_t1_t4_x10_mem0 += ADD_mem[1]
 
 	c_t3_a1__x12_mem0 = S.Task('c_t3_a1__x12_mem0', length=1, delay_cost=1)
 	S += c_t3_a1__x12_mem0 >= 29
@@ -976,13 +976,13 @@ def solve():
 	S += c_t5011_mem1 >= 29
 	c_t5011_mem1 += INPUT_mem_r
 
-	c_t111 = S.Task('c_t111', length=1, delay_cost=1)
-	S += c_t111 >= 30
-	c_t111 += ADD[3]
+	c_t111_mem0 = S.Task('c_t111_mem0', length=1, delay_cost=1)
+	S += c_t111_mem0 >= 30
+	c_t111_mem0 += ADD_mem[1]
 
-	c_t1_t4_x10_mem0 = S.Task('c_t1_t4_x10_mem0', length=1, delay_cost=1)
-	S += c_t1_t4_x10_mem0 >= 30
-	c_t1_t4_x10_mem0 += ADD_mem[1]
+	c_t1_t4_x10 = S.Task('c_t1_t4_x10', length=1, delay_cost=1)
+	S += c_t1_t4_x10 >= 30
+	c_t1_t4_x10 += ADD[3]
 
 	c_t3_a1__x12 = S.Task('c_t3_a1__x12', length=1, delay_cost=1)
 	S += c_t3_a1__x12 >= 30
@@ -1012,17 +1012,17 @@ def solve():
 	S += c_t5_a1__x10_mem0 >= 30
 	c_t5_a1__x10_mem0 += ADD_mem[0]
 
-	c_t1_t4_x10 = S.Task('c_t1_t4_x10', length=1, delay_cost=1)
-	S += c_t1_t4_x10 >= 31
-	c_t1_t4_x10 += ADD[3]
+	c_t111 = S.Task('c_t111', length=1, delay_cost=1)
+	S += c_t111 >= 31
+	c_t111 += ADD[2]
 
-	c_t3_t3_t5_mem0 = S.Task('c_t3_t3_t5_mem0', length=1, delay_cost=1)
-	S += c_t3_t3_t5_mem0 >= 31
-	c_t3_t3_t5_mem0 += MUL_mem[0]
+	c_t3_t30_mem0 = S.Task('c_t3_t30_mem0', length=1, delay_cost=1)
+	S += c_t3_t30_mem0 >= 31
+	c_t3_t30_mem0 += MUL_mem[0]
 
-	c_t3_t3_t5_mem1 = S.Task('c_t3_t3_t5_mem1', length=1, delay_cost=1)
-	S += c_t3_t3_t5_mem1 >= 31
-	c_t3_t3_t5_mem1 += MUL_mem[0]
+	c_t3_t30_mem1 = S.Task('c_t3_t30_mem1', length=1, delay_cost=1)
+	S += c_t3_t30_mem1 >= 31
+	c_t3_t30_mem1 += MUL_mem[0]
 
 	c_t4011_mem0 = S.Task('c_t4011_mem0', length=1, delay_cost=1)
 	S += c_t4011_mem0 >= 31
@@ -1034,7 +1034,7 @@ def solve():
 
 	c_t4_a1__x01 = S.Task('c_t4_a1__x01', length=1, delay_cost=1)
 	S += c_t4_a1__x01 >= 31
-	c_t4_a1__x01 += ADD[2]
+	c_t4_a1__x01 += ADD[3]
 
 	c_t5010 = S.Task('c_t5010', length=1, delay_cost=1)
 	S += c_t5010 >= 31
@@ -1060,17 +1060,17 @@ def solve():
 	S += c_t5_t3_t0_mem1 >= 31
 	c_t5_t3_t0_mem1 += ADD_mem[0]
 
-	c_t3_t30_mem0 = S.Task('c_t3_t30_mem0', length=1, delay_cost=1)
-	S += c_t3_t30_mem0 >= 32
-	c_t3_t30_mem0 += MUL_mem[0]
+	c_t3_t30 = S.Task('c_t3_t30', length=1, delay_cost=1)
+	S += c_t3_t30 >= 32
+	c_t3_t30 += ADD[1]
 
-	c_t3_t30_mem1 = S.Task('c_t3_t30_mem1', length=1, delay_cost=1)
-	S += c_t3_t30_mem1 >= 32
-	c_t3_t30_mem1 += MUL_mem[0]
+	c_t3_t3_t5_mem0 = S.Task('c_t3_t3_t5_mem0', length=1, delay_cost=1)
+	S += c_t3_t3_t5_mem0 >= 32
+	c_t3_t3_t5_mem0 += MUL_mem[0]
 
-	c_t3_t3_t5 = S.Task('c_t3_t3_t5', length=1, delay_cost=1)
-	S += c_t3_t3_t5 >= 32
-	c_t3_t3_t5 += ADD[3]
+	c_t3_t3_t5_mem1 = S.Task('c_t3_t3_t5_mem1', length=1, delay_cost=1)
+	S += c_t3_t3_t5_mem1 >= 32
+	c_t3_t3_t5_mem1 += MUL_mem[0]
 
 	c_t4011 = S.Task('c_t4011', length=1, delay_cost=1)
 	S += c_t4011 >= 32
@@ -1106,19 +1106,11 @@ def solve():
 
 	c_t5_a1__x11 = S.Task('c_t5_a1__x11', length=1, delay_cost=1)
 	S += c_t5_a1__x11 >= 32
-	c_t5_a1__x11 += ADD[1]
+	c_t5_a1__x11 += ADD[2]
 
 	c_t5_t3_t0 = S.Task('c_t5_t3_t0', length=7, delay_cost=1)
 	S += c_t5_t3_t0 >= 32
 	c_t5_t3_t0 += MUL[0]
-
-	c_t0_a1__x12_mem0 = S.Task('c_t0_a1__x12_mem0', length=1, delay_cost=1)
-	S += c_t0_a1__x12_mem0 >= 33
-	c_t0_a1__x12_mem0 += ADD_mem[1]
-
-	c_t0_a1__x12_mem1 = S.Task('c_t0_a1__x12_mem1', length=1, delay_cost=1)
-	S += c_t0_a1__x12_mem1 >= 33
-	c_t0_a1__x12_mem1 += INPUT_mem_r
 
 	c_t1_a1__x02_mem0 = S.Task('c_t1_a1__x02_mem0', length=1, delay_cost=1)
 	S += c_t1_a1__x02_mem0 >= 33
@@ -1128,9 +1120,17 @@ def solve():
 	S += c_t1_a1__x02_mem1 >= 33
 	c_t1_a1__x02_mem1 += INPUT_mem_r
 
-	c_t3_t30 = S.Task('c_t3_t30', length=1, delay_cost=1)
-	S += c_t3_t30 >= 33
-	c_t3_t30 += ADD[1]
+	c_t2_a1__x02_mem0 = S.Task('c_t2_a1__x02_mem0', length=1, delay_cost=1)
+	S += c_t2_a1__x02_mem0 >= 33
+	c_t2_a1__x02_mem0 += ADD_mem[1]
+
+	c_t2_a1__x02_mem1 = S.Task('c_t2_a1__x02_mem1', length=1, delay_cost=1)
+	S += c_t2_a1__x02_mem1 >= 33
+	c_t2_a1__x02_mem1 += INPUT_mem_r
+
+	c_t3_t3_t5 = S.Task('c_t3_t3_t5', length=1, delay_cost=1)
+	S += c_t3_t3_t5 >= 33
+	c_t3_t3_t5 += ADD[1]
 
 	c_t4_t11 = S.Task('c_t4_t11', length=1, delay_cost=1)
 	S += c_t4_t11 >= 33
@@ -1172,13 +1172,9 @@ def solve():
 	S += c_t5_t3_t2_mem1 >= 33
 	c_t5_t3_t2_mem1 += ADD_mem[3]
 
-	c_t0_a1__x12 = S.Task('c_t0_a1__x12', length=1, delay_cost=1)
-	S += c_t0_a1__x12 >= 34
-	c_t0_a1__x12 += ADD[2]
-
 	c_t1_a1__x02 = S.Task('c_t1_a1__x02', length=1, delay_cost=1)
 	S += c_t1_a1__x02 >= 34
-	c_t1_a1__x02 += ADD[3]
+	c_t1_a1__x02 += ADD[2]
 
 	c_t1_a1__x12_mem0 = S.Task('c_t1_a1__x12_mem0', length=1, delay_cost=1)
 	S += c_t1_a1__x12_mem0 >= 34
@@ -1188,13 +1184,17 @@ def solve():
 	S += c_t1_a1__x12_mem1 >= 34
 	c_t1_a1__x12_mem1 += INPUT_mem_r
 
-	c_t2_a1__x02_mem0 = S.Task('c_t2_a1__x02_mem0', length=1, delay_cost=1)
-	S += c_t2_a1__x02_mem0 >= 34
-	c_t2_a1__x02_mem0 += ADD_mem[1]
+	c_t2_a1__x02 = S.Task('c_t2_a1__x02', length=1, delay_cost=1)
+	S += c_t2_a1__x02 >= 34
+	c_t2_a1__x02 += ADD[3]
 
-	c_t2_a1__x02_mem1 = S.Task('c_t2_a1__x02_mem1', length=1, delay_cost=1)
-	S += c_t2_a1__x02_mem1 >= 34
-	c_t2_a1__x02_mem1 += INPUT_mem_r
+	c_t2_t31_mem0 = S.Task('c_t2_t31_mem0', length=1, delay_cost=1)
+	S += c_t2_t31_mem0 >= 34
+	c_t2_t31_mem0 += MUL_mem[0]
+
+	c_t2_t31_mem1 = S.Task('c_t2_t31_mem1', length=1, delay_cost=1)
+	S += c_t2_t31_mem1 >= 34
+	c_t2_t31_mem1 += ADD_mem[1]
 
 	c_t4_t2_t3 = S.Task('c_t4_t2_t3', length=1, delay_cost=1)
 	S += c_t4_t2_t3 >= 34
@@ -1220,25 +1220,25 @@ def solve():
 	S += c_t5_t3_t2 >= 34
 	c_t5_t3_t2 += ADD[1]
 
+	c_t0_a1__x12_mem0 = S.Task('c_t0_a1__x12_mem0', length=1, delay_cost=1)
+	S += c_t0_a1__x12_mem0 >= 35
+	c_t0_a1__x12_mem0 += ADD_mem[1]
+
+	c_t0_a1__x12_mem1 = S.Task('c_t0_a1__x12_mem1', length=1, delay_cost=1)
+	S += c_t0_a1__x12_mem1 >= 35
+	c_t0_a1__x12_mem1 += INPUT_mem_r
+
+	c_t1_a1__x03_mem0 = S.Task('c_t1_a1__x03_mem0', length=1, delay_cost=1)
+	S += c_t1_a1__x03_mem0 >= 35
+	c_t1_a1__x03_mem0 += ADD_mem[2]
+
 	c_t1_a1__x12 = S.Task('c_t1_a1__x12', length=1, delay_cost=1)
 	S += c_t1_a1__x12 >= 35
-	c_t1_a1__x12 += ADD[1]
+	c_t1_a1__x12 += ADD[3]
 
-	c_t2_a1__x02 = S.Task('c_t2_a1__x02', length=1, delay_cost=1)
-	S += c_t2_a1__x02 >= 35
-	c_t2_a1__x02 += ADD[3]
-
-	c_t2_t31_mem0 = S.Task('c_t2_t31_mem0', length=1, delay_cost=1)
-	S += c_t2_t31_mem0 >= 35
-	c_t2_t31_mem0 += MUL_mem[0]
-
-	c_t2_t31_mem1 = S.Task('c_t2_t31_mem1', length=1, delay_cost=1)
-	S += c_t2_t31_mem1 >= 35
-	c_t2_t31_mem1 += ADD_mem[1]
-
-	c_t310_mem0 = S.Task('c_t310_mem0', length=1, delay_cost=1)
-	S += c_t310_mem0 >= 35
-	c_t310_mem0 += ADD_mem[1]
+	c_t2_t31 = S.Task('c_t2_t31', length=1, delay_cost=1)
+	S += c_t2_t31 >= 35
+	c_t2_t31 += ADD[1]
 
 	c_t3_t31_mem0 = S.Task('c_t3_t31_mem0', length=1, delay_cost=1)
 	S += c_t3_t31_mem0 >= 35
@@ -1246,7 +1246,7 @@ def solve():
 
 	c_t3_t31_mem1 = S.Task('c_t3_t31_mem1', length=1, delay_cost=1)
 	S += c_t3_t31_mem1 >= 35
-	c_t3_t31_mem1 += ADD_mem[3]
+	c_t3_t31_mem1 += ADD_mem[1]
 
 	c_t5_a1__x00 = S.Task('c_t5_a1__x00', length=1, delay_cost=1)
 	S += c_t5_a1__x00 >= 35
@@ -1264,29 +1264,29 @@ def solve():
 	S += c_t5_t11 >= 35
 	c_t5_t11 += ADD[2]
 
-	c_t0_a1__x13_mem0 = S.Task('c_t0_a1__x13_mem0', length=1, delay_cost=1)
-	S += c_t0_a1__x13_mem0 >= 36
-	c_t0_a1__x13_mem0 += ADD_mem[2]
+	c_t0_a1__x12 = S.Task('c_t0_a1__x12', length=1, delay_cost=1)
+	S += c_t0_a1__x12 >= 36
+	c_t0_a1__x12 += ADD[2]
+
+	c_t1_a1__x03 = S.Task('c_t1_a1__x03', length=1, delay_cost=1)
+	S += c_t1_a1__x03 >= 36
+	c_t1_a1__x03 += ADD[3]
+
+	c_t1_a1__x13_mem0 = S.Task('c_t1_a1__x13_mem0', length=1, delay_cost=1)
+	S += c_t1_a1__x13_mem0 >= 36
+	c_t1_a1__x13_mem0 += ADD_mem[3]
 
 	c_t2_a1__x03_mem0 = S.Task('c_t2_a1__x03_mem0', length=1, delay_cost=1)
 	S += c_t2_a1__x03_mem0 >= 36
 	c_t2_a1__x03_mem0 += ADD_mem[3]
 
-	c_t2_t31 = S.Task('c_t2_t31', length=1, delay_cost=1)
-	S += c_t2_t31 >= 36
-	c_t2_t31 += ADD[3]
-
-	c_t310 = S.Task('c_t310', length=1, delay_cost=1)
-	S += c_t310 >= 36
-	c_t310 += ADD[1]
+	c_t2_t4_x10_mem0 = S.Task('c_t2_t4_x10_mem0', length=1, delay_cost=1)
+	S += c_t2_t4_x10_mem0 >= 36
+	c_t2_t4_x10_mem0 += ADD_mem[1]
 
 	c_t3_t31 = S.Task('c_t3_t31', length=1, delay_cost=1)
 	S += c_t3_t31 >= 36
-	c_t3_t31 += ADD[2]
-
-	c_t3_t4_x00_mem0 = S.Task('c_t3_t4_x00_mem0', length=1, delay_cost=1)
-	S += c_t3_t4_x00_mem0 >= 36
-	c_t3_t4_x00_mem0 += ADD_mem[1]
+	c_t3_t31 += ADD[1]
 
 	c_t4_t3_t3_mem0 = S.Task('c_t4_t3_t3_mem0', length=1, delay_cost=1)
 	S += c_t4_t3_t3_mem0 >= 36
@@ -1300,29 +1300,29 @@ def solve():
 	S += c_t5_t10 >= 36
 	c_t5_t10 += ADD[0]
 
-	c_t0_a1__x13 = S.Task('c_t0_a1__x13', length=1, delay_cost=1)
-	S += c_t0_a1__x13 >= 37
-	c_t0_a1__x13 += ADD[2]
+	c_t0_a1__x13_mem0 = S.Task('c_t0_a1__x13_mem0', length=1, delay_cost=1)
+	S += c_t0_a1__x13_mem0 >= 37
+	c_t0_a1__x13_mem0 += ADD_mem[2]
 
-	c_t1_a1__x03_mem0 = S.Task('c_t1_a1__x03_mem0', length=1, delay_cost=1)
-	S += c_t1_a1__x03_mem0 >= 37
-	c_t1_a1__x03_mem0 += ADD_mem[3]
+	c_t1_a1__x13 = S.Task('c_t1_a1__x13', length=1, delay_cost=1)
+	S += c_t1_a1__x13 >= 37
+	c_t1_a1__x13 += ADD[3]
 
-	c_t1_a1__x13_mem0 = S.Task('c_t1_a1__x13_mem0', length=1, delay_cost=1)
-	S += c_t1_a1__x13_mem0 >= 37
-	c_t1_a1__x13_mem0 += ADD_mem[1]
+	c_t211_mem0 = S.Task('c_t211_mem0', length=1, delay_cost=1)
+	S += c_t211_mem0 >= 37
+	c_t211_mem0 += ADD_mem[1]
 
 	c_t2_a1__x03 = S.Task('c_t2_a1__x03', length=1, delay_cost=1)
 	S += c_t2_a1__x03 >= 37
-	c_t2_a1__x03 += ADD[3]
+	c_t2_a1__x03 += ADD[1]
 
-	c_t2_t4_x10_mem0 = S.Task('c_t2_t4_x10_mem0', length=1, delay_cost=1)
-	S += c_t2_t4_x10_mem0 >= 37
-	c_t2_t4_x10_mem0 += ADD_mem[3]
+	c_t2_t4_x10 = S.Task('c_t2_t4_x10', length=1, delay_cost=1)
+	S += c_t2_t4_x10 >= 37
+	c_t2_t4_x10 += ADD[2]
 
-	c_t3_t4_x00 = S.Task('c_t3_t4_x00', length=1, delay_cost=1)
-	S += c_t3_t4_x00 >= 37
-	c_t3_t4_x00 += ADD[1]
+	c_t310_mem0 = S.Task('c_t310_mem0', length=1, delay_cost=1)
+	S += c_t310_mem0 >= 37
+	c_t310_mem0 += ADD_mem[1]
 
 	c_t4_t3_t3 = S.Task('c_t4_t3_t3', length=1, delay_cost=1)
 	S += c_t4_t3_t3 >= 37
@@ -1344,21 +1344,21 @@ def solve():
 	S += c_t0_a1__x02_mem1 >= 38
 	c_t0_a1__x02_mem1 += INPUT_mem_r
 
-	c_t1_a1__x03 = S.Task('c_t1_a1__x03', length=1, delay_cost=1)
-	S += c_t1_a1__x03 >= 38
-	c_t1_a1__x03 += ADD[0]
+	c_t0_a1__x13 = S.Task('c_t0_a1__x13', length=1, delay_cost=1)
+	S += c_t0_a1__x13 >= 38
+	c_t0_a1__x13 += ADD[1]
 
-	c_t1_a1__x13 = S.Task('c_t1_a1__x13', length=1, delay_cost=1)
-	S += c_t1_a1__x13 >= 38
-	c_t1_a1__x13 += ADD[2]
+	c_t211 = S.Task('c_t211', length=1, delay_cost=1)
+	S += c_t211 >= 38
+	c_t211 += ADD[2]
 
-	c_t211_mem0 = S.Task('c_t211_mem0', length=1, delay_cost=1)
-	S += c_t211_mem0 >= 38
-	c_t211_mem0 += ADD_mem[3]
+	c_t310 = S.Task('c_t310', length=1, delay_cost=1)
+	S += c_t310 >= 38
+	c_t310 += ADD[0]
 
-	c_t2_t4_x10 = S.Task('c_t2_t4_x10', length=1, delay_cost=1)
-	S += c_t2_t4_x10 >= 38
-	c_t2_t4_x10 += ADD[1]
+	c_t3_t4_x00_mem0 = S.Task('c_t3_t4_x00_mem0', length=1, delay_cost=1)
+	S += c_t3_t4_x00_mem0 >= 38
+	c_t3_t4_x00_mem0 += ADD_mem[1]
 
 	c_t4_a1__x10_mem0 = S.Task('c_t4_a1__x10_mem0', length=1, delay_cost=1)
 	S += c_t4_a1__x10_mem0 >= 38
@@ -1382,11 +1382,7 @@ def solve():
 
 	c_t0_a1__x02 = S.Task('c_t0_a1__x02', length=1, delay_cost=1)
 	S += c_t0_a1__x02 >= 39
-	c_t0_a1__x02 += ADD[1]
-
-	c_t211 = S.Task('c_t211', length=1, delay_cost=1)
-	S += c_t211 >= 39
-	c_t211 += ADD[3]
+	c_t0_a1__x02 += ADD[3]
 
 	c_t2_a1__x12_mem0 = S.Task('c_t2_a1__x12_mem0', length=1, delay_cost=1)
 	S += c_t2_a1__x12_mem0 >= 39
@@ -1395,6 +1391,18 @@ def solve():
 	c_t2_a1__x12_mem1 = S.Task('c_t2_a1__x12_mem1', length=1, delay_cost=1)
 	S += c_t2_a1__x12_mem1 >= 39
 	c_t2_a1__x12_mem1 += INPUT_mem_r
+
+	c_t3_t4_x00 = S.Task('c_t3_t4_x00', length=1, delay_cost=1)
+	S += c_t3_t4_x00 >= 39
+	c_t3_t4_x00 += ADD[2]
+
+	c_t4_a1__x02_mem0 = S.Task('c_t4_a1__x02_mem0', length=1, delay_cost=1)
+	S += c_t4_a1__x02_mem0 >= 39
+	c_t4_a1__x02_mem0 += ADD_mem[3]
+
+	c_t4_a1__x02_mem1 = S.Task('c_t4_a1__x02_mem1', length=1, delay_cost=1)
+	S += c_t4_a1__x02_mem1 >= 39
+	c_t4_a1__x02_mem1 += ADD_mem[0]
 
 	c_t4_a1__x10 = S.Task('c_t4_a1__x10', length=1, delay_cost=1)
 	S += c_t4_a1__x10 >= 39
@@ -1408,25 +1416,21 @@ def solve():
 	S += c_t4_t30_mem1 >= 39
 	c_t4_t30_mem1 += MUL_mem[0]
 
-	c_t5_a1__x12_mem0 = S.Task('c_t5_a1__x12_mem0', length=1, delay_cost=1)
-	S += c_t5_a1__x12_mem0 >= 39
-	c_t5_a1__x12_mem0 += ADD_mem[1]
-
-	c_t5_a1__x12_mem1 = S.Task('c_t5_a1__x12_mem1', length=1, delay_cost=1)
-	S += c_t5_a1__x12_mem1 >= 39
-	c_t5_a1__x12_mem1 += ADD_mem[0]
-
 	c_t5_t3_t4 = S.Task('c_t5_t3_t4', length=7, delay_cost=1)
 	S += c_t5_t3_t4 >= 39
 	c_t5_t3_t4 += MUL[0]
 
 	c_t0_a1__x03_mem0 = S.Task('c_t0_a1__x03_mem0', length=1, delay_cost=1)
 	S += c_t0_a1__x03_mem0 >= 40
-	c_t0_a1__x03_mem0 += ADD_mem[1]
+	c_t0_a1__x03_mem0 += ADD_mem[3]
 
 	c_t2_a1__x12 = S.Task('c_t2_a1__x12', length=1, delay_cost=1)
 	S += c_t2_a1__x12 >= 40
-	c_t2_a1__x12 += ADD[3]
+	c_t2_a1__x12 += ADD[2]
+
+	c_t4_a1__x02 = S.Task('c_t4_a1__x02', length=1, delay_cost=1)
+	S += c_t4_a1__x02 >= 40
+	c_t4_a1__x02 += ADD[0]
 
 	c_t4_a1__x11_mem0 = S.Task('c_t4_a1__x11_mem0', length=1, delay_cost=1)
 	S += c_t4_a1__x11_mem0 >= 40
@@ -1439,10 +1443,6 @@ def solve():
 	c_t5_a1__x01_mem0 = S.Task('c_t5_a1__x01_mem0', length=1, delay_cost=1)
 	S += c_t5_a1__x01_mem0 >= 40
 	c_t5_a1__x01_mem0 += ADD_mem[0]
-
-	c_t5_a1__x12 = S.Task('c_t5_a1__x12', length=1, delay_cost=1)
-	S += c_t5_a1__x12 >= 40
-	c_t5_a1__x12 += ADD[2]
 
 	c_t5_t30_mem0 = S.Task('c_t5_t30_mem0', length=1, delay_cost=1)
 	S += c_t5_t30_mem0 >= 40
@@ -1458,7 +1458,7 @@ def solve():
 
 	c_t2_a1__x13_mem0 = S.Task('c_t2_a1__x13_mem0', length=1, delay_cost=1)
 	S += c_t2_a1__x13_mem0 >= 41
-	c_t2_a1__x13_mem0 += ADD_mem[3]
+	c_t2_a1__x13_mem0 += ADD_mem[2]
 
 	c_t410_mem0 = S.Task('c_t410_mem0', length=1, delay_cost=1)
 	S += c_t410_mem0 >= 41
@@ -1466,7 +1466,7 @@ def solve():
 
 	c_t4_a1__x11 = S.Task('c_t4_a1__x11', length=1, delay_cost=1)
 	S += c_t4_a1__x11 >= 41
-	c_t4_a1__x11 += ADD[3]
+	c_t4_a1__x11 += ADD[1]
 
 	c_t4_t3_t4_in = S.Task('c_t4_t3_t4_in', length=1, delay_cost=1)
 	S += c_t4_t3_t4_in >= 41
@@ -1486,11 +1486,11 @@ def solve():
 
 	c_t5_a1__x01 = S.Task('c_t5_a1__x01', length=1, delay_cost=1)
 	S += c_t5_a1__x01 >= 41
-	c_t5_a1__x01 += ADD[2]
+	c_t5_a1__x01 += ADD[3]
 
 	c_t5_t30 = S.Task('c_t5_t30', length=1, delay_cost=1)
 	S += c_t5_t30 >= 41
-	c_t5_t30 += ADD[1]
+	c_t5_t30 += ADD[2]
 
 	c_t5_t3_t5_mem0 = S.Task('c_t5_t3_t5_mem0', length=1, delay_cost=1)
 	S += c_t5_t3_t5_mem0 >= 41
@@ -1502,19 +1502,11 @@ def solve():
 
 	c_t2_a1__x13 = S.Task('c_t2_a1__x13', length=1, delay_cost=1)
 	S += c_t2_a1__x13 >= 42
-	c_t2_a1__x13 += ADD[3]
+	c_t2_a1__x13 += ADD[2]
 
 	c_t410 = S.Task('c_t410', length=1, delay_cost=1)
 	S += c_t410 >= 42
-	c_t410 += ADD[0]
-
-	c_t4_a1__x02_mem0 = S.Task('c_t4_a1__x02_mem0', length=1, delay_cost=1)
-	S += c_t4_a1__x02_mem0 >= 42
-	c_t4_a1__x02_mem0 += ADD_mem[2]
-
-	c_t4_a1__x02_mem1 = S.Task('c_t4_a1__x02_mem1', length=1, delay_cost=1)
-	S += c_t4_a1__x02_mem1 >= 42
-	c_t4_a1__x02_mem1 += ADD_mem[0]
+	c_t410 += ADD[1]
 
 	c_t4_t3_t4 = S.Task('c_t4_t3_t4', length=7, delay_cost=1)
 	S += c_t4_t3_t4 >= 42
@@ -1530,31 +1522,35 @@ def solve():
 
 	c_t4_t4_x00 = S.Task('c_t4_t4_x00', length=1, delay_cost=1)
 	S += c_t4_t4_x00 >= 42
-	c_t4_t4_x00 += ADD[2]
-
-	c_t510_mem0 = S.Task('c_t510_mem0', length=1, delay_cost=1)
-	S += c_t510_mem0 >= 42
-	c_t510_mem0 += ADD_mem[1]
+	c_t4_t4_x00 += ADD[3]
 
 	c_t5_a1__x02_mem0 = S.Task('c_t5_a1__x02_mem0', length=1, delay_cost=1)
 	S += c_t5_a1__x02_mem0 >= 42
-	c_t5_a1__x02_mem0 += ADD_mem[2]
+	c_t5_a1__x02_mem0 += ADD_mem[3]
 
 	c_t5_a1__x02_mem1 = S.Task('c_t5_a1__x02_mem1', length=1, delay_cost=1)
 	S += c_t5_a1__x02_mem1 >= 42
 	c_t5_a1__x02_mem1 += ADD_mem[0]
 
+	c_t5_t2_t3_mem0 = S.Task('c_t5_t2_t3_mem0', length=1, delay_cost=1)
+	S += c_t5_t2_t3_mem0 >= 42
+	c_t5_t2_t3_mem0 += ADD_mem[0]
+
+	c_t5_t2_t3_mem1 = S.Task('c_t5_t2_t3_mem1', length=1, delay_cost=1)
+	S += c_t5_t2_t3_mem1 >= 42
+	c_t5_t2_t3_mem1 += ADD_mem[2]
+
 	c_t5_t3_t5 = S.Task('c_t5_t3_t5', length=1, delay_cost=1)
 	S += c_t5_t3_t5 >= 42
-	c_t5_t3_t5 += ADD[1]
+	c_t5_t3_t5 += ADD[0]
 
-	c_t4_a1__x02 = S.Task('c_t4_a1__x02', length=1, delay_cost=1)
-	S += c_t4_a1__x02 >= 43
-	c_t4_a1__x02 += ADD[1]
+	c_t5_t4_x00_mem0 = S.Task('c_t5_t4_x00_mem0', length=1, delay_cost=1)
+	S += c_t5_t4_x00_mem0 >= 42
+	c_t5_t4_x00_mem0 += ADD_mem[2]
 
 	c_t4_a1__x12_mem0 = S.Task('c_t4_a1__x12_mem0', length=1, delay_cost=1)
 	S += c_t4_a1__x12_mem0 >= 43
-	c_t4_a1__x12_mem0 += ADD_mem[3]
+	c_t4_a1__x12_mem0 += ADD_mem[1]
 
 	c_t4_a1__x12_mem1 = S.Task('c_t4_a1__x12_mem1', length=1, delay_cost=1)
 	S += c_t4_a1__x12_mem1 >= 43
@@ -1562,39 +1558,43 @@ def solve():
 
 	c_t4_t3_t5 = S.Task('c_t4_t3_t5', length=1, delay_cost=1)
 	S += c_t4_t3_t5 >= 43
-	c_t4_t3_t5 += ADD[2]
+	c_t4_t3_t5 += ADD[1]
 
-	c_t510 = S.Task('c_t510', length=1, delay_cost=1)
-	S += c_t510 >= 43
-	c_t510 += ADD[0]
+	c_t510_mem0 = S.Task('c_t510_mem0', length=1, delay_cost=1)
+	S += c_t510_mem0 >= 43
+	c_t510_mem0 += ADD_mem[2]
 
 	c_t5_a1__x02 = S.Task('c_t5_a1__x02', length=1, delay_cost=1)
 	S += c_t5_a1__x02 >= 43
-	c_t5_a1__x02 += ADD[3]
+	c_t5_a1__x02 += ADD[2]
 
-	c_t5_t2_t3_mem0 = S.Task('c_t5_t2_t3_mem0', length=1, delay_cost=1)
-	S += c_t5_t2_t3_mem0 >= 43
-	c_t5_t2_t3_mem0 += ADD_mem[0]
+	c_t5_a1__x12_mem0 = S.Task('c_t5_a1__x12_mem0', length=1, delay_cost=1)
+	S += c_t5_a1__x12_mem0 >= 43
+	c_t5_a1__x12_mem0 += ADD_mem[2]
 
-	c_t5_t2_t3_mem1 = S.Task('c_t5_t2_t3_mem1', length=1, delay_cost=1)
-	S += c_t5_t2_t3_mem1 >= 43
-	c_t5_t2_t3_mem1 += ADD_mem[2]
+	c_t5_a1__x12_mem1 = S.Task('c_t5_a1__x12_mem1', length=1, delay_cost=1)
+	S += c_t5_a1__x12_mem1 >= 43
+	c_t5_a1__x12_mem1 += ADD_mem[0]
 
-	c_t5_t4_x00_mem0 = S.Task('c_t5_t4_x00_mem0', length=1, delay_cost=1)
-	S += c_t5_t4_x00_mem0 >= 43
-	c_t5_t4_x00_mem0 += ADD_mem[1]
+	c_t5_t2_t3 = S.Task('c_t5_t2_t3', length=1, delay_cost=1)
+	S += c_t5_t2_t3 >= 43
+	c_t5_t2_t3 += ADD[3]
+
+	c_t5_t4_x00 = S.Task('c_t5_t4_x00', length=1, delay_cost=1)
+	S += c_t5_t4_x00 >= 43
+	c_t5_t4_x00 += ADD[0]
 
 	c_t4_a1__x12 = S.Task('c_t4_a1__x12', length=1, delay_cost=1)
 	S += c_t4_a1__x12 >= 44
-	c_t4_a1__x12 += ADD[0]
+	c_t4_a1__x12 += ADD[1]
 
-	c_t5_t2_t3 = S.Task('c_t5_t2_t3', length=1, delay_cost=1)
-	S += c_t5_t2_t3 >= 44
-	c_t5_t2_t3 += ADD[2]
+	c_t510 = S.Task('c_t510', length=1, delay_cost=1)
+	S += c_t510 >= 44
+	c_t510 += ADD[3]
 
-	c_t5_t4_x00 = S.Task('c_t5_t4_x00', length=1, delay_cost=1)
-	S += c_t5_t4_x00 >= 44
-	c_t5_t4_x00 += ADD[3]
+	c_t5_a1__x12 = S.Task('c_t5_a1__x12', length=1, delay_cost=1)
+	S += c_t5_a1__x12 >= 44
+	c_t5_a1__x12 += ADD[0]
 
 	c_t5_t31_mem0 = S.Task('c_t5_t31_mem0', length=1, delay_cost=1)
 	S += c_t5_t31_mem0 >= 46
@@ -1602,11 +1602,11 @@ def solve():
 
 	c_t5_t31_mem1 = S.Task('c_t5_t31_mem1', length=1, delay_cost=1)
 	S += c_t5_t31_mem1 >= 46
-	c_t5_t31_mem1 += ADD_mem[1]
+	c_t5_t31_mem1 += ADD_mem[0]
 
 	c_t5_t31 = S.Task('c_t5_t31', length=1, delay_cost=1)
 	S += c_t5_t31 >= 47
-	c_t5_t31 += ADD[0]
+	c_t5_t31 += ADD[1]
 
 	c_t4_t31_mem0 = S.Task('c_t4_t31_mem0', length=1, delay_cost=1)
 	S += c_t4_t31_mem0 >= 49
@@ -1614,11 +1614,11 @@ def solve():
 
 	c_t4_t31_mem1 = S.Task('c_t4_t31_mem1', length=1, delay_cost=1)
 	S += c_t4_t31_mem1 >= 49
-	c_t4_t31_mem1 += ADD_mem[2]
+	c_t4_t31_mem1 += ADD_mem[1]
 
 	c_t4_t31 = S.Task('c_t4_t31', length=1, delay_cost=1)
 	S += c_t4_t31 >= 50
-	c_t4_t31 += ADD[0]
+	c_t4_t31 += ADD[2]
 
 
 	# new tasks
@@ -1638,8 +1638,8 @@ def solve():
 	c_t0_a1_1 += alt(ADD)
 
 	c_t0_a1_1_mem0 = S.Task('c_t0_a1_1_mem0', length=1, delay_cost=1)
-	c_t0_a1_1_mem0 += ADD_mem[2]
-	S += 37 < c_t0_a1_1_mem0
+	c_t0_a1_1_mem0 += ADD_mem[1]
+	S += 38 < c_t0_a1_1_mem0
 	S += c_t0_a1_1_mem0 <= c_t0_a1_1
 
 	c_t0_a1_1_mem1 = S.Task('c_t0_a1_1_mem1', length=1, delay_cost=1)
@@ -1671,8 +1671,8 @@ def solve():
 	c_t1_a1_0 += alt(ADD)
 
 	c_t1_a1_0_mem0 = S.Task('c_t1_a1_0_mem0', length=1, delay_cost=1)
-	c_t1_a1_0_mem0 += ADD_mem[0]
-	S += 38 < c_t1_a1_0_mem0
+	c_t1_a1_0_mem0 += ADD_mem[3]
+	S += 36 < c_t1_a1_0_mem0
 	S += c_t1_a1_0_mem0 <= c_t1_a1_0
 
 	c_t1_a1_0_mem1 = S.Task('c_t1_a1_0_mem1', length=1, delay_cost=1)
@@ -1683,8 +1683,8 @@ def solve():
 	c_t1_a1_1 += alt(ADD)
 
 	c_t1_a1_1_mem0 = S.Task('c_t1_a1_1_mem0', length=1, delay_cost=1)
-	c_t1_a1_1_mem0 += ADD_mem[2]
-	S += 38 < c_t1_a1_1_mem0
+	c_t1_a1_1_mem0 += ADD_mem[3]
+	S += 37 < c_t1_a1_1_mem0
 	S += c_t1_a1_1_mem0 <= c_t1_a1_1
 
 	c_t1_a1_1_mem1 = S.Task('c_t1_a1_1_mem1', length=1, delay_cost=1)
@@ -1695,8 +1695,8 @@ def solve():
 	c_t1_t4_x02 += alt(ADD)
 
 	c_t1_t4_x02_mem0 = S.Task('c_t1_t4_x02_mem0', length=1, delay_cost=1)
-	c_t1_t4_x02_mem0 += ADD_mem[2]
-	S += 18 < c_t1_t4_x02_mem0
+	c_t1_t4_x02_mem0 += ADD_mem[0]
+	S += 17 < c_t1_t4_x02_mem0
 	S += c_t1_t4_x02_mem0 <= c_t1_t4_x02
 
 	c_t1_t4_x02_mem1 = S.Task('c_t1_t4_x02_mem1', length=1, delay_cost=1)
@@ -1709,14 +1709,14 @@ def solve():
 
 	c_t1_t4_x11_mem0 = S.Task('c_t1_t4_x11_mem0', length=1, delay_cost=1)
 	c_t1_t4_x11_mem0 += ADD_mem[3]
-	S += 31 < c_t1_t4_x11_mem0
+	S += 30 < c_t1_t4_x11_mem0
 	S += c_t1_t4_x11_mem0 <= c_t1_t4_x11
 
 	c_t2_a1_0 = S.Task('c_t2_a1_0', length=1, delay_cost=1)
 	c_t2_a1_0 += alt(ADD)
 
 	c_t2_a1_0_mem0 = S.Task('c_t2_a1_0_mem0', length=1, delay_cost=1)
-	c_t2_a1_0_mem0 += ADD_mem[3]
+	c_t2_a1_0_mem0 += ADD_mem[1]
 	S += 37 < c_t2_a1_0_mem0
 	S += c_t2_a1_0_mem0 <= c_t2_a1_0
 
@@ -1728,7 +1728,7 @@ def solve():
 	c_t2_a1_1 += alt(ADD)
 
 	c_t2_a1_1_mem0 = S.Task('c_t2_a1_1_mem0', length=1, delay_cost=1)
-	c_t2_a1_1_mem0 += ADD_mem[3]
+	c_t2_a1_1_mem0 += ADD_mem[2]
 	S += 42 < c_t2_a1_1_mem0
 	S += c_t2_a1_1_mem0 <= c_t2_a1_1
 
@@ -1740,8 +1740,8 @@ def solve():
 	c_t2_t4_x02 += alt(ADD)
 
 	c_t2_t4_x02_mem0 = S.Task('c_t2_t4_x02_mem0', length=1, delay_cost=1)
-	c_t2_t4_x02_mem0 += ADD_mem[2]
-	S += 17 < c_t2_t4_x02_mem0
+	c_t2_t4_x02_mem0 += ADD_mem[1]
+	S += 18 < c_t2_t4_x02_mem0
 	S += c_t2_t4_x02_mem0 <= c_t2_t4_x02
 
 	c_t2_t4_x02_mem1 = S.Task('c_t2_t4_x02_mem1', length=1, delay_cost=1)
@@ -1753,8 +1753,8 @@ def solve():
 	c_t2_t4_x11 += alt(ADD)
 
 	c_t2_t4_x11_mem0 = S.Task('c_t2_t4_x11_mem0', length=1, delay_cost=1)
-	c_t2_t4_x11_mem0 += ADD_mem[1]
-	S += 38 < c_t2_t4_x11_mem0
+	c_t2_t4_x11_mem0 += ADD_mem[2]
+	S += 37 < c_t2_t4_x11_mem0
 	S += c_t2_t4_x11_mem0 <= c_t2_t4_x11
 
 	c_t3_a1__x03 = S.Task('c_t3_a1__x03', length=1, delay_cost=1)
@@ -1777,15 +1777,15 @@ def solve():
 	c_t3_t4_x01 += alt(ADD)
 
 	c_t3_t4_x01_mem0 = S.Task('c_t3_t4_x01_mem0', length=1, delay_cost=1)
-	c_t3_t4_x01_mem0 += ADD_mem[1]
-	S += 37 < c_t3_t4_x01_mem0
+	c_t3_t4_x01_mem0 += ADD_mem[2]
+	S += 39 < c_t3_t4_x01_mem0
 	S += c_t3_t4_x01_mem0 <= c_t3_t4_x01
 
 	c_t3_t4_x10 = S.Task('c_t3_t4_x10', length=1, delay_cost=1)
 	c_t3_t4_x10 += alt(ADD)
 
 	c_t3_t4_x10_mem0 = S.Task('c_t3_t4_x10_mem0', length=1, delay_cost=1)
-	c_t3_t4_x10_mem0 += ADD_mem[2]
+	c_t3_t4_x10_mem0 += ADD_mem[1]
 	S += 36 < c_t3_t4_x10_mem0
 	S += c_t3_t4_x10_mem0 <= c_t3_t4_x10
 
@@ -1793,7 +1793,7 @@ def solve():
 	c_t311 += alt(ADD)
 
 	c_t311_mem0 = S.Task('c_t311_mem0', length=1, delay_cost=1)
-	c_t311_mem0 += ADD_mem[2]
+	c_t311_mem0 += ADD_mem[1]
 	S += 36 < c_t311_mem0
 	S += c_t311_mem0 <= c_t311
 
@@ -1801,15 +1801,15 @@ def solve():
 	c_t4_a1__x03 += alt(ADD)
 
 	c_t4_a1__x03_mem0 = S.Task('c_t4_a1__x03_mem0', length=1, delay_cost=1)
-	c_t4_a1__x03_mem0 += ADD_mem[1]
-	S += 43 < c_t4_a1__x03_mem0
+	c_t4_a1__x03_mem0 += ADD_mem[0]
+	S += 40 < c_t4_a1__x03_mem0
 	S += c_t4_a1__x03_mem0 <= c_t4_a1__x03
 
 	c_t4_a1__x13 = S.Task('c_t4_a1__x13', length=1, delay_cost=1)
 	c_t4_a1__x13 += alt(ADD)
 
 	c_t4_a1__x13_mem0 = S.Task('c_t4_a1__x13_mem0', length=1, delay_cost=1)
-	c_t4_a1__x13_mem0 += ADD_mem[0]
+	c_t4_a1__x13_mem0 += ADD_mem[1]
 	S += 44 < c_t4_a1__x13_mem0
 	S += c_t4_a1__x13_mem0 <= c_t4_a1__x13
 
@@ -1817,7 +1817,7 @@ def solve():
 	c_t4_t4_x01 += alt(ADD)
 
 	c_t4_t4_x01_mem0 = S.Task('c_t4_t4_x01_mem0', length=1, delay_cost=1)
-	c_t4_t4_x01_mem0 += ADD_mem[2]
+	c_t4_t4_x01_mem0 += ADD_mem[3]
 	S += 42 < c_t4_t4_x01_mem0
 	S += c_t4_t4_x01_mem0 <= c_t4_t4_x01
 
@@ -1825,7 +1825,7 @@ def solve():
 	c_t4_t4_x10 += alt(ADD)
 
 	c_t4_t4_x10_mem0 = S.Task('c_t4_t4_x10_mem0', length=1, delay_cost=1)
-	c_t4_t4_x10_mem0 += ADD_mem[0]
+	c_t4_t4_x10_mem0 += ADD_mem[2]
 	S += 50 < c_t4_t4_x10_mem0
 	S += c_t4_t4_x10_mem0 <= c_t4_t4_x10
 
@@ -1833,7 +1833,7 @@ def solve():
 	c_t411 += alt(ADD)
 
 	c_t411_mem0 = S.Task('c_t411_mem0', length=1, delay_cost=1)
-	c_t411_mem0 += ADD_mem[0]
+	c_t411_mem0 += ADD_mem[2]
 	S += 50 < c_t411_mem0
 	S += c_t411_mem0 <= c_t411
 
@@ -1841,7 +1841,7 @@ def solve():
 	c_t5_a1__x03 += alt(ADD)
 
 	c_t5_a1__x03_mem0 = S.Task('c_t5_a1__x03_mem0', length=1, delay_cost=1)
-	c_t5_a1__x03_mem0 += ADD_mem[3]
+	c_t5_a1__x03_mem0 += ADD_mem[2]
 	S += 43 < c_t5_a1__x03_mem0
 	S += c_t5_a1__x03_mem0 <= c_t5_a1__x03
 
@@ -1849,23 +1849,23 @@ def solve():
 	c_t5_a1__x13 += alt(ADD)
 
 	c_t5_a1__x13_mem0 = S.Task('c_t5_a1__x13_mem0', length=1, delay_cost=1)
-	c_t5_a1__x13_mem0 += ADD_mem[2]
-	S += 40 < c_t5_a1__x13_mem0
+	c_t5_a1__x13_mem0 += ADD_mem[0]
+	S += 44 < c_t5_a1__x13_mem0
 	S += c_t5_a1__x13_mem0 <= c_t5_a1__x13
 
 	c_t5_t4_x01 = S.Task('c_t5_t4_x01', length=1, delay_cost=1)
 	c_t5_t4_x01 += alt(ADD)
 
 	c_t5_t4_x01_mem0 = S.Task('c_t5_t4_x01_mem0', length=1, delay_cost=1)
-	c_t5_t4_x01_mem0 += ADD_mem[3]
-	S += 44 < c_t5_t4_x01_mem0
+	c_t5_t4_x01_mem0 += ADD_mem[0]
+	S += 43 < c_t5_t4_x01_mem0
 	S += c_t5_t4_x01_mem0 <= c_t5_t4_x01
 
 	c_t5_t4_x10 = S.Task('c_t5_t4_x10', length=1, delay_cost=1)
 	c_t5_t4_x10 += alt(ADD)
 
 	c_t5_t4_x10_mem0 = S.Task('c_t5_t4_x10_mem0', length=1, delay_cost=1)
-	c_t5_t4_x10_mem0 += ADD_mem[0]
+	c_t5_t4_x10_mem0 += ADD_mem[1]
 	S += 47 < c_t5_t4_x10_mem0
 	S += c_t5_t4_x10_mem0 <= c_t5_t4_x10
 
@@ -1873,7 +1873,7 @@ def solve():
 	c_t511 += alt(ADD)
 
 	c_t511_mem0 = S.Task('c_t511_mem0', length=1, delay_cost=1)
-	c_t511_mem0 += ADD_mem[0]
+	c_t511_mem0 += ADD_mem[1]
 	S += 47 < c_t511_mem0
 	S += c_t511_mem0 <= c_t511
 
@@ -1886,16 +1886,16 @@ def solve():
 	S += c_s0011_mem0 <= c_s0011
 
 	c_s0011_mem1 = S.Task('c_s0011_mem1', length=1, delay_cost=1)
-	c_s0011_mem1 += ADD_mem[3]
-	S += 30 < c_s0011_mem1
+	c_s0011_mem1 += ADD_mem[2]
+	S += 31 < c_s0011_mem1
 	S += c_s0011_mem1 <= c_s0011
 
 	c_s010 = S.Task('c_s010', length=1, delay_cost=1)
 	c_s010 += alt(ADD)
 
 	c_s010_mem0 = S.Task('c_s010_mem0', length=1, delay_cost=1)
-	c_s010_mem0 += ADD_mem[1]
-	S += 36 < c_s010_mem0
+	c_s010_mem0 += ADD_mem[0]
+	S += 38 < c_s010_mem0
 	S += c_s010_mem0 <= c_s010
 
 	c_s010_mem1 = S.Task('c_s010_mem1', length=1, delay_cost=1)
@@ -1907,20 +1907,20 @@ def solve():
 	c_s1011 += alt(ADD)
 
 	c_s1011_mem0 = S.Task('c_s1011_mem0', length=1, delay_cost=1)
-	c_s1011_mem0 += ADD_mem[3]
-	S += 30 < c_s1011_mem0
+	c_s1011_mem0 += ADD_mem[2]
+	S += 31 < c_s1011_mem0
 	S += c_s1011_mem0 <= c_s1011
 
 	c_s1011_mem1 = S.Task('c_s1011_mem1', length=1, delay_cost=1)
-	c_s1011_mem1 += ADD_mem[3]
-	S += 39 < c_s1011_mem1
+	c_s1011_mem1 += ADD_mem[2]
+	S += 38 < c_s1011_mem1
 	S += c_s1011_mem1 <= c_s1011
 
 	c_s1110 = S.Task('c_s1110', length=1, delay_cost=1)
 	c_s1110 += alt(ADD)
 
 	c_s1110_mem0 = S.Task('c_s1110_mem0', length=1, delay_cost=1)
-	c_s1110_mem0 += ADD_mem[0]
+	c_s1110_mem0 += ADD_mem[1]
 	S += 42 < c_s1110_mem0
 	S += c_s1110_mem0 <= c_s1110
 
@@ -1933,8 +1933,8 @@ def solve():
 	c_s2011 += alt(ADD)
 
 	c_s2011_mem0 = S.Task('c_s2011_mem0', length=1, delay_cost=1)
-	c_s2011_mem0 += ADD_mem[3]
-	S += 39 < c_s2011_mem0
+	c_s2011_mem0 += ADD_mem[2]
+	S += 38 < c_s2011_mem0
 	S += c_s2011_mem0 <= c_s2011
 
 	c_s2011_mem1 = S.Task('c_s2011_mem1', length=1, delay_cost=1)
@@ -1946,8 +1946,8 @@ def solve():
 	c_s210 += alt(ADD)
 
 	c_s210_mem0 = S.Task('c_s210_mem0', length=1, delay_cost=1)
-	c_s210_mem0 += ADD_mem[0]
-	S += 43 < c_s210_mem0
+	c_s210_mem0 += ADD_mem[3]
+	S += 44 < c_s210_mem0
 	S += c_s210_mem0 <= c_s210
 
 	c_s210_mem1 = S.Task('c_s210_mem1', length=1, delay_cost=1)
@@ -1959,7 +1959,7 @@ def solve():
 	c_t6_y1__x01 += alt(ADD)
 
 	c_t6_y1__x01_mem0 = S.Task('c_t6_y1__x01_mem0', length=1, delay_cost=1)
-	c_t6_y1__x01_mem0 += ADD_mem[0]
+	c_t6_y1__x01_mem0 += ADD_mem[2]
 	S += 17 < c_t6_y1__x01_mem0
 	S += c_t6_y1__x01_mem0 <= c_t6_y1__x01
 
@@ -1967,8 +1967,8 @@ def solve():
 	c_t6_y1__x10 += alt(ADD)
 
 	c_t6_y1__x10_mem0 = S.Task('c_t6_y1__x10_mem0', length=1, delay_cost=1)
-	c_t6_y1__x10_mem0 += ADD_mem[3]
-	S += 39 < c_t6_y1__x10_mem0
+	c_t6_y1__x10_mem0 += ADD_mem[2]
+	S += 38 < c_t6_y1__x10_mem0
 	S += c_t6_y1__x10_mem0 <= c_t6_y1__x10
 
 	c_t0_t00 = S.Task('c_t0_t00', length=1, delay_cost=1)
@@ -2138,8 +2138,8 @@ def solve():
 	S += c_t2_t4_x12_mem0 <= c_t2_t4_x12
 
 	c_t2_t4_x12_mem1 = S.Task('c_t2_t4_x12_mem1', length=1, delay_cost=1)
-	c_t2_t4_x12_mem1 += ADD_mem[3]
-	S += 36 < c_t2_t4_x12_mem1
+	c_t2_t4_x12_mem1 += ADD_mem[1]
+	S += 35 < c_t2_t4_x12_mem1
 	S += c_t2_t4_x12_mem1 <= c_t2_t4_x12
 
 	c_t3_a1_0 = S.Task('c_t3_a1_0', length=1, delay_cost=1)
@@ -2187,7 +2187,7 @@ def solve():
 
 	c_t3_t4_x02_mem1 = S.Task('c_t3_t4_x02_mem1', length=1, delay_cost=1)
 	c_t3_t4_x02_mem1 += ADD_mem[1]
-	S += 33 < c_t3_t4_x02_mem1
+	S += 32 < c_t3_t4_x02_mem1
 	S += c_t3_t4_x02_mem1 <= c_t3_t4_x02
 
 	c_t3_t4_x11 = S.Task('c_t3_t4_x11', length=1, delay_cost=1)
@@ -2304,7 +2304,7 @@ def solve():
 	S += c_t5_t4_x02_mem0 <= c_t5_t4_x02
 
 	c_t5_t4_x02_mem1 = S.Task('c_t5_t4_x02_mem1', length=1, delay_cost=1)
-	c_t5_t4_x02_mem1 += ADD_mem[1]
+	c_t5_t4_x02_mem1 += ADD_mem[2]
 	S += 41 < c_t5_t4_x02_mem1
 	S += c_t5_t4_x02_mem1 <= c_t5_t4_x02
 
@@ -2399,7 +2399,7 @@ def solve():
 	S += c_t6_y1__x02_mem0 <= c_t6_y1__x02
 
 	c_t6_y1__x02_mem1 = S.Task('c_t6_y1__x02_mem1', length=1, delay_cost=1)
-	c_t6_y1__x02_mem1 += ADD_mem[0]
+	c_t6_y1__x02_mem1 += ADD_mem[2]
 	S += 11 < c_t6_y1__x02_mem1
 	S += c_t6_y1__x02_mem1 <= c_t6_y1__x02
 
@@ -2417,7 +2417,7 @@ def solve():
 	c210 = S.Task('c210', length=1, delay_cost=1)
 	c210 += alt(ADD)
 
-	S += 35<c210
+	S += 34<c210
 
 	c210_mem0 = S.Task('c210_mem0', length=1, delay_cost=1)
 	c210_mem0 += ADD_mem[3]
@@ -2446,7 +2446,7 @@ def solve():
 
 	cycles = int(solution[-1][3])
 
-	pic_file_name = "/home/mfukuda/pairing_automation_design2/bls12-1150/scheduling/SQR_mul1_add4/SQR_4.png"
+	pic_file_name = "/mnt/rose/usr1/fukuda/pairing_automation_design2/bls12-1150/scheduling/SQR_mul1_add4/SQR_4.png"
 	if(S.solution() != []):
 		plotters.matplotlib.plot(S,img_filename=pic_file_name, vertical_text=True, fig_size=(cycles*0.25+3, 5), show_task_labels=False)
 
