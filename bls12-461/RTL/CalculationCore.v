@@ -213,7 +213,7 @@ always @(posedge clk or negedge rst_n) begin
 		add1_out_reg <= add1_out;
 		add2_out_reg <= add2_out;
 		add3_out_reg <= add3_out;
-		inv_out_reg <= inv_out;
+		//inv_out_reg <= inv_out;
 		if (I_INPUTMODE == `EXEC_CORE) begin
 			case (mode)
 				`MODE_PDBL: begin
