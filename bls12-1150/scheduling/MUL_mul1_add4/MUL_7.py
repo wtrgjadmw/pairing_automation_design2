@@ -4117,7 +4117,7 @@ def solve():
 	c_t001 = S.Task('c_t001', length=1, delay_cost=1)
 	c_t001 += alt(ADD)
 
-	S += c_t001<104
+	S += c_t001<103
 
 	c_t001_mem0 = S.Task('c_t001_mem0', length=1, delay_cost=1)
 	c_t001_mem0 += ADD_mem[2]
@@ -4132,7 +4132,7 @@ def solve():
 	c_t201 = S.Task('c_t201', length=1, delay_cost=1)
 	c_t201 += alt(ADD)
 
-	S += c_t201<104
+	S += c_t201<103
 
 	c_t201_mem0 = S.Task('c_t201_mem0', length=1, delay_cost=1)
 	c_t201_mem0 += ADD_mem[1]
@@ -4147,7 +4147,7 @@ def solve():
 	c_t6001 = S.Task('c_t6001', length=1, delay_cost=1)
 	c_t6001 += alt(ADD)
 
-	S += c_t6001<108
+	S += c_t6001<107
 
 	c_t6001_mem0 = S.Task('c_t6001_mem0', length=1, delay_cost=1)
 	c_t6001_mem0 += alt(ADD_mem)
@@ -4165,7 +4165,7 @@ def solve():
 	c_t600 = S.Task('c_t600', length=1, delay_cost=1)
 	c_t600 += alt(ADD)
 
-	S += c_t600<105
+	S += c_t600<104
 
 	c_t600_mem0 = S.Task('c_t600_mem0', length=1, delay_cost=1)
 	c_t600_mem0 += ADD_mem[0]
@@ -4182,7 +4182,7 @@ def solve():
 
 	S += 47<c111
 
-	S += c111<1000
+	S += c111<999
 
 	c111_mem0 = S.Task('c111_mem0', length=1, delay_cost=1)
 	c111_mem0 += ADD_mem[1]
@@ -4204,7 +4204,7 @@ def solve():
 	c_t8001 = S.Task('c_t8001', length=1, delay_cost=1)
 	c_t8001 += alt(ADD)
 
-	S += c_t8001<106
+	S += c_t8001<105
 
 	c_t8001_mem0 = S.Task('c_t8001_mem0', length=1, delay_cost=1)
 	c_t8001_mem0 += alt(ADD_mem)
@@ -4225,7 +4225,7 @@ def solve():
 	c_t800 = S.Task('c_t800', length=1, delay_cost=1)
 	c_t800 += alt(ADD)
 
-	S += c_t800<110
+	S += c_t800<109
 
 	c_t800_mem0 = S.Task('c_t800_mem0', length=1, delay_cost=1)
 	c_t800_mem0 += ADD_mem[3]
