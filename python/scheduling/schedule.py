@@ -40,7 +40,7 @@ def find_next_formula(value, formulas, pre_sche_result):
                 if formula[0] == sol[0]:
                     min_finish_time = min(min_finish_time, int(sol[2]))
                     max_finish_time = max(max_finish_time, int(sol[2]))
-    return min_finish_time, max_finish_time
+    return min_finish_time-1, max_finish_time
 
 
 def find_prev_resource(pre_sche_result, operand):
