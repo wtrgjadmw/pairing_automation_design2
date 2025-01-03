@@ -1549,9 +1549,9 @@ end
 	ram_add3_raddr1 <= 10;
 	ram_add0_raddr1 <= 3;
 	ram_add1_raddr1 <= 2;
-	ram_add2_raddr2 <= 4;
+	ram_add2_raddr1 <= 4;
 	ram_add3_raddr2 <= 5;
-	ram_add2_raddr1 <= 5;
+	ram_add2_raddr2 <= 5;
 	w1_n_reg <= 0;
 	waddr1_reg <= ret_addr + `RAM_ADDR_SIZE'd6;
 	wdata_s1 <= `ADD2;
@@ -1560,8 +1560,8 @@ end
 101: begin
 	add0_opr1 <= ram_add3_out1; add0_opr2 <= ram_add0_out1; issub0 <= 1;
 	add1_opr1 <= add1_out_reg; add1_opr2 <= ram_add1_out1; issub1 <= 0;
-	add3_opr1 <= ram_add2_out2; add3_opr2 <= ram_add3_out2; issub3 <= 1;
-	add2_opr1 <= add0_out_reg; add2_opr2 <= ram_add2_out1; issub2 <= 1;
+	add3_opr1 <= ram_add2_out1; add3_opr2 <= ram_add3_out2; issub3 <= 1;
+	add2_opr1 <= add0_out_reg; add2_opr2 <= ram_add2_out2; issub2 <= 1;
 	ram_add3_wr_n <= 1;
 	ram_add0_wr_n <= 0;
 	ram_add0_waddr <= 1;
